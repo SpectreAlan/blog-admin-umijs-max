@@ -118,7 +118,40 @@ aside {
     }
   }
 }
-
+.timeBox{
+  width:220px !important;
+  padding:3px 5px;
+}
+.el-date-editor .el-range-separator {
+  padding: 0 5px;
+  width: 12%;
+}
+.el-button--mini, .el-button--mini.is-round {
+  padding: 7px 8px;
+}
+.el-table td, .el-table th.is-leaf {
+  text-align: center;
+}
+.bet-box .el-input.is-disabled .el-input__inner {
+  background-color: #fff;
+  border-color: #DCDFE6;
+  color: #606266;
+  width:260px;
+}
+.el-button.filter-item{
+  float: right;
+  margin-right: 6px;
+  margin-bottom: 7px ;
+}
+.el-dialog__body {
+  padding: 16px 20px;
+}
+.el-dialog__footer .el-button{
+  padding:10px 20px;
+}
+.sattle-box .el-input {
+  width: 400px;
+}
 //main-container全局样式
 .app-container {
   padding: 20px;
@@ -188,4 +221,143 @@ aside {
 
 .multiselect--active {
   z-index: 1000 !important;
+}
+#app .sidebar-container .svg-icon{
+  width:1.2rem;
+  height:1.2rem;
+}
+@media screen and (min-width: 1420px){
+  .el-button + .el-button{
+    margin: 5px!important;
+  }
+  .el-button:nth-child(1){
+    margin: 5px!important;
+  }
+}
+@media screen and (max-width: 768px){
+  .el-button + .el-button{
+    margin-left: 0!important;
+    margin-top: 5px;
+  }
+  .el-date-editor{
+    width:100%!important;
+  }
+  .el-range-input{
+    font-size: 12px!important;
+    width: 100%!important;
+  }
+
+
+  .el-picker-panel{
+    top: 0px!important;
+    width: 80%!important;
+    //overflow: scroll!important;
+    //transform: scale(0.9);
+  }
+  .el-date-range-picker__content.is-left,.el-date-range-picker__content.is-right{
+    border-right: none!important;
+    width: 100%!important;
+  }
+  .el-picker-panel__body{
+    padding-top: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 100% !important;
+  }
+  .el-date-range-picker__time-header{
+    width: 100% !important;
+    display: flex!important;
+    flex-direction: column;
+  }
+  .centerForm{
+    width:100%!important;
+  }
+}
+.centerForm{
+  width:60rem;
+  margin:3rem auto;
+}
+.popover-member>.cell{
+  height:30px!important;
+  overflow: visible!important;
+}
+.nest-menu{
+  height:50px;
+}
+.centerForm{
+  width:60rem;
+  margin:3rem auto;
+}
+.popover-member>.cell{
+  height:30px!important;
+  overflow: visible!important;
+}
+.nest-menu{
+  height:50px;
+}
+.upload-loading, .avatar-uploader .el-upload {
+  width: 178px;
+  height: 178px;
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  vertical-align: middle;
+}
+.upload-loading{
+  padding-top:60px;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409EFF;
+}
+.avatar-uploader-icon {
+  position: absolute;
+  top:50%;
+  left:50%;
+  margin-top: -20px;
+  margin-left: -20px;
+  font-size: 40px;
+  color: #8c939d;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  height: 178px;
+  width: 178px;
+  display: block;
+}
+.uploadLoading p.el-loading-text{
+  font-size:18px;
+  color:#fff;
+}
+.uploadLoading i.el-icon-loading{
+  font-size:80px;
+  color:#fff;
+}
+.indexloadLoading p.el-loading-text{
+  font-size:18px;
+  color:rgba(255,255,255,.8);
+}
+.indexloadLoading i.el-icon-loading{
+  font-size:50px;
+  color:rgba(255,255,255,.8);
+}
+.ql-container>.ql-editor{
+  min-height:300px!important;
+}
+.el-message-box__title{
+  text-align: center;
+  font-size:16px!important;
+}
+.filter-container{
+  display: flex;
+  justify-content: start;
+  line-height: 50px;
+}
+.time-choose-box {
+  display: inline-block;
+  margin-top: 10px;
 }

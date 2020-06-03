@@ -26,6 +26,12 @@ const mutations = {
 }
 
 const actions = {
+  setRoles({ commit }, data) {
+    commit('SET_ROLES', data)
+  },
+  setName({ commit }, data) {
+    commit('SET_NAME', data)
+  },
   // user login
   login({ commit }, userInfo) {
     const { username, password } = userInfo

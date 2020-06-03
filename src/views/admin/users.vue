@@ -115,6 +115,8 @@ export default {
   },
   created() {
     this.search()
+    const s = { ...this.$store.state }
+    console.log(JSON.stringify(s))
   },
   methods: {
     recovery,
@@ -124,7 +126,6 @@ export default {
     search() {
       this.loading = true
       list(this.listQuery).then(res => {
-        console.log(res)
         this.list = res.list
         this.total = res.total
         this.loading = false

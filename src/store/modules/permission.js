@@ -42,11 +42,14 @@ const state = {
 const mutations = {
   SET_ROUTES: (state, routes) => {
     state.addRoutes = routes
-    state.routes = constantRoutes.concat(routes)
+    state.routes = [...constantRoutes, ...routes]
   }
 }
 
 const actions = {
+  setRoutes({ commit }, data) {
+    commit('SET_ROUTES', ...data)
+  },
   generateRoutes({ commit }, roles) {
     return new Promise(resolve => {
       let accessedRoutes
