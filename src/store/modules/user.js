@@ -40,7 +40,7 @@ const actions = {
       login({ username: username.trim(), password: md5(password) }).then(response => {
         commit('SET_TOKEN', response)
         setToken(response)
-        resolve()
+        resolve(response)
       }).catch(error => {
         reject(error)
       })
@@ -55,7 +55,6 @@ const actions = {
         dispathUserInfo(response, commit, reject, resolve)
       } else {
         getInfo(state.token).then(res => {
-          console.log(res)
           dispathUserInfo(res, commit, reject, resolve)
         })
       }

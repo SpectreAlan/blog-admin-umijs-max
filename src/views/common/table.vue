@@ -64,7 +64,7 @@
                 :inactive-text="k.inactiveText"
                 :active-value="k.active"
                 :inactive-value="k.inactive"
-                @change="control(k.field, row)"
+                @change="control(k.switch, row)"
               />
             </template>
             <template v-else-if="k.img">

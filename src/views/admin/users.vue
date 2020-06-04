@@ -2,13 +2,9 @@
   <div class="app-container">
     <!-- 表格查询条件 -->
     <div class="filter-container">
-      <el-input v-model.trim.trim="listQuery.title" placeholder="标题" style="width: 200px;" class="filter-item" />
-      <div class="time-choose-box">
-        <div class="time-choose">
-          <el-button type="primary" @click="search()">查询</el-button>
-          <el-button type="primary" @click="handleAdd()">添加</el-button>
-        </div>
-      </div>
+      <el-input v-model.trim.trim="listQuery.account" placeholder="账号..." style="width: 200px;" clearable />
+      <el-button type="primary" class="filter-item" @click="search()">查询</el-button>
+      <el-button type="primary" class="filter-item" @click="handleAdd()">添加</el-button>
     </div>
     <!-- 表格区域 -->
     <table-template
@@ -16,16 +12,21 @@
       :list="list"
       :toolbar-list="toolbarList"
       :list-loading="loading"
+      :formatter="formatter"
+      :table-control="tableControl"
       @recovery="recovery"
-      @edit="handleEdit"
-      @del="handleDel"
-      @status="handleStatus"
+      @handleEdit="handleEdit"
+      @handleDel="handleDel"
+      @handleStatus="handleStatus"
     />
-    <!-- 新增/编辑发现 -->
-    <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="dialogVisible" width="40%">
-      <el-form ref="form" :model="form" label-width="110px" size="mini" :rules="rules">
-        <el-form-item label="账号" prop="account">
-          <el-input v-model.trim="form.account" />
+    <!-- 新增/编辑-->
+    <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="dialogVisible" width="600px">
+      <el-form ref="form" :model="form" label-width="100px" size="mini" :rules="rules">
+        <el-form-item v-if="title==='添加'" label="账号" prop="account">
+          <el-input v-model.trim="form.account" placeholder="长度4至8位，以字母开头，字母，数字，减号，下划线" />
+        </el-form-item>
+        <el-form-item label="密码" prop="pwd">
+          <el-input v-model.trim="form.pwd" show-password placeholder="长度6至12位" />
         </el-form-item>
         <el-form-item label="昵称" prop="nickName">
           <el-input v-model.trim="form.nickName" />
@@ -33,7 +34,7 @@
         <ImgUpload label="头像" :icon="form.avatar" @setIcon="setIcon" />
         <el-form-item label="角色" prop="role">
           <el-select ref="role" v-model="form.role" placeholder="选择用户角色" clearable class="filter-item">
-            <el-option v-for="(v,k,i) in roles" :key="i" :label="v" :value="k" />
+            <el-option v-for="(v, k,i) in roles" :key="i" :label="v" :value="k" />
           </el-select>
         </el-form-item>
         <el-form-item label="状态">
@@ -51,73 +52,62 @@
       </el-form>
     </el-dialog>
     <!-- 分页 -->
-    <pagination v-if="total>0" :total="total" :page.sync="listQuery.page" @pagination="search" />
+    <el-pagination :current-page.sync="listQuery.page" layout="total, prev,pager, next" :total="total" background @current-change="search" />
   </div>
 </template>
 
 <script>
-import { list, add, del, edit } from '@/api/permission'
+import { list, signup, del, edit, getRoles } from '@/api/users'
 import { recovery } from '@/utils/common'
 import TableTemplate from '../common/table'
-import Pagination from '@/components/Pagination'
 import ImgUpload from '@/views/common/imgUpload'
+import { validUsername } from '@/utils/validate'
+import md5 from 'md5'
 export default {
   name: 'Users',
-  components: { TableTemplate, Pagination, ImgUpload },
+  components: { TableTemplate, ImgUpload },
   data() {
+    const validateUsername = (rule, value, callback) => {
+      callback(validUsername(value) ? '' : new Error('账号格式不对'))
+    }
     return {
-      rules: {
-        title: [
-          { required: true, message: '请输入账号', trigger: 'blur' },
-          { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
-        ]
-      },
-      form: {
-        account: '',
-        nickName: '',
-        role: '',
-        remark: '',
-        status: 1,
-        avatar: ''
-      },
-      roles: [],
+      rules: { account: [{ required: true, trigger: 'blur', validator: validateUsername }], role: [{ required: true, message: '请选择角色', trigger: 'change' }] },
+      form: { account: '', nickName: '', role: '', remark: '', status: 1, pwd: '', avatar: '' },
+      roles: {},
       dialogVisible: false,
       reqLoading: false,
       list: [],
-      listQuery: {
-        page: 1,
-        account: ''
-      },
+      listQuery: { page: 1, account: '' },
       loading: false,
       tableHeader: [
         { field: 'account', sortable: 'custom', title: '账号' },
         { field: 'nickName', sortable: 'custom', title: '昵称' },
-        { field: 'avatar', sortable: 'custom', title: '头像', width: '200px', img: 'avatar' },
-        { field: 'status', title: '状态', switch: 'handleStatus', inactive: 0, active: 1 },
-        { field: 'role', title: '角色' },
-        { field: 'createTime', title: '创建时间', width: '100px' },
-        { field: 'updateTime', title: '更新时间', width: '100px' },
-        { field: 'updateBy', title: '操作人', width: '100px' },
-        { field: 'remark', title: '备注', width: '100px' },
+        { field: 'avatar', title: '头像', width: '200px', img: 'avatar' },
+        { field: 'status', title: '账号启禁', switch: 'handleStatus', inactive: 0, active: 1 },
+        { field: 'role', title: '角色', formatter: 'role' },
+        { field: 'updateTime', title: '更新时间' },
+        { field: 'remark', title: '备注' },
         { field: 'toolbar', title: '操作', width: '200px' }
       ],
       toolbarList: [{ title: '编辑', field: 'handleEdit', type: 'primary' }, { title: '删除', field: 'handleDel', type: 'danger' }],
       total: 0,
-      title: '添加'
-    }
-  },
-  watch: {
-    dialogVisible() {
-      this.$nextTick(() => {
-        this.$refs.form.clearValidate()
-      })
+      title: '添加',
+      tableControl: true
     }
   },
   created() {
+    getRoles().then(res => {
+      res.map(item => {
+        this.roles[item.id] = item.role
+      })
+    })
     this.search()
   },
   methods: {
     recovery,
+    formatter(type) {
+      return this.roles[type]
+    },
     setIcon(url) {
       this.form.avatar = url
     },
@@ -134,43 +124,65 @@ export default {
     onSubmit() {
       this.$refs.form.validate((valid) => {
         if (valid) {
-          this.reqLoading = true
-          if (this.title === '编辑') {
-            edit(this.form).then(res => {
-              this.$message.success(res.msg)
-              this.reqLoading = false
-              this.search()
-            })
-          } else {
-            add(this.form).then(res => {
-              this.$message.success(res.msg)
-              this.reqLoading = true
-              this.search()
-            })
-          }
+          this.title !== '添加' ? this.editReq() : this.addReq()
         }
       })
     },
+    editReq() {
+      if (this.form.pwd && (this.form.pwd.length > 13 || this.form.pwd.length < 6)) {
+        this.$message.error('密码格式有误')
+        return
+      }
+      this.reqLoading = true
+      edit(this.form).then(res => {
+        this.reqLoading = false
+        this.dialogVisible = false
+        this.search()
+        this.$message.success('编辑成功')
+      }).catch(() => {
+        this.reqLoading = false
+      })
+    },
+    addReq() {
+      const param = { ...this.form }
+      if (param.pwd.length > 13 || param.pwd.length < 6) {
+        this.$message.error('密码格式有误')
+        return
+      }
+      this.reqLoading = true
+      param.pwd = md5(param.pwd)
+      signup(param).then(res => {
+        this.reqLoading = false
+        this.dialogVisible = false
+        this.$message.success('添加成功')
+        this.search()
+      }).catch(() => {
+        this.reqLoading = false
+      })
+    },
     handleEdit(data) {
-      this.title = '编辑'
+      this.title = '编辑 -  ' + data.account
       this.dialogVisible = true
       this.form.id = data.id
       for (const i in this.form) {
         this.form[i] = data[i]
       }
+      this.form.role = String(data.role)
     },
     handleAdd() {
       this.form = { ...{}, ...this.$options.data().form }
       this.title = '添加'
       this.dialogVisible = true
+      this.$nextTick(() => {
+        this.$refs.form.clearValidate()
+      })
     },
     handleStatus(data) {
       this.loading = true
-      edit({ id: data.id, status: data.status }).then(res => {
-        this.$message.success(res.msg)
+      edit(data).then(res => {
         this.loading = false
+        this.$message.success('编辑成功')
       }).catch(() => {
-        this.loading = false
         this.search()
       })
     },
@@ -185,7 +197,7 @@ export default {
         type: 'warning'
       }).then(() => {
         del({ id: data.id }).then(res => {
-          this.$message.success(res.msg)
+          this.$message.success('删除成功')
           this.search()
         })
       }).catch(() => {
@@ -195,8 +207,5 @@ export default {
 }
 </script>
 <style scoped>
-.tipsRed{
-  color:red;
-}
 </style>
 

@@ -7,11 +7,3 @@ export function searchUser(name) {
     params: { name }
   })
 }
-
-export function transactionList(query) {
-  return request({
-    url: '/transaction',
-    method: 'post',
-    params: query
-  })
-}

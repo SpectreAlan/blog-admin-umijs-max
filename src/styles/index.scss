@@ -25,7 +25,11 @@ html {
 #app {
   height: 100%;
 }
-
+ul,
+li {
+  list-style: none;
+  padding: 0;
+}
 *,
 *:before,
 *:after {
@@ -204,16 +208,6 @@ aside {
   }
 }
 
-.filter-container {
-  padding-bottom: 10px;
-
-  .filter-item {
-    display: inline-block;
-    vertical-align: middle;
-    margin-bottom: 10px;
-  }
-}
-
 //refine vue-multiselect plugin
 .multiselect {
   line-height: 16px;
@@ -356,8 +350,33 @@ aside {
   display: flex;
   justify-content: start;
   line-height: 50px;
+  align-items: center;
+  button{
+    margin-top:10px;
+    margin-left:10px;
+  }
 }
-.time-choose-box {
-  display: inline-block;
-  margin-top: 10px;
+.el-pagination{
+  margin-top: 20px;
+  text-align: center;
+}
+.table-control-choose{
+  position: relative;
+}
+.table-control-box{
+  position: absolute;
+  padding:10px 10px;
+  top: 20px;
+  left:-60px;;
+  z-index: 999;
+  border: 1px solid #b4bccc;
+  background: #fff;
+}
+.table-control{
+  display: flex;
+  float: right;
+  margin:10px;
+}
+.table-control li{
+  margin: 10px;
 }
