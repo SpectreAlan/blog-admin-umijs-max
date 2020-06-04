@@ -115,8 +115,6 @@ export default {
   },
   created() {
     this.search()
-    const s = { ...this.$store.state }
-    console.log(JSON.stringify(s))
   },
   methods: {
     recovery,

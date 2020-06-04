@@ -111,7 +111,7 @@ export default {
     }
   },
   created() {
-    // window.addEventListener('storage', this.afterQRScan)
+    this.$store.dispatch('user/clearUser')
   },
   mounted() {
     if (this.loginForm.username === '') {

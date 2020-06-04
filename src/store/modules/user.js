@@ -1,10 +1,11 @@
 import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 import md5 from 'md5'
+import { userInfo, dispathUserInfo } from '@/utils/storeControl'
 
 const state = {
-  token: getToken(),
+  token: '',
   name: '',
   avatar: '',
   roles: []
@@ -49,41 +50,31 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        if (!response) {
-          reject('Verification failed, please Login again.')
-        }
-
-        const { roles, name, avatar } = response
-
-        // roles must be a non-empty array
-        if (!roles || roles.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
-        }
-
-        commit('SET_ROLES', roles)
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        resolve(response)
-      }).catch(error => {
-        reject(error)
-      })
+      const response = userInfo()
+      if (response) {
+        dispathUserInfo(response, commit, reject, resolve)
+      } else {
+        getInfo(state.token).then(res => {
+          console.log(res)
+          dispathUserInfo(res, commit, reject, resolve)
+        })
+      }
     })
   },
 
-  // user logout
+  clearUser({ commit }) {
+    commit('SET_TOKEN', '')
+    commit('SET_ROLES', [])
+    commit('SET_NAME', '')
+    commit('SET_AVATAR', '')
+    sessionStorage.clear()
+  },
   logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
-        commit('SET_TOKEN', '')
-        commit('SET_ROLES', [])
         removeToken()
         resetRouter()
-
-        // reset visited views and cached views
-        // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
         dispatch('tagsView/delAllViews', null, { root: true })
-
         resolve()
       }).catch(error => {
         reject(error)
