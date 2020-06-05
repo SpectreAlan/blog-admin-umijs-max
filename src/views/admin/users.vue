@@ -134,7 +134,11 @@ export default {
         return
       }
       this.reqLoading = true
-      edit(this.form).then(res => {
+      const param = { ...this.form }
+      if (param.pwd) {
+        param.pwd = md5(param.pwd)
+      }
+      edit(param).then(res => {
         this.reqLoading = false
         this.dialogVisible = false
         this.search()

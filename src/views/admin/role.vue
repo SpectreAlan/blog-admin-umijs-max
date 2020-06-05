@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { list, add, del, edit } from '@/api/role'
+import { list, add, del, edit, menuList, status } from '@/api/role'
 import TableTemplate from '../common/table'
 export default {
   name: 'Role',
@@ -71,7 +71,7 @@ export default {
     return {
       change: false,
       rules: { name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }] },
-      role: { name: '', status: 1, sysMenuIds: [] },
+      role: { name: '', status: 1, keys: [] },
       dialogVisible: false,
       title: '添加角色',
       treeLoading: false,
@@ -125,16 +125,13 @@ export default {
       this.getTree()
       this.dialogVisible = true
       this.role = this.$options.data().role
+      this.title === '添加角色'
     },
     handleStatus(data) {
       this.listLoading = true
-      edit(data).then(res => {
+      status({ id: data.id, status: data.status }).then(res => {
         this.listLoading = false
-        if (res.code) {
-          this.$message.success('操作成功')
-        } else {
-          this.search()
-        }
+        this.$message.success('操作成功')
       }).catch(() => {
         this.search()
       })
@@ -150,72 +147,57 @@ export default {
     },
     getTree(item) {
       this.treeLoading = true
-      edit({ id: 0,
-        name: '',
-        pageNum: 1,
-        pageSize: 10 }).then(res => {
-        if (res.data) {
-          const arr = res.data.list
-          const first_leval = []
-          const other = {}
-          for (let i = 0; i < arr.length; i++) {
-            const obj = {}
-            obj.id = arr[i].id
-            obj.name = arr[i].name
-            if (arr[i].parentId) {
-              obj.parentId = arr[i].parentId
-              !other[arr[i].parentId] && (other[arr[i].parentId] = [])
-              other[arr[i].parentId].push(obj)
-            } else {
-              first_leval.push(obj)
-            }
+      menuList().then(arr => {
+        const first_leval = []
+        const other = {}
+        for (let i = 0; i < arr.length; i++) {
+          const obj = {}
+          obj.id = arr[i].id
+          obj.name = arr[i].menu_name
+          if (arr[i].parentId) {
+            obj.parentId = arr[i].parentId
+            !other[arr[i].parentId] && (other[arr[i].parentId] = [])
+            other[arr[i].parentId].push(obj)
+          } else {
+            first_leval.push(obj)
           }
-          this.treeSort(first_leval, other)
-          this.tree = first_leval
-          this.$refs.tree.setCheckedKeys([])
-          this.treeLoading = false
-          item && this.generateTree(item.id)
         }
+        this.treeSort(first_leval, other)
+        this.tree = first_leval
+        this.$refs.tree.setCheckedKeys([])
+        this.treeLoading = false
+        item && this.$nextTick(() => {
+          this.$refs.tree.setCheckedKeys(item.role_keys.split(','))
+        })
       }).catch(() => { this.treeLoading = false })
     },
-    generateTree(id) {
-      edit({ id }).then(res => {
-        if (res.code) {
-          const list = []
-          res.data.map(k => {
-            list.push(k.menuId)
-          })
-          this.$nextTick(() => {
-            this.$refs.tree.setCheckedKeys(list)
-          })
-        }
-      }).catch(() => {})
-    },
     confirmRole() {
-      this.role.sysMenuIds = this.$refs.tree.getCheckedKeys()
-      if (!this.role.sysMenuIds.length) {
+      this.role.keys = this.$refs.tree.getCheckedKeys()
+      if (!this.role.keys.length) {
         this.$message.error('请选择授权项')
         return
       }
-      const url = this.title === '添加角色' ? '/sysRole/addData.do' : '/sysRole/editData.do'
-      console.log(url)
       this.$refs['role'].validate((valid) => {
-        if (valid) {
-          add(this.role).then(res => {
-            if (res.code) {
-              this.$message.success('提交成功')
-              this.dialogVisible = false
-              this.search()
-            }
-          }).catch(() => {})
-        } else {
-          this.$message.error('请填写完整')
-        }
+        valid && (this.title === '添加角色' ? this.addReq() : this.editReq())
       })
+    },
+    addReq() {
+      add(this.role).then(res => {
+        this.$message.success('添加成功')
+        this.dialogVisible = false
+        this.search()
+      }).catch(() => { this.dialogVisible = false })
+    },
+    editReq() {
+      edit(this.role).then(res => {
+        this.$message.success('编辑成功')
+        this.dialogVisible = false
+        this.search()
+      }).catch(() => { this.dialogVisible = false })
     },
     handleEdit(item) {
       this.role.id = item.id
-      this.role.name = item.name
+      this.role.name = item.role_name
       this.getTree(item)
       this.title = '编辑角色'
       this.dialogVisible = true
@@ -226,7 +208,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        del({ roleId: item.id }).then(res => {
+        del({ id: item.id }).then(res => {
           this.$message.success('删除成功')
           this.search()
         }).catch(() => {})

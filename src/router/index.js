@@ -72,7 +72,7 @@ export const asyncRoutes = [
         component: () => import('@/views/admin/menu'),
         name: 'Menu',
         meta: {
-          title: 'Menu Permission',
+          title: 'Menus',
           key: 'menu'
         }
       },
@@ -81,13 +81,42 @@ export const asyncRoutes = [
         component: () => import('@/views/admin/role'),
         name: 'Role',
         meta: {
-          title: 'Role Permission',
+          title: 'Roles',
           key: 'role'
         }
       }
     ]
   },
-
+  {
+    path: '/blog',
+    component: Layout,
+    redirect: '/blog/article',
+    name: 'Blog',
+    meta: {
+      title: 'Blog',
+      icon: 'lock'
+    },
+    children: [
+      {
+        path: 'article',
+        component: () => import('@/views/blog/article'),
+        name: 'Article',
+        meta: {
+          title: 'Article',
+          key: 'article'
+        }
+      },
+      {
+        path: 'write',
+        component: () => import('@/views/blog/write'),
+        name: 'Write',
+        meta: {
+          title: 'Write',
+          key: 'write'
+        }
+      }
+    ]
+  },
   { path: '*', redirect: '/404', hidden: true }
 ]
 

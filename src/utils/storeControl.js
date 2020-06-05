@@ -19,7 +19,11 @@ export function backupStore() {
   const state = this.$store.state
   const store = {}
   for (const i in state) {
-    store[i] = JSON.stringify(state[i])
+    try {
+      store[i] = JSON.stringify(state[i])
+    } catch (error) {
+      localStorage.setItem('error', i)
+    }
   }
   sessionStorage.setItem('store', JSON.stringify(store))
 }
