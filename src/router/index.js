@@ -114,6 +114,15 @@ export const asyncRoutes = [
           title: 'Write',
           key: 'write'
         }
+      },
+      {
+        path: 'tags',
+        component: () => import('@/views/blog/tags'),
+        name: 'Tags',
+        meta: {
+          title: 'Tags',
+          key: 'tags'
+        }
       }
     ]
   },

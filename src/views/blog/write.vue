@@ -48,7 +48,7 @@
 
 <script>
 import Markdown from '@/components/Markdown/'
-import { search, category, tags, add, edit } from '@/api/blog'
+import { search, category, allTags, add, edit } from '@/api/blog'
 import ImgUpLoad from '@/views/common/imgUpload'
 export default {
   name: 'Write',
@@ -102,7 +102,7 @@ export default {
       category().then(res => {
         this.category = res
       })
-      tags().then(res => {
+      allTags().then(res => {
         this.tags = res
       })
     }

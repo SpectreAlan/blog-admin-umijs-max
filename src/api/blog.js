@@ -27,6 +27,9 @@ export function search(data) {
 export function tags(data) {
   return Request.post('/article/tags', data)
 }
+export function allTags(data) {
+  return Request.post('/article/allTags', data)
+}
 export function category(data) {
   return Request.post('/article/category', data)
 }
