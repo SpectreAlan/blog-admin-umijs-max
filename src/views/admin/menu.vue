@@ -16,6 +16,7 @@
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
       <el-table-column
+        class-name="table-align-left"
         prop="menu_name"
         label="名称"
         width="250"

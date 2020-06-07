@@ -1,11 +1,10 @@
 <template>
-  <el-form-item :label="label" prop="icon">
-    <span class="tipsRed">(注意：上传的图片大小必须小于1M，支持png、jpg、jpeg、gif格式)</span>
+  <div>
     <div v-if="loading" class="upload-loading"><i class="el-icon-loading" />上传中....</div>
     <el-upload
       v-if="!loading"
       ref="upload"
-      class="avatar-uploader"
+      class="img-uploader"
       :action="url"
       :show-file-list="false"
       :on-success="success"
@@ -13,20 +12,16 @@
       :on-error="error"
       :file-list="fileList"
       :auto-upload="false"
-      name="mFile"
+      name="file"
     >
-      <div>
-        <img v-if="icon" :src="icon" class="avatar" alt="">
-        <i v-else class="el-icon-plus avatar-uploader-icon" />
-      </div>
+      <img v-if="img" :src="img" class="img" alt="" :style="{width: width, height: height}">
+      <i v-else class="el-icon-plus img-uploader-icon" :style="{width: width, height: height, lineHeight: height}" />
     </el-upload>
-    <!--    <el-form-item prop="img">-->
-    <!--      <el-input v-model.trim="icon" size="small" disabled style="width: 80%;" />-->
-    <!--    </el-form-item>-->
-  </el-form-item>
+  </div>
 </template>
 
 <script>
+import defaultSetting from '@/settings'
 export default {
   name: 'ImgUpload',
   props: {
@@ -36,10 +31,22 @@ export default {
         return ''
       }
     },
-    icon: {
+    img: {
       type: String,
       default() {
         return ''
+      }
+    },
+    width: {
+      type: String,
+      default() {
+        return '178px'
+      }
+    },
+    height: {
+      type: String,
+      default() {
+        return '178px'
       }
     }
   },
@@ -47,14 +54,14 @@ export default {
     return {
       loading: false,
       fileList: [],
-      url: process.env.VUE_APP_BASE_API + '/file/uploadImg.do'
+      url: defaultSetting.proxy.name + '/upload/images'
     }
   },
   methods: {
     success(res) {
       this.loading = false
       if (res.code) {
-        this.$emit('setIcon', res.data.host + res.data.filePath)
+        this.$emit('setImg', res.data)
         this.$message({
           type: 'success',
           message: '上传成功'
@@ -98,6 +105,30 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.img-uploader{
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    &:hover {
+      border-color: #409EFF;
+    }
+  }
+  .img-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    text-align: center;
+  }
+  .img {
+    display: block;
+  }
+}
 </style>

@@ -41,7 +41,7 @@ export default {
         { field: 'tags', sortable: 'custom', title: '标签' },
         { field: 'readed', sortable: 'custom', title: '阅读数' },
         { field: 'cover', title: '封面图', width: '200px', img: 'cover' },
-        { field: 'status', title: '展示状态', switch: 'handleStatus', inactive: 0, active: 1 },
+        { field: 'status', title: '发布状态', switch: 'handleStatus', inactive: 0, active: 1 },
         { field: 'createTime', title: '创作时间' },
         { field: 'updateTime', title: '更新时间' },
         { field: 'remark', title: '备注' },
@@ -68,9 +68,17 @@ export default {
       })
     },
     handleEdit(data) {
-      console.log(data)
+      this.$router.push({
+        name: 'Write',
+        query: {
+          id: data.id
+        }
+      })
     },
     handleAdd() {
+      this.$router.push({
+        name: 'Write'
+      })
     },
     handleStatus(data) {
       this.loading = true

@@ -74,6 +74,12 @@
   "devDependencies": {
     "@babel/core": "7.0.0",
     "@babel/register": "7.0.0",
+    "@toast-ui/editor-plugin-chart": "^1.0.0",
+    "@toast-ui/editor-plugin-code-syntax-highlight": "^1.0.0",
+    "@toast-ui/editor-plugin-color-syntax": "^1.0.0",
+    "@toast-ui/editor-plugin-table-merged-cell": "^1.0.0",
+    "@toast-ui/editor-plugin-uml": "^1.0.0",
+    "@toast-ui/vue-editor": "^2.1.2",
     "@vue/cli-plugin-babel": "3.5.3",
     "@vue/cli-plugin-eslint": "^3.9.1",
     "@vue/cli-plugin-unit-jest": "3.5.3",

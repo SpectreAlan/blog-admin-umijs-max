@@ -1,22 +1,130 @@
 <template>
-  <div class="app-container">
-    write
+  <div class="write">
+    <el-form ref="form" :inline="true" :model="form" label-width="120px" :rules="rules" size="medium">
+      <el-form-item label="标题" prop="title">
+        <el-input v-model.trim="form.title" style="width: 400px;" clearable />
+      </el-form-item>
+      <el-form-item label="分类" prop="category">
+        <el-select v-model="form.category" placeholder="请选择分类" style="width: 100%" clearable>
+          <el-option
+            v-for="(item,k) in category"
+            :key="k"
+            :label="item.name"
+            :value="item.name"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="标签" prop="tags">
+        <el-select v-model="form.tags" multiple placeholder="请选择标签" style="width: 400px;" clearable>
+          <el-option
+            v-for="(item,k) in tags"
+            :key="k"
+            :label="item.name"
+            :value="item.name"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="概述" prop="des">
+        <el-input
+          v-model.trim="form.des"
+          :rows="4"
+          type="textarea"
+          maxlength="80"
+          show-word-limit
+          clearable
+        />
+      </el-form-item>
+      <el-form-item label="封面" prop="cover">
+        <ImgUpLoad :img="form.cover" width="200px" height="95px" @setImg="setImg" />
+      </el-form-item>
+    </el-form>
+    <div class="control">
+      <el-button type="success" size="medium " @click="onSubmit(1)"><i class="el-icon-upload el-icon--right" />立即发布</el-button>
+      <el-button type="primary" size="medium " icon="el-icon-edit" @click="onSubmit(0)">保存草稿</el-button>
+    </div>
+    <Markdown :content="form.content" @getMarkdown="getMarkdown" />
   </div>
 </template>
 
 <script>
+import Markdown from '@/components/Markdown/'
+import { search, category, tags, add, edit } from '@/api/blog'
+import ImgUpLoad from '@/views/common/imgUpload'
 export default {
   name: 'Write',
+  components: { Markdown, ImgUpLoad },
   data() {
     return {
+      tags: [],
+      rules: {},
+      category: [],
+      form: {
+        content: '',
+        title: '',
+        des: '',
+        category: '',
+        tags: [],
+        cover: ''
+      }
     }
   },
   created() {
+    this.getList()
   },
   methods: {
+    setImg(url) {
+      this.form.cover = url
+    },
+    getMarkdown(content) {
+      this.form.content = content
+    },
+    onSubmit(status) {
+      this.form.status = status
+      const msg = status ? '保存成功' : '发布成功'
+      this.form.id ? edit(this.form).then(res => {
+        this.$message.success(msg)
+      })
+        : add(this.form).then(res => {
+          this.$message.success(msg)
+        })
+    },
+    search(id) {
+      if (!id) {
+        return
+      }
+      search({ id }).then(res => {
+        const buffer = new Buffer(res.content)
+        res.content = buffer.toString()
+        this.form = res
+      })
+    },
+    getList() {
+      category().then(res => {
+        this.category = res
+      })
+      tags().then(res => {
+        this.tags = res
+      })
+    }
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.search(vm.$route.query.id)
+    })
   }
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
+.write{
+  padding-top: 10px;
+  position: relative;
+  .control{
+    position: absolute;
+    top: 90px;
+    right: 400px;
+    text-align: end;
+  }
+}
+
 </style>
 
