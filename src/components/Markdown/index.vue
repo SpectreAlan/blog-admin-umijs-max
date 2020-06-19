@@ -4,7 +4,6 @@
     :options="config"
     height="650px"
     preview-style="vertical"
-    @change="getMarkdown"
   />
 </template>
 
@@ -34,8 +33,7 @@ export default {
   },
   methods: {
     getMarkdown() {
-      const v = this.$refs.editor.invoke('getMarkdown')
-      this.$emit('getMarkdown', v)
+      return this.$refs.editor.invoke('getMarkdown')
     },
     setMarkdown() {
       this.$refs.editor.invoke('setMarkdown', this.content)

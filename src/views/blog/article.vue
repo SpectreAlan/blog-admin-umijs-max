@@ -47,17 +47,17 @@ export default {
       loading: false,
       tableHeader: [
         { field: 'title', sortable: 'custom', title: '标题' },
-        { field: 'category', sortable: 'custom', title: '分类' },
+        { field: 'category', sortable: 'custom', title: '分类', width: '120px' },
         { field: 'tags', sortable: 'custom', title: '标签' },
-        { field: 'readed', sortable: 'custom', title: '阅读数' },
-        { field: 'cover', title: '封面图', width: '200px', img: 'cover' },
-        { field: 'status', title: '发布状态', switch: 'handleStatus', inactive: 0, active: 1 },
+        { field: 'readed', sortable: 'custom', title: '阅读数', width: '100px' },
+        { field: 'cover', title: '封面图', width: '150px', img: 'cover' },
+        { field: 'status', title: '发布状态', switch: 'handleStatus', inactive: 0, active: 1, width: '80px' },
         { field: 'createTime', title: '创作时间' },
         { field: 'updateTime', title: '更新时间' },
         { field: 'remark', title: '备注' },
-        { field: 'toolbar', title: '操作', width: '200px' }
+        { field: 'toolbar', title: '操作', width: '240px' }
       ],
-      toolbarList: [{ title: '编辑', field: 'handleEdit', type: 'primary' }, { title: '添加置顶评论', field: 'handleComment', type: 'success' }, { title: '删除', field: 'handleDel', type: 'danger' }],
+      toolbarList: [{ title: '添加置顶评论', field: 'handleComment', type: 'success' }, { title: '编辑', field: 'handleEdit', type: 'primary' }, { title: '删除', field: 'handleDel', type: 'danger' }],
       total: 0,
       tableControl: true,
       alterVisible: false,

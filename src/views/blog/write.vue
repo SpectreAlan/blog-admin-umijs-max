@@ -32,7 +32,11 @@
           maxlength="150"
           show-word-limit
           clearable
+          style="width: 400px;"
         />
+      </el-form-item>
+      <el-form-item label="封面" prop="cover">
+        <ImgUpLoad :img="form.cover" width="200px" height="95px" @setImg="setImg" />
       </el-form-item>
       <el-form-item label="关键字" prop="keywords">
         <el-input
@@ -41,18 +45,16 @@
           type="textarea"
           maxlength="80"
           show-word-limit
+          style="width: 400px;"
           clearable
         />
-      </el-form-item>
-      <el-form-item label="封面" prop="cover">
-        <ImgUpLoad :img="form.cover" width="200px" height="95px" @setImg="setImg" />
       </el-form-item>
     </el-form>
     <div class="control">
       <el-button type="success" size="medium " @click="onSubmit(1)"><i class="el-icon-upload el-icon--right" />立即发布</el-button>
       <el-button type="primary" size="medium " icon="el-icon-edit" @click="onSubmit(0)">保存草稿</el-button>
     </div>
-    <Markdown :content="form.content" @getMarkdown="getMarkdown" />
+    <Markdown ref="markdown" :content="form.content" />
   </div>
 </template>
 
@@ -74,7 +76,7 @@ export default {
         des: '',
         category: '',
         tags: [],
-        keywords: [],
+        keywords: '',
         cover: ''
       }
     }
@@ -91,6 +93,7 @@ export default {
     },
     onSubmit(status) {
       this.form.status = status
+      this.form.content = this.$refs.markdown.getMarkdown()
       const msg = status ? '保存成功' : '发布成功'
       this.form.id ? edit(this.form).then(res => {
         this.$message.success(msg)
@@ -131,8 +134,8 @@ export default {
   position: relative;
   .control{
     position: absolute;
-    top: 100px;
-    right: 300px;
+    top: 120px;
+    right: 30px;
     text-align: end;
   }
 }
