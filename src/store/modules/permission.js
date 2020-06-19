@@ -19,7 +19,6 @@ export function filterAsyncRoutes(routes, roles) {
       res.push(tmp)
     }
   })
-
   return res
 }
 
@@ -46,9 +45,10 @@ const actions = {
       //   accessedRoutes = asyncRoutes || []
       // } else {
       const accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+      const arr = accessedRoutes.filter(i => !i.children || i.children.length > 0)
       // }
-      commit('SET_ROUTES', accessedRoutes)
-      resolve(accessedRoutes)
+      commit('SET_ROUTES', arr)
+      resolve(arr)
     })
   }
 }
