@@ -41,7 +41,7 @@ export const constantRoutes = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
+        meta: { title: 'Dashboard', icon: 'chart', affix: true, key: 'dashboard' }
       }
     ]
   }
@@ -55,7 +55,7 @@ export const asyncRoutes = [
     name: 'Admin',
     meta: {
       title: 'Admin',
-      icon: 'lock'
+      icon: 'administrator'
     },
     children: [
       {
@@ -88,13 +88,35 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/settings',
+    component: Layout,
+    redirect: '/settings/basic',
+    name: 'Settings',
+    meta: {
+      title: 'Settings',
+      icon: 'settings'
+    },
+    children: [
+      {
+        path: 'basic',
+        component: () => import('@/views/settings/basic'),
+        name: 'Basic',
+        meta: {
+          title: 'BasicSetting',
+          icon: 'setting',
+          key: 'basic'
+        }
+      }
+    ]
+  },
+  {
     path: '/blog',
     component: Layout,
     redirect: '/blog/article',
     name: 'Blog',
     meta: {
       title: 'Blog',
-      icon: 'lock'
+      icon: 'write'
     },
     children: [
       {
@@ -122,6 +144,33 @@ export const asyncRoutes = [
         meta: {
           title: 'Tags',
           key: 'tags'
+        }
+      },
+      {
+        path: 'category',
+        component: () => import('@/views/blog/category'),
+        name: 'Category',
+        meta: {
+          title: 'Category',
+          key: 'category'
+        }
+      },
+      {
+        path: 'comment',
+        component: () => import('@/views/blog/comment'),
+        name: 'Comment',
+        meta: {
+          title: 'Comment',
+          key: 'comment'
+        }
+      },
+      {
+        path: 'gallery',
+        component: () => import('@/views/blog/gallery'),
+        name: 'Gallery',
+        meta: {
+          title: 'Gallery',
+          key: 'gallery'
         }
       }
     ]

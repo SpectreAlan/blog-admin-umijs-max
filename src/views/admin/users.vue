@@ -31,7 +31,9 @@
         <el-form-item label="昵称" prop="nickName">
           <el-input v-model.trim="form.nickName" />
         </el-form-item>
-        <ImgUpload label="头像" :icon="form.avatar" @setIcon="setIcon" />
+        <el-form-item label="头像" prop="avatar">
+          <ImgUpLoad :img="form.avatar" height="120px" width="120px" @setImg="setIcon" />
+        </el-form-item>
         <el-form-item label="角色" prop="role">
           <el-select ref="role" v-model="form.role" placeholder="选择用户角色" clearable class="filter-item">
             <el-option v-for="(v, k,i) in roles" :key="i" :label="v" :value="k" />
@@ -60,18 +62,15 @@
 import { list, signup, del, edit, getRoles } from '@/api/users'
 import { recovery } from '@/utils/common'
 import TableTemplate from '../common/table'
-import ImgUpload from '@/views/common/imgUpload'
-import { validUsername } from '@/utils/validate'
+import ImgUpLoad from '@/views/common/imgUpload'
+
 import md5 from 'md5'
 export default {
   name: 'Users',
-  components: { TableTemplate, ImgUpload },
+  components: { TableTemplate, ImgUpLoad },
   data() {
-    const validateUsername = (rule, value, callback) => {
-      callback(validUsername(value) ? '' : new Error('账号格式不对'))
-    }
     return {
-      rules: { account: [{ required: true, trigger: 'blur', validator: validateUsername }], role: [{ required: true, message: '请选择角色', trigger: 'change' }] },
+      rules: { account: [{ required: true, trigger: 'blur' }], role: [{ required: true, message: '请选择角色', trigger: 'change' }] },
       form: { account: '', nickName: '', role: '', remark: '', status: 1, pwd: '', avatar: '' },
       roles: {},
       dialogVisible: false,

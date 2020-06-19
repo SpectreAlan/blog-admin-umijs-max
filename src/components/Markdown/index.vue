@@ -29,7 +29,6 @@ export default {
   },
   watch: {
     content() {
-      console.log(this.content)
       this.setMarkdown()
     }
   },

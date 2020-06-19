@@ -25,10 +25,19 @@ export function search(data) {
 }
 
 export function tags(data) {
-  return Request.post('/article/tags', data)
+  return Request.post('/tags/list', data)
 }
 export function allTags(data) {
-  return Request.post('/article/allTags', data)
+  return Request.post('/tags/all', data)
+}
+export function addTags(data) {
+  return Request.post('/tags/add', data)
+}
+export function editTags(data) {
+  return Request.post('/tags/edit', data)
+}
+export function delTags(data) {
+  return Request.post('/tags/del', data)
 }
 export function category(data) {
   return Request.post('/article/category', data)

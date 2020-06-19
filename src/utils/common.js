@@ -1,3 +1,4 @@
+import defaultSetting from '@/settings'
 
 export function recovery(key) {
   this.list = JSON.parse(localStorage.getItem(key))
@@ -15,4 +16,8 @@ export function copy(value) {
     message: '复制成功',
     type: 'success'
   })
+}
+
+export function getUrl(url) {
+  return window.location.protocol + '//' + window.location.host + defaultSetting.proxy.name + url
 }
