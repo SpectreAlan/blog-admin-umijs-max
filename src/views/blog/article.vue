@@ -2,7 +2,7 @@
   <div class="app-container">
     <!-- 表格查询条件 -->
     <div class="filter-container">
-      <el-input v-model.trim.trim="listQuery.account" placeholder="标题..." style="width: 200px;" clearable />
+      <el-input v-model.trim="listQuery.account" placeholder="标题..." style="width: 200px;" clearable />
       <el-button type="primary" class="filter-item" @click="search()">查询</el-button>
       <el-button type="primary" class="filter-item" @click="handleAdd()">添加</el-button>
     </div>
@@ -17,7 +17,16 @@
       @handleEdit="handleEdit"
       @handleDel="handleDel"
       @handleStatus="handleStatus"
+      @handleComment="handleComment"
     />
+    <el-dialog :close-on-click-modal="false" title="添加置顶评论" :visible.sync="alterVisible" width="400px">
+      <el-input
+        v-model.trim="form.comment"
+        type="textarea"
+        :rows="4"
+      />
+      <span slot="footer" class="dialog-footer"><el-button type="primary" @click="ok()">确 定</el-button></span>
+    </el-dialog>
     <!-- 分页 -->
     <el-pagination :current-page.sync="listQuery.page" layout="total, prev,pager, next" :total="total" background @current-change="search" />
   </div>
@@ -25,6 +34,7 @@
 
 <script>
 import { list, status, del } from '@/api/blog'
+import { add } from '@/api/comment'
 import { recovery } from '@/utils/common'
 import TableTemplate from '../common/table'
 export default {
@@ -47,9 +57,11 @@ export default {
         { field: 'remark', title: '备注' },
         { field: 'toolbar', title: '操作', width: '200px' }
       ],
-      toolbarList: [{ title: '编辑', field: 'handleEdit', type: 'primary' }, { title: '删除', field: 'handleDel', type: 'danger' }],
+      toolbarList: [{ title: '编辑', field: 'handleEdit', type: 'primary' }, { title: '添加置顶评论', field: 'handleComment', type: 'success' }, { title: '删除', field: 'handleDel', type: 'danger' }],
       total: 0,
-      tableControl: true
+      tableControl: true,
+      alterVisible: false,
+      form: { comment: '' }
     }
   },
   created() {
@@ -78,6 +90,22 @@ export default {
     handleAdd() {
       this.$router.push({
         name: 'Write'
+      })
+    },
+    handleComment(item) {
+      this.form.id = item.id
+      this.form.title = item.title
+      this.form.createTime = item.createTime
+      this.form.comment = ''
+      this.alterVisible = true
+    },
+    ok() {
+      if (!this.form.comment) {
+        this.$message.error('内容不能为空')
+      }
+      add(this.form).then(() => {
+        this.$message.success('添加成功')
+        this.alterVisible = false
       })
     },
     handleStatus(data) {

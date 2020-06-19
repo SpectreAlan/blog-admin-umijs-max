@@ -29,6 +29,16 @@
           v-model.trim="form.des"
           :rows="4"
           type="textarea"
+          maxlength="150"
+          show-word-limit
+          clearable
+        />
+      </el-form-item>
+      <el-form-item label="关键字" prop="keywords">
+        <el-input
+          v-model.trim="form.keywords"
+          :rows="4"
+          type="textarea"
           maxlength="80"
           show-word-limit
           clearable
@@ -64,6 +74,7 @@ export default {
         des: '',
         category: '',
         tags: [],
+        keywords: [],
         cover: ''
       }
     }
@@ -120,8 +131,8 @@ export default {
   position: relative;
   .control{
     position: absolute;
-    top: 90px;
-    right: 400px;
+    top: 100px;
+    right: 300px;
     text-align: end;
   }
 }

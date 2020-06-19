@@ -2,90 +2,130 @@
   <div class="app-container">
     <!-- 表格查询条件 -->
     <div class="filter-container">
-      <el-input v-model.trim.trim="listQuery.title" placeholder="标签名称" style="width: 200px;" clearable />
-      <el-button type="primary" class="filter-item" @click="search()">查询</el-button>
-      <el-button type="primary" class="filter-item" @click="search">添加</el-button>
+      <el-input v-model.trim="listQuery.title" placeholder="标签名称" style="width: 200px;" clearable />
+      <el-button type="primary" class="filter-item" @click="search">查询</el-button>
+      <el-button type="primary" class="filter-item" @click="add">添加</el-button>
     </div>
-    <el-table v-loading="loading" :data="list" border fit highlight-current-row style="width: 100%">
-      <el-table-column min-width="300px" label="标签名称">
-        <template slot-scope="{row}">
-          <template v-if="row.edit">
-            <el-input v-model="row.title" class="edit-input" size="small" />
-            <el-button class="cancel-btn" size="small" icon="el-icon-refresh" type="warning" @click="cancelEdit(row)"> 取消 </el-button>
+    <table-template
+      :table-header="tableHeader"
+      :list="list"
+      :toolbar-list="toolbarList"
+      :list-loading="loading"
+      @recovery="recovery"
+      @handleEdit="handleEdit"
+      @handleDel="handleDel"
+      @handleShow="handleShow"
+    />
+    <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="alterVisible" width="20%">
+      <el-input v-model.trim="form.title" />
+      <span slot="footer" class="dialog-footer"><el-button type="primary" @click="ok()">确 定</el-button></span>
+    </el-dialog>
+    <el-dialog title="所属文章" :visible.sync="searchVisible">
+      <el-table v-loading="articleLoading" :data="articleData">
+        <el-table-column property="title" label="标题" />
+        <el-table-column property="category" label="分类" />
+        <el-table-column property="tags" label="标签" />
+        <el-table-column property="status" label="发布状态">
+          <template slot-scope="scope">
+            {{ scope.row.status ? '已发布' : '未发布' }}
           </template>
-          <span v-else>{{ row.title }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="300px" align="center" label="更新时间">
-        <template slot-scope="{row}"> <span>{{ row.updateTime }}</span></template>
-      </el-table-column>
-      <el-table-column width="250px" align="center" label="文章数量">
-        <template slot-scope="{row}"><span>{{ row.count }}</span></template>
-      </el-table-column>
-      <el-table-column align="center" label="操作" width="400">
-        <template slot-scope="{row}">
-          <el-button v-if="row.edit" type="success" size="small" icon="el-icon-circle-check-outline" @click="confirmEdit(row)">确认</el-button>
-          <template v-else>
-            <el-button type="primary" size="small" icon="el-icon-edit" @click="row.edit=!row.edit"> 编辑 </el-button>
-            <el-button type="success" size="small" @click="row.edit=!row.edit"> 查看所属文章 </el-button>
-            <el-button type="danger" size="small" @click="row.edit=!row.edit"> 删除 </el-button>
-          </template>
-        </template>
-      </el-table-column>
-    </el-table>
+        </el-table-column>
+        <el-table-column property="updateTime" label="更新时间" />
+      </el-table>
+    </el-dialog>
+    <el-pagination :current-page.sync="listQuery.page" layout="total, prev,pager, next" :total="total" background @current-change="search" />
   </div>
 </template>
 
 <script>
-import { tags } from '@/api/blog'
-
+import { tags, edit, add, del, search } from '@/api/tags'
+import { recovery } from '@/utils/common'
+import TableTemplate from '../common/table'
 export default {
   name: 'Tags',
+  components: { TableTemplate },
   data() {
     return {
       list: [],
+      articleData: [],
+      total: 0,
       loading: true,
-      listQuery: { page: 1, title: '' }
+      title: '',
+      form: {},
+      alterVisible: false,
+      searchVisible: false,
+      articleLoading: false,
+      listQuery: { page: 1, title: '' },
+      tableHeader: [
+        { field: 'title', sortable: 'custom', title: '标签名' },
+        { field: 'updateTime', title: '更新时间' },
+        { field: 'toolbar', title: '操作' }
+      ],
+      toolbarList: [{ title: '编辑', field: 'handleEdit', type: 'primary' }, { title: '查看所属文章', field: 'handleShow', type: 'success' }, { title: '删除', field: 'handleDel', type: 'danger' }]
     }
   },
   created() {
     this.search()
   },
   methods: {
+    recovery,
     search() {
       this.loading = true
       tags(this.listQuery).then(res => {
         this.loading = false
-        this.list = res.list.map(v => {
-          this.$set(v, 'edit', false)
-          v.originalTitle = v.title
-          return v
-        })
-        this.loading = false
+        this.list = res.list
         this.total = res.total
       }).catch(() => {
         this.loading = false
       })
     },
-    cancelEdit(row) {
-      row.title = row.originalTitle
-      row.edit = false
+    handleEdit(data) {
+      this.title = '编辑标签'
+      this.alterVisible = true
+      this.form = { title: data.title, id: data.id }
     },
-    confirmEdit(row) {
-      row.edit = false
-      row.originalTitle = row.title
+    handleShow(data) {
+      this.searchVisible = true
+      this.articleLoading = true
+      search({ tag: data.title }).then(res => {
+        this.articleLoading = false
+        this.articleData = res
+        this.alterVisible = false
+      }).catch(() => { this.articleLoading = false })
+    },
+    ok() {
+      if (!this.form.title) { return }
+      this.form.id ? edit(this.form).then(res => {
+        this.search()
+        this.$message.success('编辑成功')
+        this.alterVisible = false
+      }) : add(this.form).then(res => {
+        this.search()
+        this.$message.success('添加成功')
+        this.alterVisible = false
+      })
+    },
+    add() {
+      this.alterVisible = true
+      this.form = { title: '' }
+      this.title = '新增标签'
+    },
+    handleDel(data) {
+      this.$confirm('此操作将永久删除该标签, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.loading = true
+        del({ id: data.id }).then(res => {
+          this.search()
+          this.$message.success('删除成功')
+        })
+      }).catch(() => { this.loading = false })
     }
   }
 }
 </script>
 
 <style scoped>
-.edit-input {
-  padding-right: 100px;
-}
-.cancel-btn {
-  position: absolute;
-  right: 15px;
-  top: 10px;
-}
 </style>

@@ -1,0 +1,122 @@
+<template>
+  <div class="app-container">
+    <!-- 表格查询条件 -->
+    <div class="filter-container">
+      <el-input v-model.trim="listQuery.article" placeholder="文章名称" style="width: 200px;" clearable />
+      <el-button type="primary" class="filter-item" @click="search">查询</el-button>
+    </div>
+    <table-template
+      :table-header="tableHeader"
+      :list="list"
+      :toolbar-list="toolbarList"
+      :list-loading="loading"
+      :formatter="formatter"
+      @recovery="recovery"
+      @handleReplay="handleReplay"
+      @handleStatus="handleStatus"
+      @handleDel="handleDel"
+    />
+    <el-dialog :close-on-click-modal="false" title="回复评论" :visible.sync="alterVisible" width="400px">
+      <el-input
+        v-model.trim="form.comment"
+        type="textarea"
+        :rows="4"
+      />
+      <span slot="footer" class="dialog-footer"><el-button type="primary" @click="ok()">确 定</el-button></span>
+    </el-dialog>
+    <el-pagination :current-page.sync="listQuery.page" layout="total, prev,pager, next" :total="total" background @current-change="search" />
+  </div>
+</template>
+
+<script>
+import { comments, replay, del, status } from '@/api/comment'
+import { recovery } from '@/utils/common'
+import TableTemplate from '../common/table'
+export default {
+  name: 'Comment',
+  components: { TableTemplate },
+  data() {
+    return {
+      list: [],
+      articleData: [],
+      total: 0,
+      loading: true,
+      form: { comment: '' },
+      alterVisible: false,
+      listQuery: { page: 1, article: '' },
+      tableHeader: [
+        { field: 'article', sortable: 'custom', title: '文章' },
+        { field: 'comment', sortable: 'custom', title: '评论' },
+        { field: 'nickName', sortable: 'custom', title: '昵称' },
+        { field: 'email', sortable: 'custom', title: '邮箱' },
+        { field: 'author', sortable: 'custom', title: '类型', formatter: 'author' },
+        { field: 'status', title: '状态', switch: 'handleStatus', inactive: 0, active: 1 },
+        { field: 'createTime', title: '创建时间' },
+        { field: 'browser', title: '设备' },
+        { field: 'os', title: '操作系统' },
+        { field: 'toolbar', title: '操作' }
+      ],
+      toolbarList: [{ title: '回复', field: 'handleReplay', type: 'primary' }, { title: '删除', field: 'handleDel', type: 'danger' }]
+    }
+  },
+  created() {
+    this.search()
+  },
+  methods: {
+    recovery,
+    formatter(type) {
+      return type ? '作者回复' : '评论'
+    },
+    search() {
+      this.loading = true
+      comments(this.listQuery).then(res => {
+        this.loading = false
+        this.list = res.list
+        this.total = res.total
+      }).catch(() => {
+        this.loading = false
+      })
+    },
+    handleReplay(data) {
+      this.form.pid = data.pid === -1 ? data.id : data.pid
+      this.form.article = data.article
+      this.form.articleId = data.articleId
+      this.form.pname = data.nickName
+      this.alterVisible = true
+    },
+    handleStatus(data) {
+      this.loading = true
+      status({ id: data.id, status: data.status }).then(() => {
+        this.loading = false
+        this.$message.success('操作成功')
+      }).catch(() => {
+        this.search()
+      })
+    },
+    ok() {
+      if (!this.form.comment) { return }
+      replay(this.form).then(() => {
+        this.search()
+        this.$message.success('回复成功')
+        this.alterVisible = false
+      })
+    },
+    handleDel(data) {
+      this.$confirm('此操作将永久删除该标签, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.loading = true
+        del({ id: data.id }).then(() => {
+          this.search()
+          this.$message.success('删除成功')
+        })
+      }).catch(() => { this.loading = false })
+    }
+  }
+}
+</script>
+
+<style scoped>
+</style>
