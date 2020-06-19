@@ -14,7 +14,7 @@
       :auto-upload="false"
       name="file"
     >
-      <img v-if="img" :src="img" class="img" alt="" :style="{width: width, height: height}">
+      <img v-if="img" :src="getUrl(img)" class="img" alt="" :style="{width: width, height: height}">
       <i v-else class="el-icon-plus img-uploader-icon" :style="{width: width, height: height, lineHeight: height}" />
     </el-upload>
   </div>
@@ -22,6 +22,7 @@
 
 <script>
 import defaultSetting from '@/settings'
+import { getUrl } from '@/utils/common'
 export default {
   name: 'ImgUpload',
   props: {
@@ -58,6 +59,7 @@ export default {
     }
   },
   methods: {
+    getUrl,
     success(res) {
       this.loading = false
       if (res.code) {

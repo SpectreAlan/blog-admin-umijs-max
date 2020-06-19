@@ -68,7 +68,7 @@
               />
             </template>
             <template v-else-if="k.img">
-              <img :src="row[k.img]" alt="" class="imgIcon">
+              <img :src="getUrl(row[k.img])" alt="" class="imgIcon">
             </template>
             <template v-else-if="k.field ==='toolbar'">
               <div v-for="(item, index) in toolbarList" :key="index" class="tableControlButton">
@@ -121,7 +121,7 @@
 </template>
 <script>
 import { exportExcel } from './excel'
-import { copy } from '@/utils/common'
+import { copy, getUrl } from '@/utils/common'
 export default {
   name: 'Table',
   props: {
@@ -238,6 +238,7 @@ export default {
   },
   methods: {
     copy,
+    getUrl,
     viewItem() {
       for (let i = 0; i < this.tableHeader.length; i++) {
         this.all[this.tableHeader[i].title] = this.tableHeader[i].field
