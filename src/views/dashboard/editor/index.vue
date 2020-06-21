@@ -7,7 +7,7 @@
       </div>
     </div>
     <div>
-      <img :src="emptyGif" class="emptyGif">
+      <img src="./default.git" class="emptyGif">
     </div>
   </div>
 </template>
@@ -17,11 +17,6 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'DashboardEditor',
-  data() {
-    return {
-      emptyGif: 'https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3'
-    }
-  },
   computed: {
     ...mapGetters([
       'name',
