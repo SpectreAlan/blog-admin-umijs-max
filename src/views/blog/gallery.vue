@@ -145,6 +145,7 @@ export default {
       })
     },
     handleEdit(data) {
+      this.title = '编辑'
       this.alterVisible = true
       this.form = { ...data }
     },
