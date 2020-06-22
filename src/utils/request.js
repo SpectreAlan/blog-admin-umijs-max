@@ -31,8 +31,8 @@ class Request {
         sessionStorage.removeItem('req_' + response.config.url)
         const res = response.data
         if (res.code !== 1) {
-          if (res.code === 40000) {
-            router.push({ path: '/login' })
+          if (res.code === 4000) {
+            router.push('/login')
           }
           Message({
             message: res.msg || '服务器响应数据为空',
