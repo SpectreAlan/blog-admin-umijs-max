@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { comments, replay, del, status } from '@/api/comment'
+import { comments, add, del, status } from '@/api/comment'
 import { recovery } from '@/utils/common'
 import TableTemplate from '../common/table'
 export default {
@@ -95,7 +95,7 @@ export default {
     },
     ok() {
       if (!this.form.comment) { return }
-      replay(this.form).then(() => {
+      add(this.form).then(() => {
         this.search()
         this.$message.success('回复成功')
         this.alterVisible = false

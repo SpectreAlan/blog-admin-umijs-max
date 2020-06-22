@@ -60,7 +60,7 @@
 
 <script>
 import Markdown from '@/components/Markdown/'
-import { search, category, allTags, add, edit } from '@/api/blog'
+import { tags, category, detail, add, edit } from '@/api/write'
 import ImgUpLoad from '@/views/common/imgUpload'
 export default {
   name: 'Write',
@@ -106,7 +106,7 @@ export default {
       if (!id) {
         return
       }
-      search({ id }).then(res => {
+      detail({ id }).then(res => {
         const buffer = new Buffer(res.content)
         res.content = buffer.toString()
         this.form = res
@@ -116,7 +116,7 @@ export default {
       category().then(res => {
         this.category = res
       })
-      allTags().then(res => {
+      tags().then(res => {
         this.tags = res
       })
     }

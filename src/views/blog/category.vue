@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { category, edit, add, del, search } from '@/api/category'
+import { search, edit, add, del, belong } from '@/api/category'
 import { recovery } from '@/utils/common'
 import TableTemplate from '../common/table'
 export default {
@@ -71,7 +71,7 @@ export default {
     recovery,
     search() {
       this.loading = true
-      category(this.listQuery).then(res => {
+      search(this.listQuery).then(res => {
         this.loading = false
         this.list = res.list
         this.total = res.total
@@ -87,7 +87,7 @@ export default {
     handleShow(data) {
       this.searchVisible = true
       this.articleLoading = true
-      search({ category: data.title }).then(res => {
+      belong({ category: data.title }).then(res => {
         this.articleLoading = false
         this.articleData = res
         this.alterVisible = false
