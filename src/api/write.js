@@ -9,7 +9,7 @@ export function category(data) {
 }
 
 export function detail(data) {
-  return Request.post('/article/search/one', data)
+  return Request.post('/write/search', data)
 }
 
 export function add(data) {
