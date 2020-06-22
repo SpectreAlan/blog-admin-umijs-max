@@ -1,7 +1,7 @@
 import Request from '@/utils/request'
 
-export function tags(data) {
-  return Request.post('/tags/list', data)
+export function search(data) {
+  return Request.post('/tags/search', data)
 }
 export function add(data) {
   return Request.post('/tags/add', data)
@@ -12,6 +12,6 @@ export function edit(data) {
 export function del(data) {
   return Request.post('/tags/del', data)
 }
-export function search(data) {
-  return Request.post('/tags/search', data)
+export function belong(data) {
+  return Request.post('/tags/belong', data)
 }

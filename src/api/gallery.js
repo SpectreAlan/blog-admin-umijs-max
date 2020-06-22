@@ -1,7 +1,7 @@
 import Request from '@/utils/request'
 
 export function list(data) {
-  return Request.post('/gallery/list', data)
+  return Request.post('/gallery/search', data)
 }
 export function add(data) {
   return Request.post('/gallery/add', data)
