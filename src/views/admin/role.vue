@@ -62,7 +62,8 @@
 </template>
 
 <script>
-import { list, add, del, edit, menuList, status } from '@/api/role'
+import { list, add, del, edit, status } from '@/api/role'
+import { search } from '@/api/menu'
 import TableTemplate from '../common/table'
 export default {
   name: 'Role',
@@ -125,11 +126,11 @@ export default {
       this.getTree()
       this.dialogVisible = true
       this.role = this.$options.data().role
-      this.title === '添加角色'
+      this.title = '添加角色'
     },
     handleStatus(data) {
       this.listLoading = true
-      status({ id: data.id, status: data.status }).then(res => {
+      status({ id: data.id, status: data.status }).then(() => {
         this.listLoading = false
         this.$message.success('操作成功')
       }).catch(() => {
@@ -147,8 +148,8 @@ export default {
     },
     getTree(item) {
       this.treeLoading = true
-      menuList().then(arr => {
-        const first_leval = []
+      search().then(arr => {
+        this.tree = []
         const other = {}
         for (let i = 0; i < arr.length; i++) {
           const obj = {}
@@ -159,11 +160,10 @@ export default {
             !other[arr[i].parentId] && (other[arr[i].parentId] = [])
             other[arr[i].parentId].push(obj)
           } else {
-            first_leval.push(obj)
+            this.tree.push(obj)
           }
         }
-        this.treeSort(first_leval, other)
-        this.tree = first_leval
+        this.treeSort(this.tree, other)
         this.$refs.tree.setCheckedKeys([])
         this.treeLoading = false
         item && this.$nextTick(() => {

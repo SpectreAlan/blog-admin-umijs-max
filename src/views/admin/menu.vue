@@ -83,8 +83,10 @@
         <el-form-item v-if="form.menu_type === 1" label="菜单编码" prop="menu_key">
           <el-input v-model.trim="form.menu_key" placeholder="请输入4~16位纯英文" clearable :disabled="title==='编辑菜单'" />
         </el-form-item>
-        <el-form-item label="权限" prop="permission">
-          <el-input v-model.trim="form.permission" placeholder="格式形如:user:add" clearable />
+        <el-form-item v-if="form.menu_type !== 1" label="权限" prop="permission">
+          <el-select ref="role" v-model="form.permission" placeholder="选择权限" clearable class="filter-item">
+            <el-option v-for="(k,i) in types" :key="i" :label="k.title" :value="k.typeKey" />
+          </el-select>
         </el-form-item>
         <el-form-item label="序号" prop="menu_order">
           <el-input v-model.trim="form.menu_order" />
@@ -113,7 +115,7 @@
 </template>
 
 <script>
-import { list, add, del, edit } from '@/api/menu'
+import { search, add, del, edit, types } from '@/api/menu'
 export default {
   name: 'Menu',
   data() {
@@ -150,8 +152,7 @@ export default {
           { required: true, message: '请选择父级菜单', trigger: 'blur' }
         ],
         permission: [
-          { required: true, message: '请输入权限', trigger: 'blur' },
-          { min: 2, max: 30, message: '长度在 2 到 30 个字符', trigger: 'blur' }
+          { required: true, message: '请输选择权限类型', trigger: 'change' }
         ]
       },
       defaultProps: {
@@ -160,6 +161,7 @@ export default {
       },
       parentInfo: '',
       list: [],
+      types: [],
       total: 0,
       title: '添加菜单',
       dialogVisible: false,
@@ -193,7 +195,7 @@ export default {
       this.listLoading = true
       this.list = []
       this.o = {}
-      list().then(arr => {
+      search().then(arr => {
         const other = {}
         for (let i = 0; i < arr.length; i++) {
           this.o[arr[i].id] = arr[i].menu_name
@@ -231,12 +233,14 @@ export default {
       this.treeVisible = false
     },
     handleAdd() {
+      this.menuTypes()
       this.form = this.$options.data().form
       this.title = '添加菜单'
       this.parentInfo = ''
       this.dialogVisible = true
     },
     handleEdit(data) {
+      this.menuTypes()
       this.detail = { ...data }
       this.form = { ...data }
       this.parentInfo = this.o[data.parentId] || '顶层菜单'
@@ -247,6 +251,11 @@ export default {
       del({ id: data.id }).then(res => {
         this.$message.success('删除成功')
         this.search()
+      })
+    },
+    menuTypes() {
+      types().then(res => {
+        this.types = res
       })
     },
     onSubmit() {
@@ -262,7 +271,7 @@ export default {
         return
       }
       if (this.title === '添加菜单') {
-        add(this.form).then(res => {
+        add(this.form).then(() => {
           this.$message.success('添加成功')
           this.dialogVisible = false
           this.search()
