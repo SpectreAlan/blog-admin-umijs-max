@@ -23,8 +23,12 @@ export default {
     ])
   },
   created() {
-    if (!this.roles.includes('dashboard')) {
-      this.currentRole = 'editorDashboard'
+    this.currentRole = 'editorDashboard'
+    for (let i = 0; i < this.roles.length; i++) {
+      if (this.roles[i].key === 'dashboard') {
+        this.currentRole = 'adminDashboard'
+        break
+      }
     }
   }
 }

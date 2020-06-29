@@ -31,7 +31,10 @@ export const constantRoutes = [
     path: '/401',
     component: () => import('@/views/error-page/401'),
     hidden: true
-  },
+  }
+]
+
+export const asyncRoutes = [
   {
     path: '/',
     component: Layout,
@@ -44,17 +47,14 @@ export const constantRoutes = [
         meta: { title: 'Dashboard', icon: 'chart', affix: true, key: 'dashboard' }
       }
     ]
-  }
-]
-
-export const asyncRoutes = [
+  },
   {
     path: '/admin',
     component: Layout,
     redirect: '/admin/users',
     name: 'Admin',
     meta: {
-      title: 'Admin',
+      title: '系统管理',
       icon: 'administrator'
     },
     children: [
@@ -115,7 +115,7 @@ export const asyncRoutes = [
     redirect: '/blog/article',
     name: 'Blog',
     meta: {
-      title: 'Blog',
+      title: '博客系统',
       icon: 'write'
     },
     children: [

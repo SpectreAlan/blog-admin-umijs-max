@@ -40,11 +40,11 @@
         label="菜单编码"
         align="center"
       />
-      <el-table-column
-        prop="menu_order"
-        label="序号"
-        align="center"
-      />
+      <!--      <el-table-column-->
+      <!--        prop="menu_order"-->
+      <!--        label="序号"-->
+      <!--        align="center"-->
+      <!--      />-->
       <el-table-column
         prop="note"
         label="备注"
@@ -88,9 +88,9 @@
             <el-option v-for="(k,i) in types" :key="i" :label="k.title" :value="k.typeKey" />
           </el-select>
         </el-form-item>
-        <el-form-item label="序号" prop="menu_order">
-          <el-input v-model.trim="form.menu_order" />
-        </el-form-item>
+        <!--        <el-form-item label="序号" prop="menu_order">-->
+        <!--          <el-input v-model.trim="form.menu_order" />-->
+        <!--        </el-form-item>-->
         <el-form-item label="父级菜单">
           <el-input v-model="parentInfo" readonly placeholder="点击选择" @focus="treeVisible = true" />
         </el-form-item>
@@ -126,14 +126,14 @@ export default {
         callback()
       }
     }
-    const menu_order = (rule, value, callback) => {
-      const reg = /^([1-9]\d*)(\.\d+)?$/g
-      if (!(reg.test(value))) {
-        callback(new Error('请输入大于0的数'))
-      } else {
-        callback()
-      }
-    }
+    // const menu_order = (rule, value, callback) => {
+    //   const reg = /^([1-9]\d*)(\.\d+)?$/g
+    //   if (!(reg.test(value))) {
+    //     callback(new Error('请输入大于0的数'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     return {
       rules: {
         menu_name: [
@@ -144,10 +144,10 @@ export default {
           { required: true, message: '请输入code', trigger: 'blur' },
           { validator: menu_key, trigger: 'blur' }
         ],
-        menu_order: [
-          { required: true, message: '请输入序号', trigger: 'blur' },
-          { validator: menu_order, trigger: 'blur' }
-        ],
+        // menu_order: [
+        //   { required: true, message: '请输入序号', trigger: 'blur' },
+        //   { validator: menu_order, trigger: 'blur' }
+        // ],
         parentId: [
           { required: true, message: '请选择父级菜单', trigger: 'blur' }
         ],
@@ -173,7 +173,7 @@ export default {
         menu_name: '',
         permission: '',
         parentId: 0,
-        menu_order: 0,
+        // menu_order: 0,
         menu_type: 0
       },
       o: null,
