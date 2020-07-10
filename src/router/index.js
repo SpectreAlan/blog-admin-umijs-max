@@ -94,7 +94,7 @@ export const asyncRoutes = [
     name: 'Settings',
     meta: {
       title: 'Settings',
-      icon: 'settings'
+      icon: 'setting'
     },
     children: [
       {
@@ -103,8 +103,16 @@ export const asyncRoutes = [
         name: 'Basic',
         meta: {
           title: 'BasicSetting',
-          icon: 'setting',
           key: 'basic'
+        }
+      },
+      {
+        path: 'images',
+        component: () => import('@/views/settings/images'),
+        name: 'Images',
+        meta: {
+          title: '图片管理',
+          key: 'images'
         }
       }
     ]
