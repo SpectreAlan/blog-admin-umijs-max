@@ -68,7 +68,11 @@
               />
             </template>
             <template v-else-if="k.img">
-              <img :src="getUrl(row[k.img])" alt="" class="imgIcon">
+              <el-image
+                class="imgIcon"
+                :src="row[k.img]"
+                :preview-src-list="[row[k.img]]"
+              />
             </template>
             <template v-else-if="k.field ==='toolbar'">
               <div v-for="(item, index) in toolbarList" :key="index" class="tableControlButton">
@@ -108,10 +112,8 @@
                 <div slot="reference" class="moreControl">...</div>
               </el-popover>
             </template>
-            <template
-              v-else
-              @click="control(k.field, row)"
-            >{{ k.formatter ? formatter(row[k.field]) : row[k.field] || '-' }}
+            <template v-else>
+              <div :class="k.event ? 'event':''" @click="handleEvent(k.event,k.field , row)">{{ k.formatter ? formatter(row[k.field]) : row[k.field] || '-' }}</div>
             </template>
           </template>
         </el-table-column>
@@ -121,7 +123,7 @@
 </template>
 <script>
 import { exportExcel } from './excel'
-import { copy, getUrl } from '@/utils/common'
+import { copy } from '@/utils/common'
 export default {
   name: 'Table',
   props: {
@@ -238,7 +240,6 @@ export default {
   },
   methods: {
     copy,
-    getUrl,
     viewItem() {
       for (let i = 0; i < this.tableHeader.length; i++) {
         this.all[this.tableHeader[i].title] = this.tableHeader[i].field
@@ -248,6 +249,9 @@ export default {
     },
     control(k, row) {
       this.$emit(k, row)
+    },
+    handleEvent(k, field, row) {
+      this[k] ? this[k](row[field]) : this.$emit(k, row)
     },
     sortChange(data) {
       this.sort = data
@@ -305,7 +309,10 @@ export default {
       display: inline-block;
     }
     .imgIcon{
-      max-height: 40px;
+      max-width: 100px;
+    }
+    .event{
+      cursor: pointer;
     }
   }
   .popover-list{

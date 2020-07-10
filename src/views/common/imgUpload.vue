@@ -13,8 +13,9 @@
       :file-list="fileList"
       :auto-upload="false"
       name="file"
+      :data="{title,storage}"
     >
-      <img v-if="img" :src="getUrl(img)" class="img" alt="" :style="{width: width, height: height}">
+      <img v-if="img" :src="img" class="img" alt="" :style="{width: width, height: height}">
       <i v-else class="el-icon-plus img-uploader-icon" :style="{width: width, height: height, lineHeight: height}" />
     </el-upload>
   </div>
@@ -22,7 +23,6 @@
 
 <script>
 import defaultSetting from '@/settings'
-import { getUrl } from '@/utils/common'
 export default {
   name: 'ImgUpload',
   props: {
@@ -33,6 +33,12 @@ export default {
       }
     },
     img: {
+      type: String,
+      default() {
+        return ''
+      }
+    },
+    title: {
       type: String,
       default() {
         return ''
@@ -49,17 +55,22 @@ export default {
       default() {
         return '178px'
       }
+    },
+    storage: {
+      type: String,
+      default() {
+        return ''
+      }
     }
   },
   data() {
     return {
       loading: false,
       fileList: [],
-      url: defaultSetting.proxy.name + '/upload/images'
+      url: defaultSetting.proxy.name + '/uploads/images'
     }
   },
   methods: {
-    getUrl,
     success(res) {
       this.loading = false
       if (res.code) {
