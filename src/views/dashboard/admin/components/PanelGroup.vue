@@ -9,7 +9,7 @@
           <div class="card-panel-text">
             New Visits
           </div>
-          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="20" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -22,33 +22,33 @@
           <div class="card-panel-text">
             Messages
           </div>
-          <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="2" :duration="3000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('purchases')">
-        <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="money" class-name="card-panel-icon" />
+      <div class="card-panel" @click="handleSetLineChartData('images')">
+        <div class="card-panel-icon-wrapper icon-image">
+          <svg-icon icon-class="image" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Purchases
+            Images
           </div>
-          <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="43" :duration="3200" class="card-panel-num" />
         </div>
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('shoppings')">
-        <div class="card-panel-icon-wrapper icon-shopping">
-          <svg-icon icon-class="shopping" class-name="card-panel-icon" />
+      <div class="card-panel" @click="handleSetLineChartData('articles')">
+        <div class="card-panel-icon-wrapper icon-article-line">
+          <svg-icon icon-class="article-line" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Shoppings
+            Articles
           </div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="18" :duration="3600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -102,12 +102,12 @@ export default {
         background: #36a3f7;
       }
 
-      .icon-money {
-        background: #f4516c;
+      .icon-image {
+        background: #e5e5e5;
       }
 
-      .icon-shopping {
-        background: #34bfa3
+      .icon-article-line {
+        background: #333
       }
     }
 
@@ -119,8 +119,8 @@ export default {
       color: #36a3f7;
     }
 
-    .icon-money {
-      color: #f4516c;
+    .icon-image {
+      color: #d4237a;
     }
 
     .icon-shopping {
