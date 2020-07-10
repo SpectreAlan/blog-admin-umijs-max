@@ -1,13 +1,10 @@
-import defaultSetting from '@/settings'
-
 export function recovery(key) {
   this.list = JSON.parse(localStorage.getItem(key))
 }
 export function copy(value) {
-  const text = document.getElementById(value).innerHTML
   const middle = document.createElement('input')
   document.body.appendChild(middle)
-  middle.value = text
+  middle.value = value
   middle.select()
   document.execCommand('copy')
   document.body.removeChild(middle)
@@ -16,8 +13,4 @@ export function copy(value) {
     message: '复制成功',
     type: 'success'
   })
-}
-
-export function getUrl(url) {
-  return window.location.protocol + '//' + window.location.host + defaultSetting.proxy.name + url
 }

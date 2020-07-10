@@ -118,10 +118,6 @@ export default {
       })
     },
     handleDel(data) {
-      if (data.status) {
-        this.$message.error('删除前请先禁用它！')
-        return
-      }
       this.$confirm('确认删除么?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

@@ -36,24 +36,37 @@
         />
       </el-form-item>
       <el-form-item label="封面" prop="cover">
-        <ImgUpLoad :img="form.cover" width="200px" height="95px" @setImg="setImg" />
+        <el-radio v-model="urlType" :label="0">手动输入</el-radio>
+        <el-radio v-model="urlType" :label="1">上传</el-radio>
+        <br>
+        <ImgUpLoad v-if="urlType" :img="form.cover" :title="form.title" width="200px" height="62px" @setImg="setImg" />
+        <el-input v-else v-model.trim="form.cover" style="width: 200px;" clearable placeholder="图片路径..." />
       </el-form-item>
       <el-form-item label="关键字" prop="keywords">
         <el-input
           v-model.trim="form.keywords"
           :rows="4"
           type="textarea"
-          maxlength="80"
+          maxlength="64"
           show-word-limit
-          style="width: 400px;"
+          style="width: 400px;height:100px"
           clearable
         />
       </el-form-item>
+      <el-form-item label="文章目录">
+        <el-switch
+          v-model="form.tic"
+          :active-value="1"
+          :inactive-value="0"
+          active-color="#13ce66"
+          inactive-color="#ff4949"
+        />
+      </el-form-item>
+      <el-form-item label=" ">
+        <el-button type="success" size="medium " @click="onSubmit(1)"><i class="el-icon-upload el-icon--right" />立即发布</el-button>
+        <el-button type="primary" size="medium " icon="el-icon-edit" @click="onSubmit(0)">保存草稿</el-button>
+      </el-form-item>
     </el-form>
-    <div class="control">
-      <el-button type="success" size="medium " @click="onSubmit(1)"><i class="el-icon-upload el-icon--right" />立即发布</el-button>
-      <el-button type="primary" size="medium " icon="el-icon-edit" @click="onSubmit(0)">保存草稿</el-button>
-    </div>
     <Markdown ref="markdown" :content="form.content" />
   </div>
 </template>
@@ -70,6 +83,7 @@ export default {
       tags: [],
       rules: {},
       category: [],
+      urlType: 1,
       form: {
         content: '',
         title: '',
@@ -77,7 +91,8 @@ export default {
         category: '',
         tags: [],
         keywords: '',
-        cover: ''
+        cover: '',
+        tic: 1
       }
     }
   },
@@ -131,13 +146,6 @@ export default {
 <style scoped lang="scss">
 .write{
   padding-top: 10px;
-  position: relative;
-  .control{
-    position: absolute;
-    top: 120px;
-    right: 30px;
-    text-align: end;
-  }
 }
 
 </style>
