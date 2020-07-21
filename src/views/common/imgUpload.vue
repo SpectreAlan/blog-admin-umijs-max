@@ -1,28 +1,16 @@
 <template>
-  <div>
+  <div class="img-uploader" @click="choose">
     <div v-if="loading" class="upload-loading"><i class="el-icon-loading" />上传中....</div>
-    <el-upload
-      v-if="!loading"
-      ref="upload"
-      class="img-uploader"
-      :action="url"
-      :show-file-list="false"
-      :on-success="success"
-      :on-change="upload"
-      :on-error="error"
-      :file-list="fileList"
-      :auto-upload="false"
-      name="file"
-      :data="{title,storage}"
-    >
-      <img v-if="img" :src="img" class="img" alt="" :style="{width: width, height: height}">
-      <i v-else class="el-icon-plus img-uploader-icon" :style="{width: width, height: height, lineHeight: height}" />
-    </el-upload>
+    <input ref="file" type="file" class="file" @change="upload($event)">
+    <img v-if="img" :src="img">
+    <i v-else class="el-icon-plus img-uploader-icon" />
   </div>
 </template>
 
 <script>
 import defaultSetting from '@/settings'
+import axios from 'axios'
+import imgzip from 'imgzip'
 export default {
   name: 'ImgUpload',
   props: {
@@ -44,18 +32,6 @@ export default {
         return ''
       }
     },
-    width: {
-      type: String,
-      default() {
-        return '178px'
-      }
-    },
-    height: {
-      type: String,
-      default() {
-        return '178px'
-      }
-    },
     storage: {
       type: String,
       default() {
@@ -67,53 +43,39 @@ export default {
     return {
       loading: false,
       fileList: [],
-      url: defaultSetting.proxy.name + '/uploads/images'
+      url: ''
     }
   },
   methods: {
-    success(res) {
-      this.loading = false
-      if (res.code) {
-        this.$emit('setImg', res.data)
-        this.$message({
-          type: 'success',
-          message: '上传成功'
-        })
-      } else {
-        this.$message.error(res.msg || '上传失败')
-      }
+    choose() {
+      this.$refs.file.click()
     },
-    upload(file) {
-      if (!this.$refs.upload) { return }
-      if (!(file.raw.type === 'image/png' || file.raw.type === 'image/jpg' || file.raw.type === 'image/jpeg' || file.raw.type === 'image/gif')) {
-        this.fileList = []
-        this.$notify.warning({
-          title: '格式错误',
-          message: '图片格式只能是png、jpg、jpeg、gif，请重新选择'
+    upload(e) {
+      imgzip.photoCompress(e.target.files[0], {}, (base64) => {
+        const blob = imgzip.convertBase64UrlToBlob(base64)
+        const formData = new FormData()
+        formData.append('file', blob)
+        this.loading = true
+        axios({
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          method: 'post',
+          url: defaultSetting.proxy.name + '/uploads/images',
+          data: formData
+        }).then(res => {
+          if (res.status === 200) {
+            this.loading = false
+            if (res.data.code) {
+              this.$message.success('上传成功')
+              this.$emit('setImg', res.data.data)
+            } else {
+              this.$message.error('上传失败')
+            }
+          }
         })
-        return
-      }
-      const size = file.raw.size / 1024 / 1024 / 2
-      if (size > 1) {
-        this.fileList = []
-        this.$notify.warning({
-          title: '警告',
-          message: '图片大小必须小于1M，请重新选择'
-        })
-        return
-      }
-      this.loading = true
-      this.$refs.upload.submit()
-    },
-    error() {
-      this.fileList = []
-      this.loading = false
-      this.$message({
-        type: 'error',
-        message: '上传失败，请稍后重试'
       })
     }
-
   }
 }
 </script>
@@ -125,23 +87,23 @@ export default {
   cursor: pointer;
   position: relative;
   overflow: hidden;
-  .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    &:hover {
-      border-color: #409EFF;
-    }
-  }
+  min-height:100px;
   .img-uploader-icon {
     font-size: 28px;
     color: #8c939d;
     text-align: center;
+    position: absolute;
+    top: 50%;
+    left:50%;
+    transform: translate(-50%,-50%);
   }
-  .img {
-    display: block;
+  img {
+    position:absolute;
+    width:100%;
+    height:100%;
+  }
+  .file{
+    display: none;
   }
 }
 </style>
