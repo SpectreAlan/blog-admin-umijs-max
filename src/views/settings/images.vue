@@ -20,7 +20,7 @@
           <el-input v-model.trim="form.title" clearable />
         </el-form-item>
         <el-form-item label="图片" prop="avatar">
-          <ImgUpLoad :img="form.url" :title="form.title" height="100px" width="100px" @setImg="setIcon" />
+          <ImgUpLoad :img="form.url" :title="form.title" @setImg="setIcon" />
         </el-form-item>
       </el-form>
     </el-dialog>
