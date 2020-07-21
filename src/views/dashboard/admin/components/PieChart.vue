@@ -21,6 +21,12 @@ export default {
     height: {
       type: String,
       default: '300px'
+    },
+    list: {
+      type: Array,
+      default() {
+        return []
+      }
     }
   },
   data() {
@@ -28,10 +34,14 @@ export default {
       chart: null
     }
   },
-  mounted() {
-    this.$nextTick(() => {
-      this.initChart()
-    })
+  watch: {
+    list() {
+      if (this.list.length > 0) {
+        this.$nextTick(() => {
+          this.initChart()
+        })
+      }
+    }
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -43,7 +53,8 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
-
+      const arr = []
+      this.list.map(item => arr.push(item.name))
       this.chart.setOption({
         tooltip: {
           trigger: 'item',
@@ -52,22 +63,17 @@ export default {
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['Industries', 'Technology', 'Forex', 'Gold', 'Forecasts']
+          data: arr
         },
         series: [
           {
-            name: 'WEEKLY WRITE ARTICLES',
+            name: '访问设备占比',
             type: 'pie',
             roseType: 'radius',
+            minAngle: 20,
             radius: [15, 95],
             center: ['50%', '38%'],
-            data: [
-              { value: 320, name: 'Industries' },
-              { value: 240, name: 'Technology' },
-              { value: 149, name: 'Forex' },
-              { value: 100, name: 'Gold' },
-              { value: 59, name: 'Forecasts' }
-            ],
+            data: this.list,
             animationEasing: 'cubicInOut',
             animationDuration: 2600
           }

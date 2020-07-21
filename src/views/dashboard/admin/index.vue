@@ -4,23 +4,17 @@
     <panel-group @handleSetLineChartData="handleSetLineChartData" />
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart :chart-data="lineChartData" />
+      <line-chart :chart-data="lineChartData" :title="title" />
     </el-row>
-
     <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="8">
+      <el-col :xs="24" :sm="24" :lg="12">
         <div class="chart-wrapper">
-          <raddar-chart />
+          <pie-chart :list="blog.visitor" />
         </div>
       </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
+      <el-col :xs="24" :sm="24" :lg="12">
         <div class="chart-wrapper">
-          <pie-chart />
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <bar-chart />
+          <bar-chart :list="blog.category" />
         </div>
       </el-col>
     </el-row>
@@ -30,46 +24,48 @@
 <script>
 import PanelGroup from './components/PanelGroup'
 import LineChart from './components/LineChart'
-import RaddarChart from './components/RaddarChart'
 import PieChart from './components/PieChart'
 import BarChart from './components/BarChart'
-
-const lineChartData = {
-  newVisitis: {
-    expectedData: [10, 12, 16, 13, 10, 16, 16],
-    actualData: [12, 8, 9, 15, 16, 14, 14]
-  },
-  messages: {
-    expectedData: [20, 19, 12, 14, 16, 13, 14],
-    actualData: [18, 16, 15, 10, 14, 15, 13]
-  },
-  images: {
-    expectedData: [8, 10, 12, 10, 10, 9, 10],
-    actualData: [12, 9, 10, 13, 14, 1, 1]
-  },
-  articles: {
-    expectedData: [13, 14, 14, 14, 14, 15, 16],
-    actualData: [12, 8, 9, 15, 16, 14, 13]
-  }
-}
-
+import { searchItem, searchBlog } from '@/api/report'
 export default {
   name: 'DashboardAdmin',
   components: {
     PanelGroup,
     LineChart,
-    RaddarChart,
     PieChart,
     BarChart
   },
   data() {
     return {
-      lineChartData: lineChartData.newVisitis
+      lineChartData: [],
+      title: '访客',
+      blog: {}
     }
   },
+  created() {
+    this.searchItem('statistics')
+    this.searchBlog()
+  },
   methods: {
+    searchItem(key) {
+      searchItem({ key }).then(res => {
+        this.lineChartData = res
+      })
+    },
+    searchBlog() {
+      searchBlog().then(res => {
+        this.blog = res
+      })
+    },
     handleSetLineChartData(type) {
-      this.lineChartData = lineChartData[type]
+      this.searchItem(type)
+      const o = {
+        statistics: '访客',
+        comment: '评论',
+        images: '图片',
+        article: '文章'
+      }
+      this.title = o[type]
     }
   }
 }

@@ -1,28 +1,43 @@
 <template>
   <el-row :gutter="40" class="panel-group">
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
+      <div class="card-panel" @click="handleSetLineChartData('statistics')">
         <div class="card-panel-icon-wrapper icon-people">
           <svg-icon icon-class="peoples" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            New Visits
+            访客 / 总浏览
           </div>
-          <count-to :start-val="0" :end-val="20" :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="report.statistics" :duration="2600" class="card-panel-num" />
+          <span class="devide"> / </span>
+          <count-to :start-val="0" :end-val="report.visitors" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('messages')">
+      <div class="card-panel" @click="handleSetLineChartData('comment')">
         <div class="card-panel-icon-wrapper icon-message">
           <svg-icon icon-class="message" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Messages
+            评论
           </div>
-          <count-to :start-val="0" :end-val="2" :duration="3000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="report.comment" :duration="3000" class="card-panel-num" />
+        </div>
+      </div>
+    </el-col>
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <div class="card-panel" @click="handleSetLineChartData('article')">
+        <div class="card-panel-icon-wrapper icon-article-line">
+          <svg-icon icon-class="article-line" class-name="card-panel-icon" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">
+            文章
+          </div>
+          <count-to :start-val="0" :end-val="report.article" :duration="3600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -33,22 +48,9 @@
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Images
+            图片
           </div>
-          <count-to :start-val="0" :end-val="43" :duration="3200" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('articles')">
-        <div class="card-panel-icon-wrapper icon-article-line">
-          <svg-icon icon-class="article-line" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            Articles
-          </div>
-          <count-to :start-val="0" :end-val="18" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="report.images" :duration="3200" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -56,13 +58,28 @@
 </template>
 
 <script>
+import { search } from '@/api/report'
 import CountTo from 'vue-count-to'
 
 export default {
   components: {
     CountTo
   },
+  data() {
+    return {
+      report: {},
+      current: {}
+    }
+  },
+  created() {
+    this.search()
+  },
   methods: {
+    search() {
+      search().then(res => {
+        this.report = res
+      })
+    },
     handleSetLineChartData(type) {
       this.$emit('handleSetLineChartData', type)
     }
@@ -159,7 +176,10 @@ export default {
     }
   }
 }
-
+.devide{
+  color: #666;
+  font-size: 20px;
+}
 @media (max-width:550px) {
   .card-panel-description {
     display: none;

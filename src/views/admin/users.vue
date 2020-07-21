@@ -32,7 +32,7 @@
           <el-input v-model.trim="form.nickName" />
         </el-form-item>
         <el-form-item label="头像" prop="avatar">
-          <ImgUpLoad :img="form.avatar" :title="form.account" height="120px" width="120px" @setImg="setIcon" />
+          <ImgUpLoad :img="form.avatar" :title="form.account" @setImg="setIcon" />
         </el-form-item>
         <el-form-item label="角色" prop="role">
           <el-select ref="role" v-model="form.role" placeholder="选择用户角色" clearable class="filter-item">

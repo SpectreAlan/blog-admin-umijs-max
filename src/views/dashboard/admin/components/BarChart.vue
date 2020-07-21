@@ -23,6 +23,12 @@ export default {
     height: {
       type: String,
       default: '300px'
+    },
+    list: {
+      type: Array,
+      default() {
+        return []
+      }
     }
   },
   data() {
@@ -30,10 +36,14 @@ export default {
       chart: null
     }
   },
-  mounted() {
-    this.$nextTick(() => {
-      this.initChart()
-    })
+  watch: {
+    list() {
+      if (this.list.length > 0) {
+        this.$nextTick(() => {
+          this.initChart()
+        })
+      }
+    }
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -45,7 +55,9 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
-
+      const key = []
+      const val = []
+      this.list.map(item => key.push(item.name) && val.push(item.value))
       this.chart.setOption({
         tooltip: {
           trigger: 'axis',
@@ -62,7 +74,7 @@ export default {
         },
         xAxis: [{
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: key,
           axisTick: {
             alignWithLabel: true
           }
@@ -74,25 +86,11 @@ export default {
           }
         }],
         series: [{
-          name: 'pageA',
+          name: '文章数量',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
-          data: [79, 52, 200, 334, 390, 330, 220],
-          animationDuration
-        }, {
-          name: 'pageB',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: [80, 52, 200, 334, 390, 330, 220],
-          animationDuration
-        }, {
-          name: 'pageC',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: [30, 52, 200, 334, 390, 330, 220],
+          data: val,
           animationDuration
         }]
       })

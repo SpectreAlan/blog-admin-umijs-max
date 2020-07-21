@@ -93,7 +93,7 @@ export const asyncRoutes = [
     redirect: '/settings/basic',
     name: 'Settings',
     meta: {
-      title: 'Settings',
+      title: '系统设置',
       icon: 'setting'
     },
     children: [
