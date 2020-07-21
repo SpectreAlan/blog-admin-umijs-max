@@ -55,6 +55,8 @@ export default {
         const blob = imgzip.convertBase64UrlToBlob(base64)
         const formData = new FormData()
         formData.append('file', blob)
+        formData.append('storage', this.storage)
+        formData.append('title', this.title)
         this.loading = true
         axios({
           headers: {
