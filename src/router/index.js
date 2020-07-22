@@ -180,6 +180,24 @@ export const asyncRoutes = [
           title: 'Gallery',
           key: 'gallery'
         }
+      },
+      {
+        path: 'fullPage',
+        component: () => import('@/views/blog/fullPage'),
+        name: 'FullPage',
+        meta: {
+          title: 'FullPage',
+          key: 'fullPage'
+        }
+      },
+      {
+        path: 'poem',
+        component: () => import('@/views/blog/poem'),
+        name: 'Poem',
+        meta: {
+          title: '一言',
+          key: 'poem'
+        }
       }
     ]
   },
