@@ -28,6 +28,7 @@ export default {
       tableHeader: [
         { field: 'url', title: '预览', img: 'url' },
         { field: 'url', title: '图片地址', event: 'copy' },
+        { field: 'createTime', title: '创建时间' },
         { field: 'toolbar', title: '操作' }
       ],
       toolbarList: [{ title: '删除', field: 'handleDel', type: 'danger' }]
