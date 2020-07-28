@@ -42,7 +42,7 @@ export default {
     copy,
     search(param) {
       this.loading = true
-      this.page = param ? param.page : 1
+      this.page = param || 1
       search({ page: this.page }).then(res => {
         this.loading = false
         this.list = res.list
