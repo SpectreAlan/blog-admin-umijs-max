@@ -38,6 +38,7 @@
       <el-table-column
         v-if="selectable"
         type="selection"
+        :selectable="selectable"
         width="40"
       />
       <template v-for="(k,v) in tableHeader">

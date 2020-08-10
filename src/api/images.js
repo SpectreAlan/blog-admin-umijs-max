@@ -9,3 +9,6 @@ export function add(data) {
 export function del(data) {
   return Request.post('/images/del', data)
 }
+export function upload(data) {
+  return Request.post('/uploads/images', data)
+}

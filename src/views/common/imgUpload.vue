@@ -3,13 +3,12 @@
     <div v-if="loading" class="upload-loading"><i class="el-icon-loading" />上传中....</div>
     <input ref="file" type="file" class="file" @change="upload($event)">
     <img v-if="img" :src="img">
-    <i v-else class="el-icon-plus img-uploader-icon" />
+    <i v-if="!img && !loading" class="el-icon-plus img-uploader-icon" />
   </div>
 </template>
 
 <script>
-import defaultSetting from '@/settings'
-import axios from 'axios'
+import { upload } from '@/api/images'
 import imgzip from 'imgzip'
 export default {
   name: 'ImgUpload',
@@ -51,30 +50,12 @@ export default {
       this.$refs.file.click()
     },
     upload(e) {
-      imgzip.photoCompress(e.target.files[0], {}, (base64) => {
-        const blob = imgzip.convertBase64UrlToBlob(base64)
-        const formData = new FormData()
-        formData.append('file', blob)
-        formData.append('storage', this.storage)
-        formData.append('title', this.title)
+      imgzip.photoCompress(e.target.files[0], {}, (file) => {
         this.loading = true
-        axios({
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          },
-          method: 'post',
-          url: defaultSetting.proxy.name + '/uploads/images',
-          data: formData
-        }).then(res => {
-          if (res.status === 200) {
-            this.loading = false
-            if (res.data.code) {
-              this.$message.success('上传成功')
-              this.$emit('setImg', res.data.data)
-            } else {
-              this.$message.error('上传失败')
-            }
-          }
+        upload({ file, storage: this.storage, title: this.title }).then(res => {
+          this.loading = false
+          this.$message.success('上传成功')
+          this.$emit('setImg', res)
         })
       })
     }
