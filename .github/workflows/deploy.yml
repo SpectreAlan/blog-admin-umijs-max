@@ -13,7 +13,7 @@ jobs:
           npm install;
           npm run build:prod;
           mv dist console;
-          mkdir dist
+          mkdir dist;
           tar -cvf ./dist/console.tar console;
       - name: Scp
         uses: garygrossgarten/github-action-scp@release
