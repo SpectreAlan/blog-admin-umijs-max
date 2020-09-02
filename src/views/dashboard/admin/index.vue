@@ -9,12 +9,12 @@
     <el-row :gutter="32">
       <el-col :xs="24" :sm="24" :lg="12">
         <div class="chart-wrapper">
-          <pie-chart :list="blog.visitor" />
+          <pie-chart :list="blog.browser" />
         </div>
       </el-col>
       <el-col :xs="24" :sm="24" :lg="12">
         <div class="chart-wrapper">
-          <bar-chart :list="blog.category" />
+          <bar-chart :list="blog.city" />
         </div>
       </el-col>
     </el-row>
