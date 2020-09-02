@@ -86,7 +86,7 @@ export default {
           }
         }],
         series: [{
-          name: '文章数量',
+          name: 'IP归属',
           type: 'bar',
           stack: 'vistors',
           barWidth: '60%',
