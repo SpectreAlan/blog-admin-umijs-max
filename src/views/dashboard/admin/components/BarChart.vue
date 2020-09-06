@@ -66,10 +66,9 @@ export default {
           }
         },
         grid: {
-          top: 10,
-          left: '2%',
-          right: '2%',
-          bottom: '3%',
+          left: '20px',
+          top: '20px',
+          bottom: '20px',
           containLabel: true
         },
         xAxis: [{
@@ -77,6 +76,10 @@ export default {
           data: key,
           axisTick: {
             alignWithLabel: true
+          },
+          axisLabel: {
+            interval: 0,
+            rotate: 40
           }
         }],
         yAxis: [{
