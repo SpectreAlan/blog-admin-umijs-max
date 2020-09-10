@@ -13,7 +13,7 @@
         <el-input
           ref="username"
           v-model="form.username"
-          placeholder="Username"
+          placeholder="请输入用户名"
           name="username"
           type="text"
           tabindex="1"
@@ -31,7 +31,7 @@
             ref="password"
             v-model="form.password"
             :type="passwordType"
-            placeholder="Password"
+            placeholder="请输入密码"
             name="password"
             tabindex="2"
             autocomplete="on"
@@ -44,7 +44,19 @@
           </span>
         </el-form-item>
       </el-tooltip>
-
+      <el-form-item prop="captcha">
+        <span class="svg-container">
+          <svg-icon icon-class="bug" />
+        </span>
+        <el-input
+          v-model="form.captcha"
+          placeholder="请输入验证码"
+          name="captcha"
+          type="text"
+          tabindex="1"
+        />
+        <span class="captcha" @click="chgUrl" v-html="captcha" />
+      </el-form-item>
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="login">Login</el-button>
     </el-form>
   </div>
@@ -52,32 +64,43 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
+import Request from '@/utils/request'
 import defaultSetting from '@/settings'
 export default {
   name: 'Login',
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
+        callback(new Error('用户名格式错误'))
       } else {
         callback()
       }
     }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
+        callback(new Error('密码格式错误'))
+      } else {
+        callback()
+      }
+    }
+    const validateCaptcha = (rule, value, callback) => {
+      if (value.length !== 4) {
+        callback(new Error('请输入4位验证码'))
       } else {
         callback()
       }
     }
     return {
+      captcha: '',
       form: {
         username: '',
-        password: ''
+        password: '',
+        captcha: ''
       },
       rules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
+        captcha: [{ required: true, trigger: 'blur', validator: validateCaptcha }]
       },
       passwordType: 'password',
       capsTooltip: false,
@@ -88,6 +111,7 @@ export default {
   },
   created() {
     this.$store.dispatch('user/clearUser')
+    this.chgUrl()
   },
   mounted() {
     if (this.form.username === '') {
@@ -97,6 +121,11 @@ export default {
     }
   },
   methods: {
+    chgUrl() {
+      Request.get('/captcha').then(res => {
+        this.captcha = res
+      })
+    },
     checkCapslock(e) {
       const { key } = e
       this.capsTooltip = key && key.length === 1 && (key >= 'A' && key <= 'Z')
@@ -134,14 +163,18 @@ export default {
 </script>
 
 <style lang="scss">
-
+  .captcha{
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+  }
 $bg:#283443;
 $light_gray:#fff;
 $cursor: #fff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
   .login-container .el-input input {
-    color: $cursor;
+    color: #000;
   }
 }
 
@@ -154,24 +187,23 @@ $cursor: #fff;
 
     input {
       background: transparent;
-      border: 0px;
+      border: 0;
       -webkit-appearance: none;
-      border-radius: 0px;
+      border-radius: 0;
       padding: 12px 5px 12px 15px;
-      color: $light_gray;
+      color: #000;
       height: 47px;
-      caret-color: $cursor;
+      caret-color: #000;
 
       &:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px $bg inset !important;
+        box-shadow: 0 0 0 1000px $bg inset !important;
         -webkit-text-fill-color: $cursor !important;
       }
     }
   }
 
   .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     color: #454545;
   }
@@ -179,8 +211,8 @@ $cursor: #fff;
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
+$bg:#fff;
+$dark_gray:#000;
 $light_gray:#eee;
 
 .login-container {
@@ -200,7 +232,7 @@ $light_gray:#eee;
 
   .tips {
     font-size: 14px;
-    color: #fff;
+    color: $bg;
     margin-bottom: 10px;
 
     span {
@@ -223,7 +255,7 @@ $light_gray:#eee;
 
     .title {
       font-size: 26px;
-      color: $light_gray;
+      color: #000;
       margin: 0px auto 40px auto;
       text-align: center;
       font-weight: bold;
@@ -238,18 +270,6 @@ $light_gray:#eee;
     color: $dark_gray;
     cursor: pointer;
     user-select: none;
-  }
-
-  .thirdparty-button {
-    position: absolute;
-    right: 0;
-    bottom: 6px;
-  }
-
-  @media only screen and (max-width: 470px) {
-    .thirdparty-button {
-      display: none;
-    }
   }
 }
 </style>

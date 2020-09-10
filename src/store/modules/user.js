@@ -35,9 +35,9 @@ const actions = {
   },
   // user login
   login({ commit }, userInfo) {
-    const { username, password } = userInfo
+    const { username, password, captcha } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: md5(password) }).then(response => {
+      login({ username: username.trim(), password: md5(password), captcha: captcha }).then(response => {
         commit('SET_TOKEN', response)
         setToken(response)
         resolve(response)
