@@ -33,7 +33,7 @@
             :type="passwordType"
             placeholder="请输入密码"
             name="password"
-            tabindex="2"
+            tabindex="1"
             autocomplete="on"
             @keyup.native="checkCapslock"
             @blur="capsTooltip = false"
@@ -93,9 +93,9 @@ export default {
     return {
       captcha: '',
       form: {
-        username: '',
-        password: '',
-        captcha: ''
+        username: 'fuck',
+        password: 'fuck336699',
+        captcha: '1234'
       },
       rules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
