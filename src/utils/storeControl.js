@@ -5,13 +5,11 @@ export function userInfo() {
   return store.user ? JSON.parse(store.user) : null
 }
 export function dispathUserInfo(response, commit, reject, resolve) {
-  const { roles, name, avatar } = response
-  if (!roles || roles.length <= 0) {
+  if (!response || response.length <= 0) {
     reject('getInfo: roles must be a non-null array!')
   }
-  commit('SET_ROLES', roles)
-  commit('SET_NAME', name)
-  commit('SET_AVATAR', avatar)
+  console.log(response)
+  commit('SET_ROLES', response)
   resolve(response)
 }
 

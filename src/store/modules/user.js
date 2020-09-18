@@ -38,7 +38,10 @@ const actions = {
     const { username, password, captcha } = userInfo
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: md5(password), captcha: captcha }).then(response => {
-        commit('SET_TOKEN', response)
+        const { name, avatar } = response
+        commit('SET_TOKEN', 'login in success')
+        commit('SET_NAME', name)
+        commit('SET_AVATAR', avatar)
         setToken(response)
         resolve(response)
       }).catch(error => {
@@ -52,7 +55,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       const response = userInfo()
       if (response) {
-        dispathUserInfo(response, commit, reject, resolve)
+        dispathUserInfo(response.roles, commit, reject, resolve)
       } else {
         getInfo(state.token).then(res => {
           dispathUserInfo(res, commit, reject, resolve)
