@@ -85,7 +85,7 @@
         </el-form-item>
         <el-form-item v-if="form.menu_type !== 1" label="权限" prop="permission">
           <el-select ref="role" v-model="form.permission" placeholder="选择权限" clearable class="filter-item">
-            <el-option v-for="(k,i) in types" :key="i" :label="k.title" :value="k.typeKey" />
+            <el-option v-for="(k,i) in types" :key="i" :label="k.type_title" :value="k.type_key" />
           </el-select>
         </el-form-item>
         <!--        <el-form-item label="序号" prop="menu_order">-->
@@ -168,7 +168,6 @@ export default {
       treeVisible: false,
       listLoading: false,
       form: {
-        menu_code: '',
         note: '',
         menu_name: '',
         permission: '',
@@ -248,8 +247,7 @@ export default {
       this.dialogVisible = true
     },
     handleDel(data) {
-      del({ id: data.id }).then(res => {
-        this.$message.success('删除成功')
+      del({ id: data.id }).then(() => {
         this.search()
       })
     },
@@ -272,7 +270,6 @@ export default {
       }
       if (this.title === '添加菜单') {
         add(this.form).then(() => {
-          this.$message.success('添加成功')
           this.dialogVisible = false
           this.search()
         })
@@ -281,8 +278,7 @@ export default {
           this.$message.error('非法操作，请勿修改菜单编码')
           return
         }
-        edit(this.form).then(res => {
-          this.$message.success('编辑成功')
+        edit(this.form).then(() => {
           this.dialogVisible = false
           this.search()
         })

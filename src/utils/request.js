@@ -30,23 +30,29 @@ class Request {
       response => {
         sessionStorage.removeItem('req_' + response.config.url)
         const res = response.data
-        if (res.code !== 1) {
+        res.msg && Message({
+          message: res.msg,
+          type: res.code ? 'success' : 'error',
+          duration: 5 * 1000
+        })
+        if (res.code) {
           if (res.code === 4000) {
             router.push('/login')
           }
-          Message({
-            message: res.msg || '服务器响应数据为空',
-            type: 'error',
-            duration: 5 * 1000
-          })
-        } else {
           return res
+        } else {
+          return Promise.reject(res.msg)
         }
       },
       (error) => {
         sessionStorage.removeItem('req_' + error.config.url)
-        console.log(error)
-        return Promise.reject(error)
+        const res = error.response.data.error
+        Message({
+          message: res,
+          type: 'error',
+          duration: 5 * 1000
+        })
+        return Promise.reject(res)
       }
     )
   }

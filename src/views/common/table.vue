@@ -252,6 +252,7 @@ export default {
       this.$emit(k, row)
     },
     handleEvent(k, field, row) {
+      if (!k) { return }
       this[k] ? this[k](row[field]) : this.$emit(k, row)
     },
     sortChange(data) {

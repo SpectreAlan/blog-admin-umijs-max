@@ -23,8 +23,8 @@
     <!-- 新增 -->
     <el-dialog :close-on-click-modal="false" :visible.sync="dialogVisible" :title="title">
       <el-form ref="role" :model="role" label-width="80px" label-position="left" :rules="rules">
-        <el-form-item label="角色名称" prop="name">
-          <el-input v-model.trim="role.name" placeholder="请输入角色名称" clearable />
+        <el-form-item label="角色名称" prop="role_name">
+          <el-input v-model.trim="role.role_name" placeholder="请输入角色名称" clearable />
         </el-form-item>
         <el-form-item label="状态">
           <el-radio-group v-model="role.status">
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { list, add, del, edit, status } from '@/api/role'
+import { list, add, del, edit } from '@/api/role'
 import { search } from '@/api/menu'
 import TableTemplate from '../common/table'
 export default {
@@ -71,13 +71,14 @@ export default {
   data() {
     return {
       change: false,
-      rules: { name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }] },
-      role: { name: '', status: 1, keys: [] },
+      rules: { role_name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }] },
+      role: { role_name: '', status: 1, role_keys: '' },
       dialogVisible: false,
       title: '添加角色',
       treeLoading: false,
       listLoading: false,
       list: [],
+      role_keys: [],
       total: 0,
       listQuery: { page: 1, role_name: '' },
       editData: '',
@@ -130,9 +131,8 @@ export default {
     },
     handleStatus(data) {
       this.listLoading = true
-      status({ id: data.id, status: data.status }).then(() => {
+      edit({ id: data.id, status: data.status }).then(() => {
         this.listLoading = false
-        this.$message.success('操作成功')
       }).catch(() => {
         this.search()
       })
@@ -172,32 +172,33 @@ export default {
       }).catch(() => { this.treeLoading = false })
     },
     confirmRole() {
-      this.role.keys = this.$refs.tree.getCheckedKeys()
-      if (!this.role.keys.length) {
+      this.role_keys = this.$refs.tree.getCheckedKeys()
+      if (!this.role_keys.length) {
         this.$message.error('请选择授权项')
         return
       }
       this.$refs['role'].validate((valid) => {
-        valid && (this.title === '添加角色' ? this.addReq() : this.editReq())
+        this.role.role_keys = this.role_keys.join(',')
+        if (valid) {
+          this.title === '添加角色' ? this.addReq() : this.editReq()
+        }
       })
     },
     addReq() {
-      add(this.role).then(res => {
-        this.$message.success('添加成功')
+      add(this.role).then(() => {
         this.dialogVisible = false
         this.search()
       }).catch(() => { this.dialogVisible = false })
     },
     editReq() {
-      edit(this.role).then(res => {
-        this.$message.success('编辑成功')
+      edit(this.role).then(() => {
         this.dialogVisible = false
         this.search()
       }).catch(() => { this.dialogVisible = false })
     },
     handleEdit(item) {
       this.role.id = item.id
-      this.role.name = item.role_name
+      this.role.role_name = item.role_name
       this.getTree(item)
       this.title = '编辑角色'
       this.dialogVisible = true
@@ -209,7 +210,6 @@ export default {
         type: 'warning'
       }).then(() => {
         del({ id: item.id }).then(res => {
-          this.$message.success('删除成功')
           this.search()
         }).catch(() => {})
       }).catch(() => {
