@@ -13,14 +13,14 @@
     />
     <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="dialogVisible" width="600px">
       <el-form ref="form" :model="form" label-width="100px" size="mini">
-        <el-form-item label="名称" prop="title">
-          <el-input v-model.trim="form.title" />
+        <el-form-item label="名称" prop="setting_title">
+          <el-input v-model.trim="form.setting_title" />
         </el-form-item>
-        <el-form-item label="标识" prop="settingKey">
-          <el-input v-model.trim="form.settingKey" placeholder="长度4至8位，以字母开头，字母，数字，减号，下划线" />
+        <el-form-item label="标识" prop="setting_key">
+          <el-input v-model.trim="form.setting_key" placeholder="长度4至8位，以字母开头，字母，数字，减号，下划线" />
         </el-form-item>
-        <el-form-item label="内容" prop="content">
-          <el-input v-model.trim="form.content" />
+        <el-form-item label="内容" prop="setting_content">
+          <el-input v-model.trim="form.setting_content" />
         </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model.trim="form.remark" />
@@ -46,9 +46,9 @@ export default {
       dialogVisible: false,
       reqLoading: false,
       tableHeader: [
-        { field: 'title', sortable: 'custom', title: '标题' },
-        { field: 'settingKey', sortable: 'custom', title: '标识' },
-        { field: 'content', sortable: 'custom', title: '内容' },
+        { field: 'setting_title', sortable: 'custom', title: '标题' },
+        { field: 'setting_key', sortable: 'custom', title: '标识' },
+        { field: 'setting_content', sortable: 'custom', title: '内容' },
         { field: 'remark', title: '备注' },
         { field: 'toolbar', title: '操作' }
       ],
@@ -56,7 +56,7 @@ export default {
       total: 0,
       title: '',
       alterVisible: false,
-      form: { title: '', settingKey: '', content: '', remark: '' }
+      form: { setting_title: '', setting_key: '', setting_content: '', remark: '' }
     }
   },
   created() {
@@ -85,11 +85,9 @@ export default {
     onSubmit() {
       this.title === '添加'
         ? add(this.form).then(() => {
-          this.$message.success('添加成功')
           this.dialogVisible = false
           this.search()
         }) : edit(this.form).then(() => {
-          this.$message.success('编辑成功')
           this.dialogVisible = false
           this.search()
         })
