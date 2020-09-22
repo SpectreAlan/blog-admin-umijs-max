@@ -1,32 +1,32 @@
 <template>
   <div class="write">
     <el-form ref="form" :inline="true" :model="form" label-width="120px" :rules="rules" size="medium">
-      <el-form-item label="标题" prop="title">
-        <el-input v-model.trim="form.title" style="width: 400px;" clearable />
+      <el-form-item label="标题" prop="article_title">
+        <el-input v-model.trim="form.article_title" style="width: 400px;" clearable />
       </el-form-item>
-      <el-form-item label="分类" prop="category">
-        <el-select v-model="form.category" placeholder="请选择分类" style="width: 100%" clearable>
+      <el-form-item label="分类" prop="category_name">
+        <el-select v-model="form.category_name" placeholder="请选择分类" style="width: 100%" clearable>
           <el-option
             v-for="(item,k) in category"
             :key="k"
-            :label="item.name"
-            :value="item.name"
+            :label="item.category_name"
+            :value="item.category_name"
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="标签" prop="tags">
-        <el-select v-model="form.tags" multiple placeholder="请选择标签" style="width: 400px;" clearable>
+      <el-form-item label="标签" prop="tag_name">
+        <el-select v-model="form.tag_name" multiple placeholder="请选择标签" style="width: 400px;" clearable>
           <el-option
             v-for="(item,k) in tags"
             :key="k"
-            :label="item.name"
-            :value="item.name"
+            :label="item.tag_name"
+            :value="item.tag_name"
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="概述" prop="des">
+      <el-form-item label="概述" prop="article_des">
         <el-input
-          v-model.trim="form.des"
+          v-model.trim="form.article_des"
           :rows="4"
           type="textarea"
           maxlength="150"
@@ -86,10 +86,10 @@ export default {
       urlType: 1,
       form: {
         content: '',
-        title: '',
-        des: '',
-        category: '',
-        tags: [],
+        article_title: '',
+        article_des: '',
+        category_name: '',
+        tag_name: [],
         keywords: '',
         cover: '',
         tic: 1
@@ -109,13 +109,19 @@ export default {
     onSubmit(status) {
       this.form.status = status
       this.form.content = this.$refs.markdown.getMarkdown()
-      const msg = status ? '保存成功' : '发布成功'
-      this.form.id ? edit(this.form).then(res => {
-        this.$message.success(msg)
-      })
-        : add(this.form).then(res => {
-          this.$message.success(msg)
+      const param = { ...this.form }
+      param.tag_name = param.tag_name.join(',')
+      if (this.form.id) {
+        edit(param).then(() => {
+          this.form = this.$options.data().form
+          this.$router.push('/blog/article')
         })
+      } else {
+        add(param).then(() => {
+          this.form = this.$options.data().form
+          this.$router.push('/blog/article')
+        })
+      }
     },
     search(id) {
       if (!id) {

@@ -2,7 +2,7 @@
   <div class="app-container">
     <!-- 表格查询条件 -->
     <div class="filter-container">
-      <el-input v-model.trim="listQuery.account" placeholder="标题..." style="width: 200px;" clearable />
+      <el-input v-model.trim="listQuery.article_title" placeholder="标题..." style="width: 200px;" clearable />
       <el-button type="primary" class="filter-item" @click="search()">查询</el-button>
       <el-button type="primary" class="filter-item" @click="handleAdd()">添加</el-button>
     </div>
@@ -33,7 +33,8 @@
 </template>
 
 <script>
-import { list, status, del } from '@/api/blog'
+import { list, del } from '@/api/blog'
+import { edit } from '@/api/write'
 import { add } from '@/api/comment'
 import { recovery } from '@/utils/common'
 import TableTemplate from '../common/table'
@@ -43,17 +44,17 @@ export default {
   data() {
     return {
       list: [],
-      listQuery: { page: 1, title: '' },
+      listQuery: { page: 1, article_title: '' },
       loading: false,
       tableHeader: [
-        { field: 'title', sortable: 'custom', title: '标题' },
-        { field: 'category', sortable: 'custom', title: '分类', width: '120px' },
-        { field: 'tags', sortable: 'custom', title: '标签' },
+        { field: 'article_title', sortable: 'custom', title: '标题' },
+        { field: 'category_name', sortable: 'custom', title: '分类', width: '120px' },
+        { field: 'tag_name', sortable: 'custom', title: '标签' },
         { field: 'readed', sortable: 'custom', title: '阅读数', width: '100px' },
         { field: 'cover', title: '封面图', width: '150px', img: 'cover' },
         { field: 'status', title: '发布状态', switch: 'handleStatus', inactive: 0, active: 1, width: '80px' },
-        { field: 'createTime', title: '创作时间' },
-        { field: 'updateTime', title: '更新时间' },
+        { field: 'create_time', title: '创作时间' },
+        { field: 'update_time', title: '更新时间' },
         { field: 'remark', title: '备注' },
         { field: 'toolbar', title: '操作', width: '240px' }
       ],
@@ -64,14 +65,17 @@ export default {
       form: { comment: '' }
     }
   },
-  created() {
-    this.search()
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.search({ page: 1, article_title: '' })
+    })
   },
   methods: {
     recovery,
-    search() {
+    search(param) {
+      param = typeof param === 'number' ? this.listQuery : param
       this.loading = true
-      list(this.listQuery).then(res => {
+      list(param).then(res => {
         this.list = res.list
         this.total = res.total
         this.loading = false
@@ -93,9 +97,10 @@ export default {
       })
     },
     handleComment(item) {
+      console.log(item)
       this.form.id = item.id
-      this.form.title = item.title
-      this.form.createTime = item.createTime
+      this.form.article_title = item.article_title
+      this.form.create_time = item.create_time
       this.form.comment = ''
       this.alterVisible = true
     },
@@ -104,15 +109,13 @@ export default {
         this.$message.error('内容不能为空')
       }
       add(this.form).then(() => {
-        this.$message.success('添加成功')
         this.alterVisible = false
       })
     },
     handleStatus(data) {
       this.loading = true
-      status({ id: data.id, status: data.status }).then(res => {
+      edit({ id: data.id, status: data.status }).then(() => {
         this.loading = false
-        this.$message.success('编辑成功')
       }).catch(() => {
         this.search()
       })
@@ -123,8 +126,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        del({ id: data.id }).then(res => {
-          this.$message.success('删除成功')
+        del({ id: data.id }).then(() => {
           this.search()
         })
       }).catch(() => {
