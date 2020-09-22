@@ -2,7 +2,7 @@
   <div class="app-container">
     <!-- 表格查询条件 -->
     <div class="filter-container">
-      <el-input v-model.trim="listQuery.title" placeholder="图片名称" style="width: 200px;" clearable />
+      <el-input v-model.trim="listQuery.image_title" placeholder="图片名称" style="width: 200px;" clearable />
       <el-button type="primary" class="filter-item" @click="search">查询</el-button>
       <el-button type="primary" class="filter-item" @click="add">添加</el-button>
     </div>
@@ -16,11 +16,11 @@
     />
     <el-dialog :close-on-click-modal="false" title="添加图片" :visible.sync="alterVisible" width="20%">
       <el-form ref="form" :model="form" label-width="100px" size="mini">
-        <el-form-item label="图片名称" prop="account">
-          <el-input v-model.trim="form.title" clearable />
+        <el-form-item label="图片名称" prop="image_title">
+          <el-input v-model.trim="form.image_title" clearable />
         </el-form-item>
         <el-form-item label="图片" prop="avatar">
-          <ImgUpLoad :img="form.url" :title="form.title" @setImg="setIcon" />
+          <ImgUpLoad :img="form.image_url" :title="form.image_title" @setImg="setIcon" />
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -43,12 +43,13 @@ export default {
       total: 0,
       loading: true,
       alterVisible: false,
-      form: { url: '', title: '' },
-      listQuery: { page: 1, title: '' },
+      form: { image_url: '', image_title: '' },
+      listQuery: { page: 1, image_title: '' },
       tableHeader: [
-        { field: 'title', sortable: 'custom', title: '名称' },
-        { field: 'url', title: '预览', img: 'url' },
-        { field: 'url', title: '图片地址', event: 'copy' },
+        { field: 'image_title', sortable: 'custom', title: '名称' },
+        { field: 'image_url', title: '预览', img: 'image_url' },
+        { field: 'image_url', title: '图片地址', event: 'copy' },
+        { field: 'create_time', title: '创建时间' },
         { field: 'toolbar', title: '操作' }
       ],
       toolbarList: [{ title: '删除', field: 'handleDel', type: 'danger' }]
@@ -66,7 +67,7 @@ export default {
     recovery,
     copy,
     setIcon(url) {
-      this.form.url = url
+      this.form.image_url = url
       this.copy(url)
       this.alterVisible = false
     },
@@ -82,7 +83,7 @@ export default {
     },
     add() {
       this.alterVisible = true
-      this.form = { title: '', url: '' }
+      this.form = { image_title: '', image_url: '' }
     },
     handleDel(data) {
       this.$confirm('此操作将永久删除该图片, 是否继续?', '提示', {
@@ -91,9 +92,8 @@ export default {
         type: 'warning'
       }).then(() => {
         this.loading = true
-        del({ id: data.id, url: data.url }).then(res => {
+        del(data).then(() => {
           this.search()
-          this.$message.success('删除成功')
         })
       }).catch(() => { this.loading = false })
     }
