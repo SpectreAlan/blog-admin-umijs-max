@@ -52,9 +52,8 @@ export default {
     upload(e) {
       imgzip.photoCompress(e.target.files[0], {}, (file) => {
         this.loading = true
-        upload({ file, storage: this.storage, title: this.title }).then(res => {
+        upload({ file, storage: this.storage, image_title: this.title }).then(res => {
           this.loading = false
-          this.$message.success('上传成功')
           this.$emit('setImg', res)
         })
       })
