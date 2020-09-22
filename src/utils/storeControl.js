@@ -8,7 +8,6 @@ export function dispathUserInfo(response, commit, reject, resolve) {
   if (!response || response.length <= 0) {
     reject('getInfo: roles must be a non-null array!')
   }
-  console.log(response)
   commit('SET_ROLES', response)
   resolve(response)
 }

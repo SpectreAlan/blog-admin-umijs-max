@@ -25,17 +25,17 @@
         <el-form-item v-if="title==='添加'" label="账号" prop="account">
           <el-input v-model.trim="form.account" placeholder="长度4至8位，以字母开头，字母，数字，减号，下划线" />
         </el-form-item>
-        <el-form-item label="密码" prop="pwd">
-          <el-input v-model.trim="form.pwd" show-password placeholder="长度6至12位" />
+        <el-form-item label="密码" prop="user_pwd">
+          <el-input v-model.trim="form.user_pwd" show-password placeholder="长度6至12位" />
         </el-form-item>
-        <el-form-item label="昵称" prop="nickName">
-          <el-input v-model.trim="form.nickName" />
+        <el-form-item label="昵称" prop="nick_name">
+          <el-input v-model.trim="form.nick_name" />
         </el-form-item>
         <el-form-item label="头像" prop="avatar">
           <ImgUpLoad :img="form.avatar" :title="form.account" @setImg="setIcon" />
         </el-form-item>
-        <el-form-item label="角色" prop="role">
-          <el-select ref="role" v-model="form.role" placeholder="选择用户角色" clearable class="filter-item">
+        <el-form-item label="角色" prop="role_id">
+          <el-select ref="role" v-model="form.role_id" placeholder="选择用户角色" clearable class="filter-item">
             <el-option v-for="(v, k,i) in roles" :key="i" :label="v" :value="k" />
           </el-select>
         </el-form-item>
@@ -71,7 +71,7 @@ export default {
   data() {
     return {
       rules: { account: [{ required: true, trigger: 'blur' }], role: [{ required: true, message: '请选择角色', trigger: 'change' }] },
-      form: { account: '', nickName: '', role: '', remark: '', status: 1, pwd: '', avatar: '' },
+      form: { account: '', nick_name: '', role_id: '', remark: '', status: 1, user_pwd: '', avatar: '' },
       roles: {},
       dialogVisible: false,
       reqLoading: false,
@@ -80,11 +80,11 @@ export default {
       loading: false,
       tableHeader: [
         { field: 'account', sortable: 'custom', title: '账号' },
-        { field: 'nickName', sortable: 'custom', title: '昵称' },
+        { field: 'nick_name', sortable: 'custom', title: '昵称' },
         { field: 'avatar', title: '头像', width: '200px', img: 'avatar' },
         { field: 'status', title: '账号启禁', switch: 'handleStatus', inactive: 0, active: 1 },
-        { field: 'role', title: '角色', formatter: 'role' },
-        { field: 'updateTime', title: '更新时间' },
+        { field: 'role_id', title: '角色', formatter: 'role_id' },
+        { field: 'update_time', title: '更新时间' },
         { field: 'remark', title: '备注' },
         { field: 'toolbar', title: '操作', width: '200px' }
       ],
@@ -97,7 +97,7 @@ export default {
   created() {
     getRoles().then(res => {
       res.map(item => {
-        this.roles[item.id] = item.role
+        this.roles[item.id] = item.role_name
       })
     })
     this.search()
@@ -128,36 +128,34 @@ export default {
       })
     },
     editReq() {
-      if (this.form.pwd && (this.form.pwd.length > 13 || this.form.pwd.length < 6)) {
+      if (this.form.user_pwd && (this.form.user_pwd.length > 13 || this.form.user_pwd.length < 6)) {
         this.$message.error('密码格式有误')
         return
       }
       this.reqLoading = true
       const param = { ...this.form }
-      if (param.pwd) {
-        param.pwd = md5(param.pwd)
+      if (param.user_pwd) {
+        param.user_pwd = md5(param.user_pwd)
       }
-      edit(param).then(res => {
+      edit(param).then(() => {
         this.reqLoading = false
         this.dialogVisible = false
         this.search()
-        this.$message.success('编辑成功')
       }).catch(() => {
         this.reqLoading = false
       })
     },
     addReq() {
       const param = { ...this.form }
-      if (param.pwd.length > 13 || param.pwd.length < 6) {
+      if (param.user_pwd.length > 13 || param.user_pwd.length < 6) {
         this.$message.error('密码格式有误')
         return
       }
       this.reqLoading = true
-      param.pwd = md5(param.pwd)
+      param.user_pwd = md5(param.user_pwd)
       signup(param).then(res => {
         this.reqLoading = false
         this.dialogVisible = false
-        this.$message.success('添加成功')
         this.search()
       }).catch(() => {
         this.reqLoading = false
@@ -170,7 +168,7 @@ export default {
       for (const i in this.form) {
         this.form[i] = data[i]
       }
-      this.form.role = String(data.role)
+      this.form.role_id = String(data.role_id)
     },
     handleAdd() {
       this.form = { ...{}, ...this.$options.data().form }
@@ -182,9 +180,8 @@ export default {
     },
     handleStatus(data) {
       this.loading = true
-      edit(data).then(res => {
+      edit(data).then(() => {
         this.loading = false
-        this.$message.success('编辑成功')
       }).catch(() => {
         this.search()
       })
@@ -199,10 +196,11 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        del({ id: data.id }).then(res => {
-          this.$message.success('删除成功')
+        this.loading = true
+        del({ id: data.id }).then(() => {
           this.search()
-        })
+          this.loading = false
+        }).catch(() => { this.loading = false })
       }).catch(() => {
       })
     }

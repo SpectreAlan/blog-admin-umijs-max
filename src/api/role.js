@@ -8,10 +8,6 @@ export function edit(data) {
   return Request.post('/role/edit', data)
 }
 
-export function status(data) {
-  return Request.post('/role/status', data)
-}
-
 export function del(data) {
   return Request.post('/role/del', data)
 }
