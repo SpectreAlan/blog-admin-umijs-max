@@ -26,7 +26,7 @@
         </el-form-item>
         <el-form-item label="日期">
           <el-date-picker
-            v-model="form.origin"
+            v-model="form.origin_time"
             type="date"
             value-format="yyyy-MM-dd"
             placeholder="请选择"
@@ -38,9 +38,9 @@
             <el-radio :label="0">禁用</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="描述" prop="description">
+        <el-form-item label="描述" prop="des">
           <el-input
-            v-model.trim="form.description"
+            v-model.trim="form.des"
             type="textarea"
             :rows="4"
           />
@@ -59,7 +59,7 @@
 
 <script>
 import ImgUpLoad from '@/views/common/imgUpload'
-import { list, edit, del, status, add } from '@/api/gallery'
+import { list, edit, del, add } from '@/api/gallery'
 import { recovery } from '@/utils/common'
 import TableTemplate from '../common/table'
 export default {
@@ -67,23 +67,23 @@ export default {
   components: { TableTemplate, ImgUpLoad },
   data() {
     return {
-      rules: { title: [{ required: true, trigger: 'blur', message: '请输入标题' }], description: [{ required: true, message: '请输入描述', trigger: 'blur' }] },
+      rules: { title: [{ required: true, trigger: 'blur', message: '请输入标题' }], des: [{ required: true, message: '请输入描述', trigger: 'blur' }] },
       list: [],
       title: '',
       articleData: [],
       total: 0,
       loading: true,
       reqLoading: false,
-      form: { title: '', description: '', origin: '', url: '', status: 1, remark: '' },
+      form: { title: '', des: '', origin_time: '', url: '', status: 1, remark: '' },
       alterVisible: false,
       listQuery: { page: 1, title: '' },
       tableHeader: [
         { field: 'title', sortable: 'custom', title: '标题' },
-        { field: 'description', sortable: 'custom', title: '描述' },
-        { field: 'origin', sortable: 'custom', title: '时间' },
+        { field: 'des', sortable: 'custom', title: '描述' },
+        { field: 'origin_time', sortable: 'custom', title: '时间' },
         { field: 'url', sortable: 'custom', title: '预览', img: 'url' },
         { field: 'status', title: '状态', switch: 'handleStatus', inactive: 0, active: 1 },
-        { field: 'updateTime', title: '更新时间' },
+        { field: 'update_time', title: '更新时间' },
         { field: 'remark', title: '备注' },
         { field: 'toolbar', title: '操作' }
       ],
@@ -132,8 +132,7 @@ export default {
     },
     addReq() {
       add(this.form).then(() => {
-        this.$message.success('添加成功')
-        this.form.description = ''
+        this.form.des = ''
         this.form.url = ''
         this.form.remark = ''
       })
@@ -141,7 +140,6 @@ export default {
     editReq() {
       edit(this.form).then(() => {
         this.alterVisible = false
-        this.$message.success('编辑成功')
       })
     },
     handleEdit(data) {
@@ -151,19 +149,10 @@ export default {
     },
     handleStatus(data) {
       this.loading = true
-      status({ id: data.id, status: data.status }).then(() => {
+      edit({ id: data.id, status: data.status }).then(() => {
         this.loading = false
-        this.$message.success('操作成功')
       }).catch(() => {
         this.search()
-      })
-    },
-    ok() {
-      if (!this.form.comment) { return }
-      add(this.form).then(() => {
-        this.search()
-        this.$message.success('回复成功')
-        this.alterVisible = false
       })
     },
     handleDel(data) {
@@ -175,7 +164,6 @@ export default {
         this.loading = true
         del({ id: data.id, url: data.url }).then(() => {
           this.search()
-          this.$message.success('删除成功')
         })
       }).catch(() => { this.loading = false })
     }
