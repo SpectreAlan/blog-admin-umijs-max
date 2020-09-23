@@ -97,11 +97,11 @@ export default {
       })
     },
     handleComment(item) {
-      console.log(item)
-      this.form.id = item.id
-      this.form.article_title = item.article_title
-      this.form.create_time = item.create_time
+      this.form.article_id = item.id
+      this.form.article_name = item.article_title
       this.form.comment = ''
+      this.form.author = 1
+      this.form.status = 1
       this.alterVisible = true
     },
     ok() {

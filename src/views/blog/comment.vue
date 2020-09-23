@@ -83,6 +83,7 @@ export default {
       this.form.article_id = data.article_id
       this.form.parent_name = data.parent_name
       this.form.status = 1
+      this.form.author = 1
       this.alterVisible = true
     },
     handleStatus(data) {
