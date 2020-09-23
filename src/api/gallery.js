@@ -12,6 +12,3 @@ export function edit(data) {
 export function del(data) {
   return Request.post('/gallery/del', data)
 }
-export function status(data) {
-  return Request.post('/gallery/status', data)
-}
