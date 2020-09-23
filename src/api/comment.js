@@ -7,7 +7,7 @@ export function add(data) {
   return Request.post('/comment/add', data)
 }
 export function status(data) {
-  return Request.post('/comment/status', data)
+  return Request.post('/comment/edit', data)
 }
 export function del(data) {
   return Request.post('/comment/del', data)
