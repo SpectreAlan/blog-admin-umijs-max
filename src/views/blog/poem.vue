@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-select ref="role" v-model="listQuery.type" clearable class="filter-item" placeholder="选择类型">
+    <el-select ref="role" v-model="listQuery.type_name" clearable class="filter-item" placeholder="选择类型">
       <el-option v-for="(v, k,i) in types" :key="i" :label="v" :value="k" />
     </el-select>
     <table-template
@@ -27,7 +27,7 @@ export default {
     return {
       list: [],
       loading: true,
-      listQuery: { page: 1, type: '' },
+      listQuery: { page: 1, type_name: '' },
       total: 0,
       types: {
         a: '动画',
@@ -46,8 +46,8 @@ export default {
       type: '',
       tableHeader: [
         { field: 'poem', title: '内容' },
-        { field: 'createTime', title: '创建时间' },
-        { field: 'type', title: '类别', formatter: 'type' },
+        { field: 'create_time', title: '创建时间' },
+        { field: 'type_name', title: '类别', formatter: 'type_name' },
         { field: 'author', title: '来源' },
         { field: 'toolbar', title: '操作' }
       ],
@@ -55,7 +55,7 @@ export default {
     }
   },
   watch: {
-    'listQuery.type': {
+    'listQuery.type_name': {
       handler() {
         this.search()
       },
@@ -86,9 +86,8 @@ export default {
     },
     handleDel(data) {
       this.loading = true
-      del({ id: data.id, url: data.url }).then(() => {
+      del({ id: data.id }).then(() => {
         this.search()
-        this.$message.success('删除成功')
       })
     }
   }
