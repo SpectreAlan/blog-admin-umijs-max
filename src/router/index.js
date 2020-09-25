@@ -182,15 +182,6 @@ export const asyncRoutes = [
         }
       },
       {
-        path: 'fullPage',
-        component: () => import('@/views/blog/fullPage'),
-        name: 'FullPage',
-        meta: {
-          title: 'FullPage',
-          key: 'fullPage'
-        }
-      },
-      {
         path: 'poem',
         component: () => import('@/views/blog/poem'),
         name: 'Poem',
