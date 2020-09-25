@@ -5,8 +5,8 @@ export function search() {
 }
 
 export function searchItem(data) {
-  return Request.post('/dashboard/search/item', data)
+  return Request.post('/dashboard/item', data)
 }
 export function searchBlog() {
-  return Request.get('/dashboard/search/category')
+  return Request.get('/dashboard/category')
 }

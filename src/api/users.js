@@ -17,5 +17,5 @@ export function del(data) {
 }
 
 export function getRoles(data) {
-  return Request.post('/role/search/all', data)
+  return Request.post('/users/roles', data)
 }

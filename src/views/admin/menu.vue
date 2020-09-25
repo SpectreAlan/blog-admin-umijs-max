@@ -84,13 +84,8 @@
           <el-input v-model.trim="form.menu_key" placeholder="请输入4~16位纯英文" clearable :disabled="title==='编辑菜单'" />
         </el-form-item>
         <el-form-item v-if="form.menu_type !== 1" label="权限" prop="permission">
-          <el-select ref="role" v-model="form.permission" placeholder="选择权限" clearable class="filter-item">
-            <el-option v-for="(k,i) in types" :key="i" :label="k.type_title" :value="k.type_key" />
-          </el-select>
+          <el-input v-model.trim="form.permission" placeholder="请输入权限" clearable />
         </el-form-item>
-        <!--        <el-form-item label="序号" prop="menu_order">-->
-        <!--          <el-input v-model.trim="form.menu_order" />-->
-        <!--        </el-form-item>-->
         <el-form-item label="父级菜单">
           <el-input v-model="parentInfo" readonly placeholder="点击选择" @focus="treeVisible = true" />
         </el-form-item>
@@ -115,7 +110,7 @@
 </template>
 
 <script>
-import { search, add, del, edit, types } from '@/api/menu'
+import { search, add, del, edit } from '@/api/menu'
 export default {
   name: 'Menu',
   data() {
@@ -126,14 +121,6 @@ export default {
         callback()
       }
     }
-    // const menu_order = (rule, value, callback) => {
-    //   const reg = /^([1-9]\d*)(\.\d+)?$/g
-    //   if (!(reg.test(value))) {
-    //     callback(new Error('请输入大于0的数'))
-    //   } else {
-    //     callback()
-    //   }
-    // }
     return {
       rules: {
         menu_name: [
@@ -144,15 +131,11 @@ export default {
           { required: true, message: '请输入code', trigger: 'blur' },
           { validator: menu_key, trigger: 'blur' }
         ],
-        // menu_order: [
-        //   { required: true, message: '请输入序号', trigger: 'blur' },
-        //   { validator: menu_order, trigger: 'blur' }
-        // ],
         parentId: [
           { required: true, message: '请选择父级菜单', trigger: 'blur' }
         ],
         permission: [
-          { required: true, message: '请输选择权限类型', trigger: 'change' }
+          { required: true, message: '请输入权限', trigger: 'blur' }
         ]
       },
       defaultProps: {
@@ -172,7 +155,6 @@ export default {
         menu_name: '',
         permission: '',
         parentId: 0,
-        // menu_order: 0,
         menu_type: 0
       },
       o: null,
@@ -232,14 +214,12 @@ export default {
       this.treeVisible = false
     },
     handleAdd() {
-      this.menuTypes()
       this.form = this.$options.data().form
       this.title = '添加菜单'
       this.parentInfo = ''
       this.dialogVisible = true
     },
     handleEdit(data) {
-      this.menuTypes()
       this.detail = { ...data }
       this.form = { ...data }
       this.parentInfo = this.o[data.parentId] || '顶层菜单'
@@ -249,11 +229,6 @@ export default {
     handleDel(data) {
       del({ id: data.id }).then(() => {
         this.search()
-      })
-    },
-    menuTypes() {
-      types().then(res => {
-        this.types = res
       })
     },
     onSubmit() {
