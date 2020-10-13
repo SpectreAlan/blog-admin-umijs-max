@@ -36,7 +36,7 @@ class Request {
           duration: 5 * 1000
         })
         if (res.code) {
-          if (res.code === 4000) {
+          if (res.code === 401) {
             router.push('/login')
           }
           return res

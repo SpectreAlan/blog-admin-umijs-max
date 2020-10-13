@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { list, signup, del, edit, getRoles } from '@/api/users'
+import { list, signup, del, edit, getRoles } from '@/api/users' // 引入函数
 import { recovery } from '@/utils/common'
 import TableTemplate from '../common/table'
 import ImgUpLoad from '@/views/common/imgUpload'
@@ -94,13 +94,13 @@ export default {
       tableControl: true
     }
   },
-  created() {
+  created() { // 组件创建的时候
     getRoles().then(res => {
       res.map(item => {
         this.roles[item.id] = item.role_name
       })
     })
-    this.search()
+    this.search() // 调用查询列表的函数
   },
   methods: {
     recovery,
@@ -112,7 +112,7 @@ export default {
     },
     search() {
       this.loading = true
-      list(this.listQuery).then(res => {
+      list(this.listQuery).then(res => { // 请求后台接口
         this.list = res.list
         this.total = res.total
         this.loading = false
