@@ -38,8 +38,8 @@ jobs:
           password: ${{ secrets.HOST_PASSWORD }}
           port: ${{ secrets.HOST_PORT }}
           script: |
-            cd /home/alan/www
-            rm -rf console
-            tar -xvf console.tar
-            rm -f console.tar
-            /home/${{ secrets.HOST_USERNAME }}/tools/node-v10.6.0/bin/npm -v
+            cd /home/alan/www;
+            rm -rf console;
+            tar -xvf console.tar;
+            rm -f console.tar;
+            npm -v;
