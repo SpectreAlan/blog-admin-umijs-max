@@ -42,3 +42,4 @@ jobs:
             rm -rf console
             tar -xvf console.tar
             rm -f console.tar
+            npm -v
