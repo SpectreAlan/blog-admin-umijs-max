@@ -36,17 +36,17 @@ class Request {
           duration: 5 * 1000
         })
         if (res.code) {
-          if (res.code === 401) {
-            router.push('/login')
-          }
           return res
         } else {
           return Promise.reject(res.msg)
         }
       },
       (error) => {
+        if (error.response.status === 401) {
+          router.push('/login')
+        }
         sessionStorage.removeItem('req_' + error.config.url)
-        const res = error.response.data.error
+        const res = error.response.data.message
         Message({
           message: res,
           type: 'error',
