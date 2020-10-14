@@ -4,29 +4,7 @@ on:
   push:
     branches: [ master ]
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build project
-        run:
-          npm install;
-          npm run build:prod;
-          mv dist console;
-          mkdir dist;
-          tar -cvf ./dist/console.tar console;
-      - name: Scp
-        uses: garygrossgarten/github-action-scp@release
-        with:
-          local: dist
-          remote: /home/alan/www
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.HOST_USERNAME }}
-          password: ${{ secrets.HOST_PASSWORD }}
-          port: ${{ secrets.HOST_PORT }}
-          concurrency: 20
   deploy:
-    needs: [build]
     name: Deploy console
     runs-on: ubuntu-latest
     steps:
@@ -38,7 +16,4 @@ jobs:
           password: ${{ secrets.HOST_PASSWORD }}
           port: ${{ secrets.HOST_PORT }}
           script: |
-            cd /home/alan/www;
-            rm -rf console;
-            tar -xvf console.tar;
-            rm -f console.tar;
+            npm -v
