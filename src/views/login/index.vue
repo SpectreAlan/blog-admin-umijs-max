@@ -93,9 +93,9 @@ export default {
     return {
       captcha: '',
       form: {
-        username: 'fuck',
-        password: 'fuck336699',
-        captcha: '1234'
+        username: '',
+        password: '',
+        captcha: ''
       },
       rules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
