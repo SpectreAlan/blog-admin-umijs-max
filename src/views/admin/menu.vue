@@ -27,7 +27,7 @@
         align="center"
       >
         <template slot-scope="{row}">
-          {{ row.menu_type === 1 ? '菜单' : '按钮' }}
+          {{ types[row.menu_type] }}
         </template>
       </el-table-column>
       <el-table-column
@@ -40,11 +40,11 @@
         label="菜单编码"
         align="center"
       />
-      <!--      <el-table-column-->
-      <!--        prop="menu_order"-->
-      <!--        label="序号"-->
-      <!--        align="center"-->
-      <!--      />-->
+      <el-table-column
+        prop="menu_order"
+        label="序号"
+        align="center"
+      />
       <el-table-column
         prop="note"
         label="备注"
@@ -59,12 +59,14 @@
             type="primary"
             size="mini"
             @click="handleEdit(row)"
-          >编辑</el-button>
+          >编辑
+          </el-button>
           <el-button
             type="danger"
             size="mini"
             @click="handleDel(row)"
-          >删除</el-button>
+          >删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -76,8 +78,7 @@
         </el-form-item>
         <el-form-item label="类型">
           <el-radio-group v-model="form.menu_type">
-            <el-radio :label="1">菜单</el-radio>
-            <el-radio :label="0">按钮</el-radio>
+            <el-radio v-for="(k,i) in types" :key="i" :label="i">{{ k }}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item v-if="form.menu_type === 1" label="菜单编码" prop="menu_key">
@@ -111,6 +112,7 @@
 
 <script>
 import { search, add, del, edit } from '@/api/menu'
+
 export default {
   name: 'Menu',
   data() {
@@ -144,7 +146,7 @@ export default {
       },
       parentInfo: '',
       list: [],
-      types: [],
+      types: ['按钮', '菜单', '目录'],
       total: 0,
       title: '添加菜单',
       dialogVisible: false,
@@ -238,7 +240,9 @@ export default {
           go = false
         }
       })
-      if (!go) { return }
+      if (!go) {
+        return
+      }
       if (this.form.menu_type === 2 && this.form.parentId === 0) {
         this.$message.error('请指定按钮父级')
         return
@@ -263,7 +267,7 @@ export default {
 }
 </script>
 <style scoped>
-  .menu{
+  .menu {
     margin-bottom: 20px;
   }
 </style>
