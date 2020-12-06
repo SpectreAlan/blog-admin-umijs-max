@@ -62,8 +62,9 @@ export default {
       this.copy(url)
       this.alterVisible = false
     },
-    search() {
+    search(k) {
       this.loading = true
+      k && (this.listQuery.page = k.page)
       search(this.listQuery).then(res => {
         this.loading = false
         this.list = res.list

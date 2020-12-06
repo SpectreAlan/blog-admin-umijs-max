@@ -58,10 +58,10 @@ export default {
     })
   },
   methods: {
-    search(param) {
-      param = typeof param === 'number' ? this.listQuery : param
+    search(k) {
+      k && (this.listQuery.page = k.page)
       this.loading = true
-      list(param).then(res => {
+      list(this.listQuery).then(res => {
         this.list = res.list
         this.total = res.total
         this.loading = false
