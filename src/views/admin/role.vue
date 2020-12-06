@@ -63,7 +63,7 @@
 
 <script>
 import { list, add, del, edit } from '@/api/role'
-import { search } from '@/api/menu'
+import { menu } from '@/api/menu'
 import TableTemplate from '../common/table'
 export default {
   name: 'Role',
@@ -148,7 +148,7 @@ export default {
     },
     getTree(item) {
       this.treeLoading = true
-      search().then(arr => {
+      menu('search').then(arr => {
         this.tree = []
         const other = {}
         for (let i = 0; i < arr.length; i++) {
@@ -172,7 +172,7 @@ export default {
       }).catch(() => { this.treeLoading = false })
     },
     confirmRole() {
-      this.role.sysMenuIds = [...this.$refs.tree.getCheckedKeys(), ...this.$refs.tree.getHalfCheckedKeys()]
+      this.role_keys = [...this.$refs.tree.getCheckedKeys(), ...this.$refs.tree.getHalfCheckedKeys()]
       if (!this.role_keys.length) {
         this.$message.error('请选择授权项')
         return
