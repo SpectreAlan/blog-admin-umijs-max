@@ -21,15 +21,6 @@ export default {
     ...mapGetters([
       'roles'
     ])
-  },
-  created() {
-    this.currentRole = 'editorDashboard'
-    for (let i = 0; i < this.roles.length; i++) {
-      if (this.roles[i].key === 'dashboard') {
-        this.currentRole = 'adminDashboard'
-        break
-      }
-    }
   }
 }
 </script>
