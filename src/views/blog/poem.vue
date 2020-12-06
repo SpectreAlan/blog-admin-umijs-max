@@ -19,7 +19,7 @@ export default {
     return {
       list: [],
       loading: true,
-      listQuery: { page: 1, type_name: '' },
+      listQuery: { page: 1, type_name: '', limit: 10 },
       total: 0,
       types: {
         a: '动画',
@@ -62,8 +62,8 @@ export default {
     formatter(row, field) {
       return this.types[row[field]]
     },
-    search(param) {
-      this.listQuery.page = param || 1
+    search(k) {
+      k && (this.listQuery.page = k.page)
       this.loading = true
       search(this.listQuery).then(res => {
         this.loading = false
