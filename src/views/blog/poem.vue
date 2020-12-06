@@ -3,26 +3,18 @@
     <el-select ref="role" v-model="listQuery.type_name" clearable class="filter-item" placeholder="选择类型">
       <el-option v-for="(v, k,i) in types" :key="i" :label="v" :value="k" />
     </el-select>
-    <table-template
-      :table-header="tableHeader"
-      :list="list"
-      :formatter="formatter"
-      :toolbar-list="toolbarList"
-      :list-loading="loading"
-      @recovery="recovery"
-      @handleDel="handleDel"
-    />
-    <el-pagination :current-page.sync="listQuery.page" layout="total, prev,pager, next" :total="total" background @current-change="search" />
+    <!-- 表格区域 -->
+    <nice-table :table-header="tableHeader" :formatter="formatter" :list="list" :toolbar-list="toolbarList" :list-loading="loading" @emitEvent="(args)=>this.$emitEvent(args)" />
+    <!-- 分页 -->
+    <nice-pagination :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="search" />
   </div>
 </template>
 
 <script>
 import { del, search } from '@/api/poem'
-import { recovery } from '@/utils/common'
-import TableTemplate from '../common/table'
+
 export default {
   name: 'Poem',
-  components: { TableTemplate },
   data() {
     return {
       list: [],
@@ -67,10 +59,9 @@ export default {
     this.stateSearch()
   },
   methods: {
-    formatter(type) {
-      return this.types[type]
+    formatter(row, field) {
+      return this.types[row[field]]
     },
-    recovery,
     search(param) {
       this.listQuery.page = param || 1
       this.loading = true

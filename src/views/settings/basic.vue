@@ -4,13 +4,7 @@
       <el-button type="primary" class="filter-item" @click="handleAdd()">添加</el-button>
     </div>
     <!-- 表格区域 -->
-    <table-template
-      :table-header="tableHeader"
-      :list="list"
-      :toolbar-list="toolbarList"
-      :list-loading="loading"
-      @handleEdit="handleEdit"
-    />
+    <nice-table :table-header="tableHeader" :list="list" :toolbar-list="toolbarList" :list-loading="loading" @emitEvent="(args)=>this.$emitEvent(args)" />
     <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="dialogVisible" width="600px">
       <el-form ref="form" :model="form" label-width="100px" size="mini">
         <el-form-item label="名称" prop="setting_title">
@@ -35,10 +29,9 @@
 
 <script>
 import { list, edit, add } from '@/api/settings'
-import TableTemplate from '../common/table'
+
 export default {
   name: 'Basic',
-  components: { TableTemplate },
   data() {
     return {
       list: [],
@@ -95,6 +88,4 @@ export default {
   }
 }
 </script>
-<style scoped>
-</style>
 

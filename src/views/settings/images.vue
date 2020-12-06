@@ -6,14 +6,7 @@
       <el-button type="primary" class="filter-item" @click="search">查询</el-button>
       <el-button type="primary" class="filter-item" @click="add">添加</el-button>
     </div>
-    <table-template
-      :table-header="tableHeader"
-      :list="list"
-      :toolbar-list="toolbarList"
-      :list-loading="loading"
-      @recovery="recovery"
-      @handleDel="handleDel"
-    />
+    <nice-table :table-header="tableHeader" :list="list" :toolbar-list="toolbarList" :list-loading="loading" @emitEvent="(args)=>this.$emitEvent(args)" />
     <el-dialog :close-on-click-modal="false" title="添加图片" :visible.sync="alterVisible" width="20%">
       <el-form ref="form" :model="form" label-width="100px" size="mini">
         <el-form-item label="图片名称" prop="image_title">
@@ -24,18 +17,18 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-    <el-pagination :current-page.sync="listQuery.page" layout="total, prev,pager, next" :total="total" background @current-change="search" />
+    <!-- 分页 -->
+    <nice-pagination :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="search" />
   </div>
 </template>
 
 <script>
 import { del, search } from '@/api/images'
-import { recovery, copy } from '@/utils/common'
-import TableTemplate from '../common/table'
+
 import ImgUpLoad from '@/views/common/imgUpload'
 export default {
   name: 'Images',
-  components: { TableTemplate, ImgUpLoad },
+  components: { ImgUpLoad },
   data() {
     return {
       list: [],
@@ -48,7 +41,7 @@ export default {
       tableHeader: [
         { field: 'image_title', sortable: 'custom', title: '名称' },
         { field: 'image_url', title: '预览', img: 'image_url' },
-        { field: 'image_url', title: '图片地址', event: 'copy' },
+        { field: 'image_url', title: '图片地址', tooltip: true },
         { field: 'create_time', title: '创建时间' },
         { field: 'toolbar', title: '操作' }
       ],
@@ -64,8 +57,6 @@ export default {
     this.search()
   },
   methods: {
-    recovery,
-    copy,
     setIcon(url) {
       this.form.image_url = url
       this.copy(url)

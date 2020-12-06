@@ -56,7 +56,10 @@
           :show-overflow-tooltip="k.tooltip"
         >
           <template slot-scope="{row}">
-            <template v-if="k.switch">
+            <template v-if="k.slot">
+              <slot :name="k.field" :data="row" />
+            </template>
+            <template v-else-if="k.switch">
               <el-switch
                 v-model="row[k.field]"
                 :active-color="k.activeColor || '#13ce66'"
@@ -79,7 +82,7 @@
               <div v-for="(item, index) in toolbarList" :key="index" class="tableControlButton">
                 <template v-if="item.show">
                   <el-button
-                    v-if="show(item.field, row[item.show])"
+                    v-if="show(item.field, row)"
                     :type="item.type"
                     size="mini"
                     @click="control(item.field, row)"
@@ -88,7 +91,7 @@
                 <template v-else-if="item.disable">
                   <el-button
                     :type="item.type"
-                    :disabled="disable(item.field, row[item.disable])"
+                    :disabled="disable(item.field, row)"
                     size="mini"
                     @click="control(item.field, row)"
                   >{{ item.title }}</el-button>
@@ -113,8 +116,8 @@
                 <div slot="reference" class="moreControl">...</div>
               </el-popover>
             </template>
-            <template v-else>
-              <div :class="k.event ? 'event':''" @click="handleEvent(k.event,k.field , row)">{{ k.formatter ? formatter(row[k.field]) : row[k.field] || '-' }}</div>
+            <template v-else-if="!k.slot">
+              <div :class="k.tooltip ? 'event':''" @click="control(k.field, row, k.tooltip)">{{ k.formatter ? formatter(row, k.field) : row[k.field] || '-' }}</div>
             </template>
           </template>
         </el-table-column>
@@ -248,12 +251,12 @@ export default {
       }
       this.excelData()
     },
-    control(k, row) {
-      this.$emit(k, row)
-    },
-    handleEvent(k, field, row) {
-      if (!k) { return }
-      this[k] ? this[k](row[field]) : this.$emit(k, row)
+    control(k, row, copyText) {
+      if (copyText) {
+        copy(row[k])
+        return
+      }
+      this.$emit('emitEvent', { fn: k, data: row })
     },
     sortChange(data) {
       this.sort = data

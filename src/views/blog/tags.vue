@@ -6,16 +6,8 @@
       <el-button type="primary" class="filter-item" @click="search">查询</el-button>
       <el-button type="primary" class="filter-item" @click="add">添加</el-button>
     </div>
-    <table-template
-      :table-header="tableHeader"
-      :list="list"
-      :toolbar-list="toolbarList"
-      :list-loading="loading"
-      @recovery="recovery"
-      @handleEdit="handleEdit"
-      @handleDel="handleDel"
-      @handleShow="handleShow"
-    />
+    <!-- 表格区域 -->
+    <nice-table :table-header="tableHeader" :list="list" :toolbar-list="toolbarList" :list-loading="loading" @emitEvent="(args)=>this.$emitEvent(args)" />
     <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="alterVisible" width="20%">
       <el-input v-model.trim="form.tag_name" />
       <span slot="footer" class="dialog-footer"><el-button type="primary" @click="ok()">确 定</el-button></span>
@@ -33,17 +25,16 @@
         <el-table-column property="update_time" label="更新时间" />
       </el-table>
     </el-dialog>
-    <el-pagination :current-page.sync="listQuery.page" layout="total, prev,pager, next" :total="total" background @current-change="search" />
+    <!-- 分页 -->
+    <nice-pagination :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="search" />
   </div>
 </template>
 
 <script>
 import { belong, edit, add, del, search } from '@/api/tags'
-import { recovery } from '@/utils/common'
-import TableTemplate from '../common/table'
+
 export default {
   name: 'Tags',
-  components: { TableTemplate },
   data() {
     return {
       list: [],
@@ -68,7 +59,6 @@ export default {
     this.search()
   },
   methods: {
-    recovery,
     search() {
       this.loading = true
       search(this.listQuery).then(res => {

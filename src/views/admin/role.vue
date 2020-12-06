@@ -11,15 +11,7 @@
       </div>
     </div>
     <!-- 表格区域 -->
-    <table-template
-      :table-header="tableHeader"
-      :list="list"
-      :list-loading="listLoading"
-      :toolbar-list="toolbarList"
-      @handleStatus="handleStatus"
-      @handleEdit="handleEdit"
-      @handleDel="handleDel"
-    />
+    <nice-table :table-header="tableHeader" :list="list" :toolbar-list="toolbarList" :list-loading="listLoading" @emitEvent="(args)=>this.$emitEvent(args)" />
     <!-- 新增 -->
     <el-dialog :close-on-click-modal="false" :visible.sync="dialogVisible" :title="title">
       <el-form ref="role" :model="role" label-width="80px" label-position="left" :rules="rules">
@@ -57,17 +49,15 @@
       </div>
     </el-dialog>
     <!-- 分页 -->
-    <el-pagination :current-page.sync="listQuery.page" layout="total, prev,pager, next" :total="total" background @current-change="search" />
+    <nice-pagination :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="search" />
   </div>
 </template>
 
 <script>
 import { list, add, del, edit } from '@/api/role'
 import { menu } from '@/api/menu'
-import TableTemplate from '../common/table'
 export default {
   name: 'Role',
-  components: { TableTemplate },
   data() {
     return {
       change: false,
