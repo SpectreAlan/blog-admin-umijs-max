@@ -172,7 +172,7 @@ export default {
       }).catch(() => { this.treeLoading = false })
     },
     confirmRole() {
-      this.role_keys = this.$refs.tree.getCheckedKeys()
+      this.role.sysMenuIds = [...this.$refs.tree.getCheckedKeys(), ...this.$refs.tree.getHalfCheckedKeys()]
       if (!this.role_keys.length) {
         this.$message.error('请选择授权项')
         return
