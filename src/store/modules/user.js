@@ -3,6 +3,7 @@ import { setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 import md5 from 'md5'
 import { userInfo, dispathUserInfo } from '@/utils/storeControl'
+import { Message } from 'element-ui'
 
 const state = {
   token: '',
@@ -58,7 +59,29 @@ const actions = {
         dispathUserInfo(response.roles, commit, reject, resolve)
       } else {
         getInfo(state.token).then(res => {
-          dispathUserInfo(res, commit, reject, resolve)
+          if (res.length > 0) {
+            const children = []
+            const list = []
+            const hash = {}
+            res.map(item => {
+              const i = { ...item }
+              if (i.type === 1) {
+                children.push(i)
+              } else {
+                i.list = []
+                list.push(i)
+                hash[i.id] = list.length - 1
+              }
+            })
+            children.map(i => {
+              list[hash[i.parentId]].list.push(i)
+            })
+            dispathUserInfo(list, commit, reject, resolve)
+            resolve(list)
+          } else {
+            resolve({ code: 0 })
+            Message.error('您的账号暂无权限,请联系管理员')
+          }
         })
       }
     })
