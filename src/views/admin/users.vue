@@ -9,7 +9,7 @@
     <!-- 表格区域 -->
     <nice-table :table-header="tableHeader" :formatter="formatter" :list="list" :toolbar-list="toolbarList" :list-loading="loading" @emitEvent="(args)=>this.$emitEvent(args)" />
     <!-- 新增/编辑-->
-    <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="dialogVisible" width="600px">
+    <el-dialog :title="title" :visible.sync="dialogVisible" width="600px">
       <el-form ref="form" :model="form" label-width="100px" size="mini" :rules="rules">
         <el-form-item v-if="title==='添加'" label="账号" prop="account">
           <el-input v-model.trim="form.account" placeholder="长度4至8位，以字母开头，字母，数字，减号，下划线" />
