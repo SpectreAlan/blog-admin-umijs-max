@@ -116,7 +116,7 @@ export default {
   methods: {
     close(refresh) {
       this.visible = false
-      // refresh === 1 && this.search()
+      refresh === 1 && this.search()
     },
     search() {
       this.listLoading = true
