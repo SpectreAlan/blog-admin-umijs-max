@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import ElementUI from 'element-ui'
+import Element from 'element-ui'
 import { emitEvent } from '@/views/common/tools'
 import 'normalize.css/normalize.css' // a modern alternative to CSS resets
 import table from '@/views/common/table'
@@ -16,6 +17,9 @@ import './icons' // icon
 import './permission' // 权限控制
 
 ElementUI.Dialog.props.closeOnClickModal.default = false // 空白区域点击关闭弹窗: false
+Vue.use(Element, {
+  size: 'medium' // set element-ui default size
+})
 Vue.component('nice-table', table)
 Vue.component('nice-pagination', pagination)
 Vue.config.productionTip = false
