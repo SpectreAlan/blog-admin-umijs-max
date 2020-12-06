@@ -43,7 +43,7 @@
       </el-form>
     </el-dialog>
     <!-- 分页 -->
-    <el-pagination :current-page.sync="listQuery.page" layout="total, prev,pager, next" :total="total" background @current-change="search" />
+    <nice-pagination :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="search" />
   </div>
 </template>
 
@@ -95,8 +95,9 @@ export default {
     setIcon(url) {
       this.form.avatar = url
     },
-    search() {
+    search(k) {
       this.loading = true
+      k && (this.listQuery.page = k.page)
       list(this.listQuery).then(res => { // 请求后台接口
         this.list = res.list
         this.total = res.total

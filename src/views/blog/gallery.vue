@@ -96,7 +96,8 @@ export default {
     setIcon(url) {
       this.form.url = url
     },
-    search() {
+    search(k) {
+      k && (this.listQuery.page = k.page)
       this.loading = true
       list(this.listQuery).then(res => {
         this.loading = false
