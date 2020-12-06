@@ -31,6 +31,11 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="parent_name"
+        label="父节点"
+        align="center"
+      />
+      <el-table-column
         prop="permission"
         label="权限"
         align="center"
@@ -111,7 +116,7 @@ export default {
   methods: {
     close(refresh) {
       this.visible = false
-      refresh === 1 && this.search()
+      // refresh === 1 && this.search()
     },
     search() {
       this.listLoading = true
