@@ -8,7 +8,7 @@
     </div>
     <!-- 表格区域 -->
     <nice-table :table-header="tableHeader" :list="list" :toolbar-list="toolbarList" :list-loading="loading" @emitEvent="(args)=>this.$emitEvent(args)" />
-    <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="alterVisible" width="600px">
+    <el-dialog :title="title" :visible.sync="alterVisible" width="600px">
       <el-form ref="form" :model="form" label-width="100px" size="mini" :rules="rules">
         <el-form-item label="标题" prop="title">
           <el-input v-model.trim="form.title" />
