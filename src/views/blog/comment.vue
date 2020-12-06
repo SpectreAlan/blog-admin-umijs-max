@@ -5,17 +5,8 @@
       <el-input v-model.trim="listQuery.article_name" placeholder="文章名称" style="width: 200px;" clearable />
       <el-button type="primary" class="filter-item" @click="search">查询</el-button>
     </div>
-    <table-template
-      :table-header="tableHeader"
-      :list="list"
-      :toolbar-list="toolbarList"
-      :list-loading="loading"
-      :formatter="formatter"
-      @recovery="recovery"
-      @handleReplay="handleReplay"
-      @handleStatus="handleStatus"
-      @handleDel="handleDel"
-    />
+    <!-- 表格区域 -->
+    <nice-table :table-header="tableHeader" :formatter="formatter" :list="list" :toolbar-list="toolbarList" :list-loading="loading" @emitEvent="(args)=>this.$emitEvent(args)" />
     <el-dialog :close-on-click-modal="false" title="回复评论" :visible.sync="alterVisible" width="400px">
       <el-input
         v-model.trim="form.comment"
@@ -24,17 +15,16 @@
       />
       <span slot="footer" class="dialog-footer"><el-button type="primary" @click="ok()">确 定</el-button></span>
     </el-dialog>
-    <el-pagination :current-page.sync="listQuery.page" layout="total, prev,pager, next" :total="total" background @current-change="search" />
+    <!-- 分页 -->
+    <nice-pagination :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="search" />
   </div>
 </template>
 
 <script>
 import { comments, add, del, status } from '@/api/comment'
-import { recovery } from '@/utils/common'
-import TableTemplate from '../common/table'
+
 export default {
   name: 'Comment',
-  components: { TableTemplate },
   data() {
     return {
       list: [],
@@ -63,9 +53,8 @@ export default {
     this.search()
   },
   methods: {
-    recovery,
-    formatter(type) {
-      return type ? '作者回复' : '评论'
+    formatter(row, field) {
+      return row[field] ? '作者回复' : '游客评论'
     },
     search() {
       this.loading = true

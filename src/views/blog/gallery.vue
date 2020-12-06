@@ -6,16 +6,8 @@
       <el-button type="primary" class="filter-item" @click="search">查询</el-button>
       <el-button type="primary" class="filter-item" @click="addImage">添加</el-button>
     </div>
-    <table-template
-      :table-header="tableHeader"
-      :list="list"
-      :toolbar-list="toolbarList"
-      :list-loading="loading"
-      @recovery="recovery"
-      @handleEdit="handleEdit"
-      @handleStatus="handleStatus"
-      @handleDel="handleDel"
-    />
+    <!-- 表格区域 -->
+    <nice-table :table-header="tableHeader" :list="list" :toolbar-list="toolbarList" :list-loading="loading" @emitEvent="(args)=>this.$emitEvent(args)" />
     <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="alterVisible" width="600px">
       <el-form ref="form" :model="form" label-width="100px" size="mini" :rules="rules">
         <el-form-item label="标题" prop="title">
@@ -53,18 +45,18 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-    <el-pagination :current-page.sync="listQuery.page" layout="total, prev,pager, next" :total="total" background @current-change="search" />
+    <!-- 分页 -->
+    <nice-pagination :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="search" />
   </div>
 </template>
 
 <script>
 import ImgUpLoad from '@/views/common/imgUpload'
 import { list, edit, del, add } from '@/api/gallery'
-import { recovery } from '@/utils/common'
-import TableTemplate from '../common/table'
+
 export default {
   name: 'Gallery',
-  components: { TableTemplate, ImgUpLoad },
+  components: { ImgUpLoad },
   data() {
     return {
       rules: { title: [{ required: true, trigger: 'blur', message: '请输入标题' }], des: [{ required: true, message: '请输入描述', trigger: 'blur' }] },
@@ -101,7 +93,6 @@ export default {
     this.search()
   },
   methods: {
-    recovery,
     setIcon(url) {
       this.form.url = url
     },

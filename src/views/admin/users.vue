@@ -7,18 +7,7 @@
       <el-button type="primary" class="filter-item" @click="handleAdd()">添加</el-button>
     </div>
     <!-- 表格区域 -->
-    <table-template
-      :table-header="tableHeader"
-      :list="list"
-      :toolbar-list="toolbarList"
-      :list-loading="loading"
-      :formatter="formatter"
-      :table-control="tableControl"
-      @recovery="recovery"
-      @handleEdit="handleEdit"
-      @handleDel="handleDel"
-      @handleStatus="handleStatus"
-    />
+    <nice-table :table-header="tableHeader" :formatter="formatter" :list="list" :toolbar-list="toolbarList" :list-loading="loading" @emitEvent="(args)=>this.$emitEvent(args)" />
     <!-- 新增/编辑-->
     <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="dialogVisible" width="600px">
       <el-form ref="form" :model="form" label-width="100px" size="mini" :rules="rules">
@@ -60,14 +49,11 @@
 
 <script>
 import { list, signup, del, edit, getRoles } from '@/api/users' // 引入函数
-import { recovery } from '@/utils/common'
-import TableTemplate from '../common/table'
 import ImgUpLoad from '@/views/common/imgUpload'
-
 import md5 from 'md5'
 export default {
   name: 'Users',
-  components: { TableTemplate, ImgUpLoad },
+  components: { ImgUpLoad },
   data() {
     return {
       rules: { account: [{ required: true, trigger: 'blur' }], role: [{ required: true, message: '请选择角色', trigger: 'change' }] },
@@ -103,9 +89,8 @@ export default {
     this.search() // 调用查询列表的函数
   },
   methods: {
-    recovery,
-    formatter(type) {
-      return this.roles[type]
+    formatter(row, field) {
+      return this.roles[row[field]]
     },
     setIcon(url) {
       this.form.avatar = url

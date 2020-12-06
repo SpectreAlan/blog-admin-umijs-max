@@ -7,18 +7,7 @@
       <el-button type="primary" class="filter-item" @click="handleAdd()">添加</el-button>
     </div>
     <!-- 表格区域 -->
-    <table-template
-      :table-header="tableHeader"
-      :list="list"
-      :toolbar-list="toolbarList"
-      :list-loading="loading"
-      :table-control="tableControl"
-      @recovery="recovery"
-      @handleEdit="handleEdit"
-      @handleDel="handleDel"
-      @handleStatus="handleStatus"
-      @handleComment="handleComment"
-    />
+    <nice-table :table-header="tableHeader" :list="list" :toolbar-list="toolbarList" :list-loading="loading" @emitEvent="(args)=>this.$emitEvent(args)" />
     <el-dialog :close-on-click-modal="false" title="添加置顶评论" :visible.sync="alterVisible" width="400px">
       <el-input
         v-model.trim="form.comment"
@@ -28,7 +17,7 @@
       <span slot="footer" class="dialog-footer"><el-button type="primary" @click="ok()">确 定</el-button></span>
     </el-dialog>
     <!-- 分页 -->
-    <el-pagination :current-page.sync="listQuery.page" layout="total, prev,pager, next" :total="total" background @current-change="search" />
+    <nice-pagination :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="search" />
   </div>
 </template>
 
@@ -36,11 +25,9 @@
 import { list, del } from '@/api/blog'
 import { edit } from '@/api/write'
 import { add } from '@/api/comment'
-import { recovery } from '@/utils/common'
-import TableTemplate from '../common/table'
+
 export default {
   name: 'Article',
-  components: { TableTemplate },
   data() {
     return {
       list: [],
@@ -71,7 +58,6 @@ export default {
     })
   },
   methods: {
-    recovery,
     search(param) {
       param = typeof param === 'number' ? this.listQuery : param
       this.loading = true
