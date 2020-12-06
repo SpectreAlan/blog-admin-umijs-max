@@ -23,6 +23,19 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/',
+    component: Layout,
+    redirect: '/home',
+    meta: { title: '首页', icon: 'dashboard' },
+    children: [
+      {
+        path: '/home',
+        name: 'Home',
+        component: () => import('@/views/home'),
+        meta: { title: '首页', icon: 'dashboard' }
+      }]
+  },
+  {
     path: '/404',
     component: () => import('@/views/error-page/404'),
     hidden: true
@@ -36,9 +49,10 @@ export const constantRoutes = [
 
 export const asyncRoutes = [
   {
-    path: '/',
+    path: '/report',
     component: Layout,
     redirect: '/dashboard',
+    meta: { title: 'Dashboard', icon: 'chart', key: 'report' },
     children: [
       {
         path: 'dashboard',
@@ -55,7 +69,8 @@ export const asyncRoutes = [
     name: 'Admin',
     meta: {
       title: '系统管理',
-      icon: 'administrator'
+      icon: 'administrator',
+      key: 'admin'
     },
     children: [
       {
@@ -94,7 +109,8 @@ export const asyncRoutes = [
     name: 'Settings',
     meta: {
       title: '系统设置',
-      icon: 'setting'
+      icon: 'setting',
+      key: 'settings'
     },
     children: [
       {
@@ -124,7 +140,8 @@ export const asyncRoutes = [
     name: 'Blog',
     meta: {
       title: '博客系统',
-      icon: 'write'
+      icon: 'write',
+      key: 'blog'
     },
     children: [
       {
@@ -191,8 +208,7 @@ export const asyncRoutes = [
         }
       }
     ]
-  },
-  { path: '*', redirect: '/404', hidden: true }
+  }
 ]
 
 const createRouter = () => new Router({
