@@ -7,7 +7,7 @@
           <el-input v-model.trim="form.menu_name" clearable />
         </el-form-item>
         <el-form-item label="类型">
-          <el-radio-group v-model="form.menu_type">
+          <el-radio-group v-model="form.menu_type" @change="handleChangeType">
             <el-radio v-for="(k,i) in types" :key="i" :label="i">{{ k }}</el-radio>
           </el-radio-group>
         </el-form-item>
@@ -123,16 +123,6 @@ export default {
       }
     }
   },
-  watch: {
-    'form.menu_type': {
-      handler() {
-        this.$nextTick(() => this.$refs.form.clearValidate())
-        this.form.parent_name = ''
-        this.form.parentId = 0
-      },
-      deep: true
-    }
-  },
   created() {
     this.getSvg()
     if (this.info) {
@@ -141,6 +131,13 @@ export default {
     }
   },
   methods: {
+    handleChangeType() {
+      this.$refs.form.clearValidate()
+      if (!this.form.id) {
+        this.form.parent_name = ''
+        this.form.parentId = 0
+      }
+    },
     setIcon(icon) {
       this.form.icon = icon
       this.svgVisible = false
