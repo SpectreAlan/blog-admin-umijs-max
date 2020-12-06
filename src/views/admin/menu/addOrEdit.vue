@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!-- 新增 -->
-    <el-dialog :close-on-click-modal="false" :title="form.id ? '编辑': '添加'" :visible.sync="visible" width="40%" :before-close="closeDialog">
+    <el-dialog :title="form.id ? '编辑': '添加'" :visible.sync="visible" width="40%" :before-close="closeDialog">
       <el-form ref="form" :model="form" label-width="110px" :rules="rules">
         <el-form-item label="名称" prop="menu_name">
           <el-input v-model.trim="form.menu_name" clearable />
