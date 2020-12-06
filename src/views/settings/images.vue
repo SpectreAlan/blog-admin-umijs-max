@@ -7,7 +7,7 @@
       <el-button type="primary" class="filter-item" @click="add">添加</el-button>
     </div>
     <nice-table :table-header="tableHeader" :list="list" :toolbar-list="toolbarList" :list-loading="loading" @emitEvent="(args)=>this.$emitEvent(args)" />
-    <el-dialog :close-on-click-modal="false" title="添加图片" :visible.sync="alterVisible" width="20%">
+    <el-dialog title="添加图片" :visible.sync="alterVisible" width="20%">
       <el-form ref="form" :model="form" label-width="100px" size="mini">
         <el-form-item label="图片名称" prop="image_title">
           <el-input v-model.trim="form.image_title" clearable />
