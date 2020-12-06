@@ -69,7 +69,7 @@ export const asyncRoutes = [
       },
       {
         path: 'menu',
-        component: () => import('@/views/admin/menu'),
+        component: () => import('@/views/admin/menu/index'),
         name: 'Menu',
         meta: {
           title: 'Menus',
