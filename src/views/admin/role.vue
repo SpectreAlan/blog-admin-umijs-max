@@ -13,7 +13,7 @@
     <!-- 表格区域 -->
     <nice-table :table-header="tableHeader" :list="list" :toolbar-list="toolbarList" :list-loading="listLoading" @emitEvent="(args)=>this.$emitEvent(args)" />
     <!-- 新增 -->
-    <el-dialog :close-on-click-modal="false" :visible.sync="dialogVisible" :title="title">
+    <el-dialog :visible.sync="dialogVisible" :title="title">
       <el-form ref="role" :model="role" label-width="80px" label-position="left" :rules="rules">
         <el-form-item label="角色名称" prop="role_name">
           <el-input v-model.trim="role.role_name" placeholder="请输入角色名称" clearable />
