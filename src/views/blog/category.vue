@@ -8,7 +8,7 @@
     </div>
     <!-- 表格区域 -->
     <nice-table :table-header="tableHeader" :list="list" :toolbar-list="toolbarList" :list-loading="loading" @emitEvent="(args)=>this.$emitEvent(args)" />
-    <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="alterVisible" width="20%">
+    <el-dialog :title="title" :visible.sync="alterVisible" width="20%">
       <el-input v-model.trim="form.category_name" />
       <span slot="footer" class="dialog-footer"><el-button type="primary" @click="ok()">确 定</el-button></span>
     </el-dialog>

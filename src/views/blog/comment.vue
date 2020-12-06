@@ -7,7 +7,7 @@
     </div>
     <!-- 表格区域 -->
     <nice-table :table-header="tableHeader" :formatter="formatter" :list="list" :toolbar-list="toolbarList" :list-loading="loading" @emitEvent="(args)=>this.$emitEvent(args)" />
-    <el-dialog :close-on-click-modal="false" title="回复评论" :visible.sync="alterVisible" width="400px">
+    <el-dialog title="回复评论" :visible.sync="alterVisible" width="400px">
       <el-input
         v-model.trim="form.comment"
         type="textarea"

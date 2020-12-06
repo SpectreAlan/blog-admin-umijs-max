@@ -38,7 +38,7 @@
       </el-form>
     </el-dialog>
     <!--    菜单树-->
-    <el-dialog :close-on-click-modal="false" title="选择菜单" :visible.sync="treeVisible" width="300px">
+    <el-dialog title="选择菜单" :visible.sync="treeVisible" width="300px">
       <el-tree
         :data="list"
         :props="defaultProps"

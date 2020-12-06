@@ -5,7 +5,7 @@
     </div>
     <!-- 表格区域 -->
     <nice-table :table-header="tableHeader" :list="list" :toolbar-list="toolbarList" :list-loading="loading" @emitEvent="(args)=>this.$emitEvent(args)" />
-    <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="dialogVisible" width="600px">
+    <el-dialog :title="title" :visible.sync="dialogVisible" width="600px">
       <el-form ref="form" :model="form" label-width="100px" size="mini">
         <el-form-item label="名称" prop="setting_title">
           <el-input v-model.trim="form.setting_title" />
