@@ -199,9 +199,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        this.listLoading = true
         del({ id: item.id }).then(res => {
           this.search()
-        }).catch(() => {})
+        }).catch(() => { this.listLoading = false })
       }).catch(() => {
       })
     }

@@ -55,7 +55,7 @@ export default {
         upload({ file, storage: this.storage, image_title: this.title }).then(res => {
           this.loading = false
           this.$emit('setImg', res)
-        })
+        }).catch(() => { this.loading = false })
       })
     }
   }

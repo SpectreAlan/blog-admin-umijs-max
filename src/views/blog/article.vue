@@ -112,9 +112,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        this.loading = true
         del({ id: data.id }).then(() => {
           this.search()
-        })
+        }).catch(() => { this.loading = false })
       }).catch(() => {
       })
     }
