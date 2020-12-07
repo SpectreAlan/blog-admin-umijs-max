@@ -31,11 +31,20 @@ export default {
       immediate: true
     },
     async theme(val) {
+      await this.setTheme(val)
+    }
+  },
+  created() {
+    const theme = localStorage.getItem(this.$store.state.user.name + '-theme') || '#11A983'
+    this.setTheme(theme)
+  },
+
+  methods: {
+    async setTheme(val) {
       const oldVal = this.chalk ? this.theme : ORIGINAL_THEME
       if (typeof val !== 'string') return
       const themeCluster = this.getThemeCluster(val.replace('#', ''))
       const originalCluster = this.getThemeCluster(oldVal.replace('#', ''))
-      console.log(themeCluster, originalCluster)
 
       const $message = this.$message({
         message: '  Compiling the theme',
@@ -81,12 +90,9 @@ export default {
       })
 
       this.$emit('change', val)
-
+      localStorage.setItem(this.$store.state.user.name + '-theme', val)
       $message.close()
-    }
-  },
-
-  methods: {
+    },
     updateStyle(style, oldCluster, newCluster) {
       let newStyle = style
       oldCluster.forEach((color, index) => {
