@@ -1,23 +1,28 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, logout, getInfo, changeThemeReq } from '@/api/user'
 import { setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 import md5 from 'md5'
 import { userInfo, dispathUserInfo } from '@/utils/storeControl'
 import { Message } from 'element-ui'
+import defaultSettings from '@/settings'
 
 const state = {
-  token: '',
   name: '',
   avatar: '',
+  theme: defaultSettings.theme,
+  id: '',
   roles: []
 }
 
 const mutations = {
-  SET_TOKEN: (state, token) => {
-    state.token = token
+  SET_ID: (state, id) => {
+    state.id = id
   },
   SET_NAME: (state, name) => {
     state.name = name
+  },
+  SET_THEME: (state, theme) => {
+    state.theme = theme
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
@@ -38,12 +43,13 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password, captcha } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: md5(password), captcha: captcha }).then(response => {
-        const { avatar } = response
-        commit('SET_TOKEN', 'login in success')
-        commit('SET_NAME', username)
+      login({ username, password: md5(password), captcha }).then(response => {
+        const { avatar, id, account, theme } = response
+        setToken(account)
+        commit('SET_ID', id)
+        commit('SET_NAME', account)
         commit('SET_AVATAR', avatar)
-        setToken(response)
+        commit('SET_THEME', theme)
         resolve(response)
       }).catch(error => {
         reject(error)
@@ -88,7 +94,8 @@ const actions = {
   },
 
   clearUser({ commit }) {
-    commit('SET_TOKEN', '')
+    commit('SET_ID', '')
+    commit('SET_THEME', defaultSettings.theme)
     commit('SET_ROLES', [])
     commit('SET_NAME', '')
     commit('SET_AVATAR', '')
@@ -106,17 +113,16 @@ const actions = {
       })
     })
   },
-
-  // remove token
-  resetToken({ commit }) {
-    return new Promise(resolve => {
-      commit('SET_TOKEN', '')
-      commit('SET_ROLES', [])
-      removeToken()
-      resolve()
+  changeTheme({ commit, state }, theme) {
+    return new Promise((resolve, reject) => {
+      changeThemeReq({ theme, id: state.id }).then(() => {
+        commit('SET_THEME', theme)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
     })
   },
-
   // dynamically modify permissions
   changeRoles({ commit, dispatch }, role) {
     return new Promise(async resolve => {
