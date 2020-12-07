@@ -56,8 +56,9 @@ export default {
     formatter(row, field) {
       return row[field] ? '作者回复' : '游客评论'
     },
-    search() {
+    search(k) {
       this.loading = true
+      k && (this.listQuery.page = k.page)
       comments(this.listQuery).then(res => {
         this.loading = false
         this.list = res.list
