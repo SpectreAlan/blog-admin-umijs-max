@@ -107,7 +107,7 @@ export default {
         this.loading = true
         del({ id: data.id }).then(res => {
           this.search()
-        })
+        }).catch(() => { this.loading = false })
       }).catch(() => { this.loading = false })
     }
   }

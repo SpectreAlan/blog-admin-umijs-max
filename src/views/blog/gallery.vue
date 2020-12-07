@@ -156,7 +156,7 @@ export default {
         this.loading = true
         del({ id: data.id, url: data.url }).then(() => {
           this.search()
-        })
+        }).catch(() => { this.loading = false })
       }).catch(() => { this.loading = false })
     }
   }

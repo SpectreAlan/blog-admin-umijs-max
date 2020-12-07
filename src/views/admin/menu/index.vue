@@ -159,9 +159,10 @@ export default {
       this.visible = true
     },
     handleDel(data) {
+      this.listLoading = true
       menu('del', { id: data.id }).then(() => {
         this.search()
-      })
+      }).catch(() => { this.listLoading = false })
     }
   }
 }

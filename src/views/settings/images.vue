@@ -86,7 +86,7 @@ export default {
         this.loading = true
         del(data).then(() => {
           this.search()
-        })
+        }).catch(() => { this.loading = false })
       }).catch(() => { this.loading = false })
     }
   }
