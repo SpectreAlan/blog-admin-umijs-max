@@ -73,7 +73,7 @@ export default {
     handleEdit(data) {
       this.title = '编辑标签'
       this.alterVisible = true
-      this.form = { title: data.title, id: data.id }
+      this.form = { tag_name: data.tag_name, id: data.id }
     },
     handleShow(data) {
       this.searchVisible = true
