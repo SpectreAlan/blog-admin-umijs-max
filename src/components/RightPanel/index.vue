@@ -2,7 +2,7 @@
   <div ref="rightPanel" :class="{show:show}" class="rightPanel-container">
     <div class="rightPanel-background" />
     <div class="rightPanel">
-      <div class="handle-button" :style="{'top':buttonTop+'px','background-color':theme}" @click="show=!show">
+      <div ref="icon" class="handle-button" :style="{'top':y+'px','background-color':theme}" @click="show=!show" @mousedown="move($event)">
         <i :class="show?'el-icon-close':'el-icon-setting'" />
       </div>
       <div class="rightPanel-items">
@@ -21,15 +21,12 @@ export default {
     clickNotClose: {
       default: false,
       type: Boolean
-    },
-    buttonTop: {
-      default: 250,
-      type: Number
     }
   },
   data() {
     return {
-      show: false
+      show: false,
+      y: 250
     }
   },
   computed: {
@@ -57,6 +54,27 @@ export default {
     elx.remove()
   },
   methods: {
+    move(e) {
+      const a = window.innerHeight
+      const i = this.$refs.icon
+      const s = e.clientY - i.offsetTop
+      document.onselectstart = function() { return false }
+      document.onmousemove = e => {
+        let o = e.clientY - s
+        o <= 20 ? o = 20 : o >= a && (o = a)
+        this.y = o
+      }
+      document.onmouseup = () => {
+        document.onmousemove = null
+        document.onmouseup = null
+        document.onselectstart = null
+      }
+      document.onmouseleave = () => {
+        document.onmousemove = null
+        document.onmouseup = null
+        document.onselectstart = null
+      }
+    },
     addEventClick() {
       window.addEventListener('click', this.closeSidebar)
     },
