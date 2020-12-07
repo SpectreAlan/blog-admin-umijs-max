@@ -37,7 +37,7 @@
         <el-form-item label="备注" prop="remark">
           <el-input v-model.trim="form.remark" />
         </el-form-item>
-        <el-form-item>
+        <el-form-item class="center">
           <el-button type="primary" :loading="reqLoading" size="medium " @click="onSubmit">立即提交</el-button>
         </el-form-item>
       </el-form>
