@@ -122,7 +122,7 @@ export default {
   },
   methods: {
     chgUrl() {
-      Request.get('/captcha').then(res => {
+      Request.get('/user/captcha').then(res => {
         this.captcha = res
       })
     },
