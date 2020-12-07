@@ -79,9 +79,9 @@ export default {
     },
     colorSate(state) {
       const active = {
-        backgroundColor: this.$store.state.settings.theme,
+        backgroundColor: this.$store.state.user.theme,
         color: '#fff',
-        borderColor: this.$store.state.settings.theme
+        borderColor: this.$store.state.user.theme
       }
       return state ? active : {}
     },

@@ -5,7 +5,7 @@
 
       <div class="drawer-item">
         <span>主题颜色</span>
-        <theme-picker style="float: right;height: 26px;margin: -3px 8px 0 0;" @change="themeChange" />
+        <theme-picker style="float: right;height: 26px;margin: -3px 8px 0 0;" />
       </div>
 
       <div class="drawer-item">
@@ -68,14 +68,6 @@ export default {
           value: val
         })
       }
-    }
-  },
-  methods: {
-    themeChange(val) {
-      this.$store.dispatch('settings/changeSetting', {
-        key: 'theme',
-        value: val
-      })
     }
   }
 }

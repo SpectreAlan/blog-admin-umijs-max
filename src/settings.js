@@ -7,6 +7,7 @@ module.exports = {
   port: 5000,
   showSettings: true,
   tagsView: true,
+  theme: '#304156',
   fixedHeader: false,
   sidebarLogo: false,
   errorLog: 'production'
