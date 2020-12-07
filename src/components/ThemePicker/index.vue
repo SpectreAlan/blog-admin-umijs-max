@@ -1,9 +1,9 @@
 <template>
   <el-color-picker
-    v-model="theme"
     :predefine="['#409EFF', '#1890ff', '#304156','#212121','#11a983', '#13c2c2', '#6959CD', '#f5222d', ]"
     class="theme-picker"
     popper-class="theme-picker-dropdown"
+    @change="changeTheme"
   />
 </template>
 
@@ -15,18 +15,20 @@ export default {
   data() {
     return {
       chalk: '', // content of theme-chalk css
-      theme: ''
+      theme: '',
+      refresh: false
     }
   },
   computed: {
     defaultTheme() {
-      return this.$store.state.settings.theme
+      return this.$store.state.user.theme || ORIGINAL_THEME
     }
   },
   watch: {
     defaultTheme: {
       handler: function(val, oldVal) {
-        this.theme = val
+        this.theme = this.transferColorToRgb(val) ? '#E1E7EE' : val
+        this.refresh = false
       },
       immediate: true
     },
@@ -35,24 +37,19 @@ export default {
     }
   },
   created() {
-    const theme = localStorage.getItem(this.$store.state.user.name + '-theme') || '#11A983'
-    this.setTheme(theme)
+    this.setTheme(this.defaultTheme)
   },
 
   methods: {
+    changeTheme(color) {
+      this.theme = color
+      this.refresh = true
+    },
     async setTheme(val) {
       const oldVal = this.chalk ? this.theme : ORIGINAL_THEME
       if (typeof val !== 'string') return
       const themeCluster = this.getThemeCluster(val.replace('#', ''))
       const originalCluster = this.getThemeCluster(oldVal.replace('#', ''))
-
-      const $message = this.$message({
-        message: '  Compiling the theme',
-        customClass: 'theme-message',
-        type: 'success',
-        duration: 0,
-        iconClass: 'el-icon-loading'
-      })
 
       const getHandler = (variable, id) => {
         return () => {
@@ -89,9 +86,18 @@ export default {
         style.innerText = this.updateStyle(innerText, originalCluster, themeCluster)
       })
 
-      this.$emit('change', val)
-      localStorage.setItem(this.$store.state.user.name + '-theme', val)
-      $message.close()
+      this.refresh && await this.$store.dispatch('user/changeTheme', val)
+    },
+    transferColorToRgb(color) {
+      color = color || ORIGINAL_THEME
+      color = color.substring(1)
+      var reg = /\w{2}/g
+      var colors = color.match(reg)
+      let counter = 0
+      for (var i = 0; i < colors.length; i++) {
+        parseInt(colors[i], 16).toString() > 230 && counter++
+      }
+      return !!(counter > 2)
     },
     updateStyle(style, oldCluster, newCluster) {
       let newStyle = style
@@ -164,18 +170,18 @@ export default {
 </script>
 
 <style>
-.theme-message,
-.theme-picker-dropdown {
-  z-index: 99999 !important;
-}
+  .theme-message,
+  .theme-picker-dropdown {
+    z-index: 99999 !important;
+  }
 
-.theme-picker .el-color-picker__trigger {
-  height: 26px !important;
-  width: 26px !important;
-  padding: 2px;
-}
+  .theme-picker .el-color-picker__trigger {
+    height: 26px !important;
+    width: 26px !important;
+    padding: 2px;
+  }
 
-.theme-picker-dropdown .el-color-dropdown__link-btn {
-  display: none;
-}
+  .theme-picker-dropdown .el-color-dropdown__link-btn {
+    display: none;
+  }
 </style>
