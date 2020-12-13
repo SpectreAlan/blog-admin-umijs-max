@@ -56,12 +56,13 @@ class Request {
       }
     )
   }
-  post(url, params = {},) {
+  post(url, params = {}, config) {
     return new Promise((resolve, reject) => {
+      config = config || { headers: {
+        'Content-Type': 'application/json;charset=utf-8' }
+      }
       this.instance
-        .post(url, params, { headers: {
-          'Content-Type': 'application/json;charset=utf-8' }
-        })
+        .post(url, params, config)
         .then((res) => {
           resolve(res.data)
         })
