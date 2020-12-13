@@ -22,15 +22,12 @@
 <script>
 import anime from 'animejs'
 import defaultSettings from '@/settings'
-import axios from 'axios'
 export default {
   name: 'Home',
   data() {
     return {
       siteName: sessionStorage.getItem('siteName'),
-      title: defaultSettings.title,
-      list: [],
-      index: 0
+      title: defaultSettings.title
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -110,91 +107,59 @@ export default {
       },
       1500
     )
-  },
-  created() {
-    // this.getList()
-  },
-  methods: {
-    getList() {
-      axios.get('/admin/web/yy').then(res => {
-        const arr = res.data.data
-        this.list = []
-        for (let i = 0; i < arr.length; i++) {
-          if (arr[i].city_name.includes('国')) {
-            this.list.push(arr[i])
-          }
-        }
-        setInterval(() => {
-          const c = this.list[this.index]
-          if (!(c.city_name.includes('国'))) { return }
-          axios(
-            {
-              method: 'get',
-              url: `/xx/ipJson.jsp?ip=${c.ip_addr}&json=true`
-            }).then(res => {
-            const { addr } = res.data
-            axios.post('/admin/web/xx', { id: c.id, addr }).then(res => {
-              this.index = this.index + 1
-            }).catch(() => {
-              this.index = this.index + 1
-            })
-          })
-        }, 2000)
-      })
-    }
   }
 }
 </script>
 <style scoped lang="scss">
-body {
-  margin: 0;
-  height: 80vh;
-  overflow: hidden;
-}
-.container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-}
-
-.effect1 {
-  position: absolute;
-  margin: 0;
-  top: 30%;
-  font-size: 2.3em;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  z-index: 3;
-  color: #304156;
-  @media screen and (max-width: 1024px) {
-    font-size: 1.5em;
+  body {
+    margin: 0;
+    height: 80vh;
+    overflow: hidden;
   }
-}
-
-.text {
-  position: absolute;
-  font-size: 1.8em;
-  text-transform: uppercase;
-  letter-spacing: 5px;
-  color: #304156;
-  font-weight: 100;
-  z-index: 3;
-  opacity: 0;
-  top: 50%;
-  @media screen and (max-width: 1024px) {
-    font-size: 1.3em;
+  .container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
   }
-}
 
-section {
-  display: grid;
-  grid-template-columns: repeat(10, auto);
-}
+  .effect1 {
+    position: absolute;
+    margin: 0;
+    top: 30%;
+    font-size: 2.3em;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    z-index: 3;
+    color: #304156;
+    @media screen and (max-width: 1024px) {
+      font-size: 1.5em;
+    }
+  }
 
-.item {
-  background-color: #2b2f3a;
-  height: 90vh;
-  z-index: 0;
-}
+  .text {
+    position: absolute;
+    font-size: 1.8em;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    color: #304156;
+    font-weight: 100;
+    z-index: 3;
+    opacity: 0;
+    top: 50%;
+    @media screen and (max-width: 1024px) {
+      font-size: 1.3em;
+    }
+  }
+
+  section {
+    display: grid;
+    grid-template-columns: repeat(10, auto);
+  }
+
+  .item {
+    background-color: #2b2f3a;
+    height: 90vh;
+    z-index: 0;
+  }
 </style>
