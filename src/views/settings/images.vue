@@ -12,8 +12,16 @@
         <el-form-item label="图片名称" prop="image_title">
           <el-input v-model.trim="form.image_title" clearable />
         </el-form-item>
+        <el-form-item label="上传路径" prop="path">
+          <el-select ref="role" v-model="path" placeholder="选择上传路径" clearable class="filter-item">
+            <el-option label="/blog/common/" value="/blog/common/" />
+            <el-option label="/blog/article/" value="/blog/article/" />
+            <el-option label="/blog/cover/" value="/blog/cover/" />
+            <el-option label="/blog/gallery/" value="/blog/gallery/" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="图片" prop="avatar">
-          <ImgUpLoad :img="form.image_url" :title="form.image_title" @setImg="setIcon" />
+          <ImgUpLoad :img="form.image_url" :title="form.image_title" :path="path" @setImg="setIcon" />
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -24,6 +32,7 @@
 
 <script>
 import { del, search } from '@/api/images'
+import { copy } from '@/utils/common'
 
 import ImgUpLoad from '@/views/common/imgUpload'
 export default {
@@ -36,6 +45,7 @@ export default {
       total: 0,
       loading: true,
       alterVisible: false,
+      path: '/blog/common/',
       form: { image_url: '', image_title: '' },
       listQuery: { page: 1, image_title: '', limit: 10 },
       tableHeader: [
@@ -59,7 +69,7 @@ export default {
   methods: {
     setIcon(url) {
       this.form.image_url = url
-      this.copy(url)
+      copy(url)
       this.alterVisible = false
     },
     search(k) {

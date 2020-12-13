@@ -31,6 +31,12 @@ export default {
         return ''
       }
     },
+    path: {
+      type: String,
+      default() {
+        return '/blog/common/'
+      }
+    },
     storage: {
       type: String,
       default() {
@@ -55,19 +61,26 @@ export default {
         this.$message.error('图片格式错误,仅支持png、jpg、jpeg、bmp、gif')
         return
       }
+      if (file.type.includes('gif')) {
+        this.uploadReq(file)
+        return
+      }
       photoCompress(e.target.files[0], { quality: 0.7, type: file.type }, (base64) => {
         const blob = base64ToBlob(base64)
-        this.loading = true
-        const params = new FormData()
-        params.append('file', blob, file.name)
-        params.append('image_title', this.title)
-        params.append('storage', this.storage)
-        console.log(params.get('file'))
-        upload(params).then(res => {
-          this.loading = false
-          this.$emit('setImg', res)
-        }).catch(() => { this.loading = false })
+        this.uploadReq(file, blob)
       })
+    },
+    uploadReq(file, blob) {
+      this.loading = true
+      const params = new FormData()
+      params.append('file', blob || file, file.name)
+      params.append('image_title', this.title)
+      params.append('path', this.path)
+      params.append('storage', this.storage)
+      upload(params).then(res => {
+        this.loading = false
+        this.$emit('setImg', res)
+      }).catch(() => { this.loading = false })
     }
   }
 }
