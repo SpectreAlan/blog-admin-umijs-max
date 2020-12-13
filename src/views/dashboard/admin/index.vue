@@ -14,7 +14,7 @@
       </el-col>
       <el-col :xs="24" :sm="24" :lg="12">
         <div class="chart-wrapper">
-          <bar-chart :list="blog.city" />
+          <city-map :list="blog.city" />
         </div>
       </el-col>
     </el-row>
@@ -25,7 +25,7 @@
 import PanelGroup from './components/PanelGroup'
 import LineChart from './components/LineChart'
 import PieChart from './components/PieChart'
-import BarChart from './components/BarChart'
+import CityMap from './components/CityMap'
 import { searchItem, searchBlog } from '@/api/report'
 export default {
   name: 'DashboardAdmin',
@@ -33,7 +33,7 @@ export default {
     PanelGroup,
     LineChart,
     PieChart,
-    BarChart
+    CityMap
   },
   data() {
     return {
