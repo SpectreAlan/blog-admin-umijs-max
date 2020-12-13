@@ -11,6 +11,6 @@ export function del(data) {
 }
 export function upload(data) {
   return Request.post('/uploads/images', data, { headers: {
-    'Content-Type': 'multipart/form-data' }
+    'Content-Type': 'multipart/form-data' }, timeout: 30000
   })
 }
