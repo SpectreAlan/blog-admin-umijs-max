@@ -37,7 +37,7 @@ export default {
       loading: true,
       alterVisible: false,
       form: { image_url: '', image_title: '' },
-      listQuery: { page: 1, image_title: '' },
+      listQuery: { page: 1, image_title: '', limit: 10 },
       tableHeader: [
         { field: 'image_title', sortable: 'custom', title: '名称' },
         { field: 'image_url', title: '预览', img: 'image_url' },
