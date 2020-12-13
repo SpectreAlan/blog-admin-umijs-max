@@ -29,6 +29,13 @@ module.exports = {
         cookiePathRewrite: {
           'admin': '/'
         }
+      },
+      '/image-base-url': {
+        target: 'https://jrsee.oss-cn-beijing.aliyuncs.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/image-base-url': ''
+        }
       }
     }
   },

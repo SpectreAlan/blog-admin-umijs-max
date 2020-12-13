@@ -9,7 +9,7 @@
 
 <script>
 import { upload } from '@/api/images'
-import imgzip from 'imgzip'
+import { photoCompress, base64ToBlob } from './tools'
 export default {
   name: 'ImgUpload',
   props: {
@@ -50,9 +50,20 @@ export default {
       this.$refs.file.click()
     },
     upload(e) {
-      imgzip.photoCompress(e.target.files[0], {}, (file) => {
+      const file = e.target.files[0]
+      if (!/png|jpg|jpeg|bmp|gif/.test(file.type)) {
+        this.$message.error('图片格式错误,仅支持png、jpg、jpeg、bmp、gif')
+        return
+      }
+      photoCompress(e.target.files[0], { quality: 0.7, type: file.type }, (base64) => {
+        const blob = base64ToBlob(base64)
         this.loading = true
-        upload({ file, storage: this.storage, image_title: this.title }).then(res => {
+        const params = new FormData()
+        params.append('file', blob, file.name)
+        params.append('image_title', this.title)
+        params.append('storage', this.storage)
+        console.log(params.get('file'))
+        upload(params).then(res => {
           this.loading = false
           this.$emit('setImg', res)
         }).catch(() => { this.loading = false })
@@ -63,29 +74,29 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.img-uploader{
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  min-height:100px;
-  .img-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    text-align: center;
-    position: absolute;
-    top: 50%;
-    left:50%;
-    transform: translate(-50%,-50%);
+  .img-uploader{
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    min-height:100px;
+    .img-uploader-icon {
+      font-size: 28px;
+      color: #8c939d;
+      text-align: center;
+      position: absolute;
+      top: 50%;
+      left:50%;
+      transform: translate(-50%,-50%);
+    }
+    img {
+      position:absolute;
+      width:100%;
+      height:100%;
+    }
+    .file{
+      display: none;
+    }
   }
-  img {
-    position:absolute;
-    width:100%;
-    height:100%;
-  }
-  .file{
-    display: none;
-  }
-}
 </style>

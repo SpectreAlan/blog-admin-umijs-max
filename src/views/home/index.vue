@@ -22,12 +22,15 @@
 <script>
 import anime from 'animejs'
 import defaultSettings from '@/settings'
+import axios from 'axios'
 export default {
   name: 'Home',
   data() {
     return {
       siteName: sessionStorage.getItem('siteName'),
-      title: defaultSettings.title
+      title: defaultSettings.title,
+      list: [],
+      index: 0
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -107,6 +110,38 @@ export default {
       },
       1500
     )
+  },
+  created() {
+    // this.getList()
+  },
+  methods: {
+    getList() {
+      axios.get('/admin/web/yy').then(res => {
+        const arr = res.data.data
+        this.list = []
+        for (let i = 0; i < arr.length; i++) {
+          if (arr[i].city_name.includes('国')) {
+            this.list.push(arr[i])
+          }
+        }
+        setInterval(() => {
+          const c = this.list[this.index]
+          if (!(c.city_name.includes('国'))) { return }
+          axios(
+            {
+              method: 'get',
+              url: `/xx/ipJson.jsp?ip=${c.ip_addr}&json=true`
+            }).then(res => {
+            const { addr } = res.data
+            axios.post('/admin/web/xx', { id: c.id, addr }).then(res => {
+              this.index = this.index + 1
+            }).catch(() => {
+              this.index = this.index + 1
+            })
+          })
+        }, 2000)
+      })
+    }
   }
 }
 </script>
