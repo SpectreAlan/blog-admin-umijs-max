@@ -14,7 +14,7 @@
           <el-input v-model.trim="form.title" />
         </el-form-item>
         <el-form-item label="图片" prop="url">
-          <ImgUpLoad :img="form.url" :title="form.title" storage="1" @setImg="setIcon" />
+          <ImgUpLoad :img="form.url" :title="form.title" storage="1" path="/blog/gallery/" @setImg="setIcon" />
         </el-form-item>
         <el-form-item label="日期">
           <el-date-picker
