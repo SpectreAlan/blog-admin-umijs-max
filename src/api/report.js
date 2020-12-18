@@ -7,6 +7,12 @@ export function search() {
 export function searchItem(data) {
   return Request.post('/dashboard/item', data)
 }
+
 export function searchBlog() {
   return Request.get('/dashboard/category')
 }
+
+export function searchCity() {
+  return Request.get('/dashboard/city')
+}
+
