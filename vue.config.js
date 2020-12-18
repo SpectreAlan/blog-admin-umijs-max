@@ -31,7 +31,7 @@ module.exports = {
         }
       },
       '/image-base-url': {
-        target: 'https://jrsee.oss-cn-beijing.aliyuncs.com',
+        target: 'https://raw.githubusercontent.com/SpectreAlan/images/master',
         changeOrigin: true,
         pathRewrite: {
           '^/image-base-url': ''
