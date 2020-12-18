@@ -84,6 +84,10 @@ export default {
           boundaryGap: false,
           axisTick: {
             show: false
+          },
+          axisLabel: {
+            interval: 0,
+            rotate: 40
           }
         },
         grid: {
