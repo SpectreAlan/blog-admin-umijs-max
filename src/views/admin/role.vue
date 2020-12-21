@@ -127,37 +127,42 @@ export default {
         this.search()
       })
     },
-    treeSort(arr, obj) {
-      for (let i = 0; i < arr.length; i++) {
-        if (obj[arr[i].id]) {
-          arr[i]['children'] = obj[arr[i].id]
-          delete obj[arr[i].id]
-          this.treeSort(arr[i]['children'], obj)
+    treeSort(list, obj) {
+      for (let i = 0; i < list.length; i++) {
+        if (obj[list[i].id]) {
+          list[i]['children'] = obj[list[i].id]
+          delete obj[list[i].id]
+          this.treeSort(list[i]['children'], obj)
         }
       }
     },
     getTree(item) {
+      const checked = item ? item.role_keys.split(',') : [] // 已被选中节点
       this.treeLoading = true
-      menu('search').then(arr => {
+      menu('search').then(list => {
         this.tree = []
-        const other = {}
-        for (let i = 0; i < arr.length; i++) {
+        const childes = {}
+        for (let i = 0; i < list.length; i++) {
           const obj = {}
-          obj.id = arr[i].id
-          obj.name = arr[i].menu_name
-          if (arr[i].parentId) {
-            obj.parentId = arr[i].parentId
-            !other[arr[i].parentId] && (other[arr[i].parentId] = [])
-            other[arr[i].parentId].push(obj)
-          } else {
+          obj.id = list[i].id
+          obj.name = list[i].menu_name
+          if (list[i].parentId) { // 相同父级的子集存储到childes下以父级id为key的arr里面
+            obj.parentId = list[i].parentId
+            !childes[list[i].parentId] && (childes[list[i].parentId] = [])
+            childes[list[i].parentId].push(obj)
+            if (item && !checked.includes(String(list[i].id))) { // 当前节点未被选中，则干掉checked内的父节点
+              const index = checked.indexOf(String(list[i].parentId))
+              index > -1 && checked.splice(index, 1)
+            }
+          } else { // 顶级菜单
             this.tree.push(obj)
           }
         }
-        this.treeSort(this.tree, other)
+        this.treeSort(this.tree, childes)
         this.$refs.tree.setCheckedKeys([])
         this.treeLoading = false
         item && this.$nextTick(() => {
-          this.$refs.tree.setCheckedKeys(item.role_keys.split(','))
+          this.$refs.tree.setCheckedKeys(checked)
         })
       }).catch(() => { this.treeLoading = false })
     },
