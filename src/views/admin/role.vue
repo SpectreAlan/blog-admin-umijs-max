@@ -127,17 +127,18 @@ export default {
         this.search()
       })
     },
-    treeSort(list, obj) {
+    treeSort(list, obj, fathers) {
       for (let i = 0; i < list.length; i++) {
         if (obj[list[i].id]) {
+          fathers.push(String(list[i].id))
           list[i]['children'] = obj[list[i].id]
           delete obj[list[i].id]
-          this.treeSort(list[i]['children'], obj)
+          this.treeSort(list[i]['children'], obj, fathers)
         }
       }
     },
     getTree(item) {
-      const checked = item ? item.role_keys.split(',') : [] // 已被选中节点
+      const fathers = []
       this.treeLoading = true
       menu('search').then(list => {
         this.tree = []
@@ -150,18 +151,16 @@ export default {
             obj.parentId = list[i].parentId
             !childes[list[i].parentId] && (childes[list[i].parentId] = [])
             childes[list[i].parentId].push(obj)
-            if (item && !checked.includes(String(list[i].id))) { // 当前节点未被选中，则干掉checked内的父节点
-              const index = checked.indexOf(String(list[i].parentId))
-              index > -1 && checked.splice(index, 1)
-            }
           } else { // 顶级菜单
             this.tree.push(obj)
           }
         }
-        this.treeSort(this.tree, childes)
+        this.treeSort(this.tree, childes, fathers)
         this.$refs.tree.setCheckedKeys([])
         this.treeLoading = false
         item && this.$nextTick(() => {
+          const role_keys = item.role_keys.split(',') // 已被选中节点
+          const checked = role_keys.filter(v => fathers.indexOf(v) === -1)
           this.$refs.tree.setCheckedKeys(checked)
         })
       }).catch(() => { this.treeLoading = false })
