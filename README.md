@@ -10,7 +10,11 @@
 </div>
 
 # 简介
-基于vue全家桶搭建的个人博客后台管理系统，搭配 [博客前台](https://github.com/SpectreAlan/blog-nextjs) 以及 [中台server](https://github.com/SpectreAlan/blog-server) 一起组成完整的个人博客系统，基础模板使用vue-element-admin，删除本项目无用的组件和页面，扩展了如下功能：
+基于vue全家桶搭建的个人博客后台管理系统
+
+项目地址: [https://console.jszoo.com](https://console.jszoo.com)    测试账号/密码: jszoo/jszoo666
+
+搭配 [博客前台](https://github.com/SpectreAlan/blog-nextjs) 以及 [中台server](https://github.com/SpectreAlan/blog-server) 一起组成完整的个人博客系统，基础模板使用vue-element-admin，删除本项目无用的组件和页面，扩展了如下功能：
 
 # 功能
 * [x] 博客报表，基于echarts包含评论统计、图片统计、访客统计以及访客分布散点图
