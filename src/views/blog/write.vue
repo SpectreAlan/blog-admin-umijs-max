@@ -39,7 +39,7 @@
         <el-radio v-model="urlType" :label="0">手动输入</el-radio>
         <el-radio v-model="urlType" :label="1">上传</el-radio>
         <br>
-        <ImgUpLoad v-if="urlType" :img="form.cover" :title="form.title" @setImg="setImg" />
+        <ImgUpLoad v-if="urlType" :img="form.cover" :title="form.title" path="/blog/article/" @setImg="setImg" />
         <el-input v-else v-model.trim="form.cover" style="width: 200px;" clearable placeholder="图片路径..." />
       </el-form-item>
       <el-form-item label="关键字" prop="keywords">
