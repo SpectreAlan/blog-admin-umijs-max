@@ -3,7 +3,21 @@
     <div v-if="loading" class="upload-loading"><i class="el-icon-loading" />上传中....</div>
     <input ref="file" type="file" class="file" @change="upload($event)">
     <img v-if="img" :src="img">
+    <el-button v-if="img" type="primary" class="previewBtn" @click.stop="previewDialog = true">预览</el-button>
     <i v-if="!img && !loading" class="el-icon-plus img-uploader-icon" />
+    <el-dialog
+      v-if="previewDialog"
+      title="预览"
+      :close-on-click-modal="true"
+      :visible.sync="previewDialog"
+      center
+      append-to-body
+    >
+      选择预览背景颜色: <el-color-picker v-model="imgPreviewBg" size="medium" show-alpha />
+      <div class="imgPreview" :style="{background: imgPreviewBg}">
+        <img :src="img">
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -47,6 +61,8 @@ export default {
   data() {
     return {
       loading: false,
+      imgPreviewBg: '#fff',
+      previewDialog: false,
       fileList: [],
       url: ''
     }
@@ -87,29 +103,46 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .img-uploader{
+  .img-uploader {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    min-height:100px;
-    .img-uploader-icon {
-      font-size: 28px;
-      color: #8c939d;
+    height: 100px;
+
+    .upload-loading,.el-icon-plus {
       text-align: center;
       position: absolute;
+      line-height: 33px;
       top: 50%;
-      left:50%;
-      transform: translate(-50%,-50%);
+      left: 50%;
+      color: #8c939d;
+      transform: translate(-50%, -50%);
+    }
+    i{
+      font-size: 28px;
     }
     img {
-      position:absolute;
-      width:100%;
-      height:100%;
+      max-width: 100%;
+      max-height: 100%;
     }
-    .file{
+    .previewBtn{
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 9999999999;
+    }
+    .file {
       display: none;
+    }
+  }
+  .imgPreview {
+    text-align: center;
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
     }
   }
 </style>
