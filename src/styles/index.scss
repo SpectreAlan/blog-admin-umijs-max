@@ -290,47 +290,6 @@ aside {
 .nest-menu{
   height:50px;
 }
-.upload-loading, .avatar-uploader .el-upload {
-  width: 178px;
-  height: 178px;
-  //border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  text-align: center;
-  vertical-align: middle;
-}
-.upload-loading{
-  padding-top:60px;
-}
-.avatar-uploader .el-upload:hover {
-  border-color: #409EFF;
-}
-.avatar-uploader-icon {
-  position: absolute;
-  top:50%;
-  left:50%;
-  margin-top: -20px;
-  margin-left: -20px;
-  font-size: 40px;
-  color: #8c939d;
-  line-height: 178px;
-  text-align: center;
-}
-.avatar {
-  height: 178px;
-  width: 178px;
-  display: block;
-}
-.uploadLoading p.el-loading-text{
-  font-size:18px;
-  color:#fff;
-}
-.uploadLoading i.el-icon-loading{
-  font-size:80px;
-  color:#fff;
-}
 .indexloadLoading p.el-loading-text{
   font-size:18px;
   color:rgba(255,255,255,.8);
