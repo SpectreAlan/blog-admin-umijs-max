@@ -19,7 +19,7 @@ jobs:
         uses: garygrossgarten/github-action-scp@release
         with:
           local: dist
-          remote: /home/alan/www
+          remote: /home/alan/projects/
           host: ${{ secrets.HOST }}
           username: ${{ secrets.HOST_USERNAME }}
           password: ${{ secrets.HOST_PASSWORD }}
@@ -38,7 +38,7 @@ jobs:
           password: ${{ secrets.HOST_PASSWORD }}
           port: ${{ secrets.HOST_PORT }}
           script: |
-            cd /home/alan/www;
+            cd /home/alan/projects;
             rm -rf console;
             tar -xvf console.tar;
             rm -f console.tar;
