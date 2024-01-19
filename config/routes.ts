@@ -9,14 +9,15 @@ const routes = [
         component: './Home',
     },
     {
-        name: '权限演示',
-        path: '/access',
-        component: './Access',
+        name: '用户管理',
+        path: '/user',
+        component: './User',
     },
     {
-        name: ' CRUD 示例',
-        path: '/table',
-        component: './Table',
+        name: 'Login',
+        path: '/login',
+        component: './login',
+        layout: false,
     },
 ]
 

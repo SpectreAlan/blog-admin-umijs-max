@@ -11,4 +11,15 @@ declare namespace User {
         nickName: string
         email: string
     }
+    interface UserItem {
+        id: string
+        account:string
+        nickName:string
+        avatar:string
+        email:string
+        role:string
+        status:number
+        createdAt:string
+        updatedAt: string
+    }
 }
