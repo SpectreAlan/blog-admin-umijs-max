@@ -1,11 +1,11 @@
 import {RequestConfig} from '@umijs/max';
 import {message} from "antd";
-import CryptoJS from 'crypto-js';
-import { history  } from 'umi';
+import {decrypt} from '@/utils/common'
+import {history} from '@umijs/max';
 
 const request: RequestConfig = {
-    timeout: 15000,
-    // other axios options you want
+    baseURL: process.env.BASE_URL,
+    timeout: 5000,
     errorConfig: {
         errorHandler(error: any) {
             const {response} = error;
@@ -26,8 +26,9 @@ const request: RequestConfig = {
             if (token) {
                 config.headers.Authorization = 'Bearer ' + token;
             }
-            if(config.method === 'post'){
+            if (config.method === 'post') {
                 config.headers['Content-Type'] = 'application/json'
+                config.data = JSON.stringify(config.data)
             }
             return config;
         },
@@ -37,10 +38,7 @@ const request: RequestConfig = {
     ],
     responseInterceptors: [
         (response) => {
-            const key = process.env.CRYPTO_SECRET_KEY;
-            const bytes = CryptoJS.AES.decrypt(response.data, key)
-            const decrypt = bytes.toString(CryptoJS.enc.Utf8)
-            const res = JSON.parse(decrypt)
+            const res = decrypt(response.data as string)
             const {code, message: msg} = res;
             if (code) {
                 message.error(msg)
