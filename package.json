@@ -1,6 +1,6 @@
 {
   "private": true,
-  "author": "lisi <lisi@gmail.com>",
+  "author": "SpectreAlan <comjszoo@gmail.com>",
   "scripts": {
     "dev": "max dev",
     "build": "max build",
