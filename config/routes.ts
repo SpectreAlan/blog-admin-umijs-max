@@ -1,4 +1,4 @@
-export const routes = [
+const routes = [
     {
         path: '/',
         redirect: '/home',
@@ -19,3 +19,5 @@ export const routes = [
         component: './Table',
     },
 ]
+
+export default routes
