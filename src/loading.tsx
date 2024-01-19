@@ -1,4 +1,4 @@
-import '@/assets/style/loading.less'
+import '@/assets/styles/loading.less'
 export default () => {
     return (
         <div className="global-loading-body">
