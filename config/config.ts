@@ -1,4 +1,5 @@
-import { defineConfig } from '@umijs/max';
+import {defineConfig} from '@umijs/max';
+import {routes} from './routes'
 
 export default defineConfig({
     antd: {},
@@ -9,33 +10,13 @@ export default defineConfig({
     layout: {
         title: 'blog admin',
     },
-    routes: [
-        {
-            path: '/',
-            redirect: '/home',
-        },
-        {
-            name: '首页',
-            path: '/home',
-            component: './Home',
-        },
-        {
-            name: '权限演示',
-            path: '/access',
-            component: './Access',
-        },
-        {
-            name: ' CRUD 示例',
-            path: '/table',
-            component: './Table',
-        },
-    ],
+    routes,
     npmClient: 'pnpm',
     proxy: {
         '/api': {
             'target': process.env.PROXY,
             'changeOrigin': true,
-            'pathRewrite': { '^/api' : '' },
+            'pathRewrite': {'^/api': ''},
         },
     },
     define: {
