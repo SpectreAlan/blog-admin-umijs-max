@@ -18,8 +18,7 @@ export const layout: RunTimeLayoutConfig = ({initialState}) => {
         menu: {
             locale: false,
         },
-        layout: 'mix',
-        splitMenus: true,
+        layout: 'side',
         avatarProps: {
             src: initialState?.avatar || undefined,
             title: initialState?.nickName || '用户',
