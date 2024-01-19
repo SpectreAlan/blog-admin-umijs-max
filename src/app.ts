@@ -1,17 +1,19 @@
 import request from '@/utils/request'
 import {RunTimeLayoutConfig} from '@umijs/max';
+import Logo from '@/assets/images/logo.png'
+import {decrypt} from "@/utils/common";
 
-export async function getInitialState(): Promise<{ name: string }> {
+export async function getInitialState():Promise<User.AccountInfo> {
     const user = sessionStorage.getItem('user')
     if(user){
-        return JSON.parse(user)
+        return decrypt(user)
     }
-    return {name: 'admin'};
+    return {role: 'default', avatar: '', nickName: '', account: '', email: '', token: ''};
 }
 
 export const layout: RunTimeLayoutConfig = ({initialState}) => {
     return {
-        logo: 'https://img.alicdn.com/tfs/TB1YHEpwUT1gK0jSZFhXXaAtVXa-28-27.svg',
+        logo: Logo,
         title: 'blog admin',
         menu: {
             locale: false,
@@ -25,4 +27,5 @@ export const layout: RunTimeLayoutConfig = ({initialState}) => {
         },
     };
 };
+
 export {request}
