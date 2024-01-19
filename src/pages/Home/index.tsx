@@ -1,13 +1,10 @@
 import {PageContainer} from '@ant-design/pro-components';
-import {useModel} from '@umijs/max';
 import styles from './index.less';
-import {  useRequest} from 'umi';
-import {useEffect} from 'react'
+import {  useRequest} from '@umijs/max';
 
 
 const HomePage: React.FC = () => {
-    const {name} = useModel('global');
-    const { data, error, loading } = useRequest('/api/article');
+    const { data, loading } = useRequest('/article');
     console.log(data);
     console.log(loading);
     console.log('-------------');
