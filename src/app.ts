@@ -2,6 +2,10 @@ import request from '@/utils/request'
 import {RunTimeLayoutConfig} from '@umijs/max';
 
 export async function getInitialState(): Promise<{ name: string }> {
+    const user = sessionStorage.getItem('user')
+    if(user){
+        return JSON.parse(user)
+    }
     return {name: 'admin'};
 }
 
@@ -12,11 +16,11 @@ export const layout: RunTimeLayoutConfig = ({initialState}) => {
         menu: {
             locale: false,
         },
-        layout: 'mix', //菜单的方式，有mix,top,side三种，这里用mix
-        splitMenus: true, // 这里用了mix才会生效,bia
+        layout: 'mix',
+        splitMenus: true,
         avatarProps: {
-            src: initialState?.avatar || undefined, //右上角头像
-            title: initialState?.name || '用户', //右上角名称
+            src: initialState?.avatar || undefined,
+            title: initialState?.nickName || '用户',
             size: 'small',
         },
     };
