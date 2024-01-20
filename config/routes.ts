@@ -19,6 +19,11 @@ const routes = [
         component: './Poem',
     },
     {
+        name: '标签管理',
+        path: '/tag',
+        component: './Tag',
+    },
+    {
         name: 'Login',
         path: '/login',
         component: './login',
