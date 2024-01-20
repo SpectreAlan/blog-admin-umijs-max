@@ -1,4 +1,4 @@
-import {ActionType, FooterToolbar, PageContainer,  ProTable} from '@ant-design/pro-components';
+import {ActionType, FooterToolbar, PageContainer, ProTable} from '@ant-design/pro-components';
 import {Access, useAccess, useRequest} from '@umijs/max';
 import {Button} from 'antd';
 import React, {useRef, useState} from "react";
@@ -31,15 +31,15 @@ const PoemPage: React.FC = () => {
     }, {
         manual: true
     });
-    const {loading: deleteLoading, run:batchDelete} = useRequest((data:string[]) => {
+    const {loading: deleteLoading, run: batchDelete} = useRequest((ids: string[]) => {
         return {
             method: 'DELETE',
             url: `/poem`,
-            data,
+            data: {ids},
         }
     }, {
         manual: true,
-        onSuccess: ()=>{
+        onSuccess: () => {
             setSelectedRows([]);
             actionRef.current?.reloadAndRest?.();
         }
@@ -55,7 +55,7 @@ const PoemPage: React.FC = () => {
                 }}
                 toolBarRender={() => [
                     <Access accessible={access.canCreate} key='add'>
-                        <AddOrEdit />
+                        <AddOrEdit/>
                     </Access>
                 ]}
                 request={async (params) => {
@@ -86,7 +86,7 @@ const PoemPage: React.FC = () => {
                             loading={deleteLoading}
                             type="primary" danger
                             onClick={async () => {
-                                batchDelete(selectedRowsState.map(item=>item.id))
+                                batchDelete(selectedRowsState.map(item => item.id))
                             }}
                         >
                             批量删除
