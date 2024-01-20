@@ -10,7 +10,7 @@ import {CommonType} from "@/types/common.typings";
 const AddOrEdit: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef}) => {
     const [form] = Form.useForm();
 
-    const {loading, run: queryRun} = useRequest(`/tag/${id}`,
+    const {loading, run: queryRun} = useRequest(`/category/${id}`,
         {
             manual: true,
             onSuccess: (res) => {
@@ -19,17 +19,17 @@ const AddOrEdit: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef
         });
 
     const {loading: saveLoading, run: saveRun} = useRequest(
-        (data: Tag.TagItem) => {
+        (data: Category.CategoryItem) => {
             if (id) {
                 return {
                     method: 'PATCH',
-                    url: `/tag/${id}`,
+                    url: `/category/${id}`,
                     data,
                 }
             }
             return {
                 method: 'POST',
-                url: `/tag`,
+                url: `/category`,
                 data,
             }
         },
@@ -48,11 +48,11 @@ const AddOrEdit: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef
     }, [])
 
     return (
-        <DrawerForm<Tag.TagItem>
+        <DrawerForm<Category.CategoryItem>
             loading={loading || saveLoading}
             onOpenChange={setDrawerVisible}
             open={true}
-            title={id ? '编辑分类' : '新建标签'}
+            title={id ? '编辑分类' : '新建分类'}
             resize={{
                 onResize() {
                     console.log('resize!');

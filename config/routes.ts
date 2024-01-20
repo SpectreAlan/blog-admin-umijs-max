@@ -24,6 +24,11 @@ const routes = [
         component: './Tag',
     },
     {
+        name: '分类管理',
+        path: '/category',
+        component: './Category',
+    },
+    {
         name: 'Login',
         path: '/login',
         component: './login',
