@@ -14,6 +14,11 @@ const routes = [
         component: './User',
     },
     {
+        name: '一言管理',
+        path: '/poem',
+        component: './Poem',
+    },
+    {
         name: 'Login',
         path: '/login',
         component: './login',
