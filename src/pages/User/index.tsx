@@ -1,4 +1,4 @@
-import {ActionType, FooterToolbar, PageContainer, ProDescriptionsItemProps, ProTable} from '@ant-design/pro-components';
+import {ActionType, FooterToolbar, PageContainer,  ProTable} from '@ant-design/pro-components';
 import {Access, useAccess, useRequest} from '@umijs/max';
 import {Button} from 'antd';
 import React, {useRef, useState} from "react";
@@ -6,7 +6,7 @@ import React, {useRef, useState} from "react";
 const UserPage: React.FC = () => {
     const access = useAccess();
     const actionRef = useRef<ActionType>();
-    const columns: ProDescriptionsItemProps<User.UserItem>[] = [
+    const columns: any[] = [
         {
             title: '账号',
             dataIndex: 'account',
