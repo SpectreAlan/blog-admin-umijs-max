@@ -76,29 +76,35 @@ const UserPage: React.FC = () => {
         },
         {
             title: '昵称',
-            dataIndex: 'nickName'
+            dataIndex: 'nickName',
+            hideInSearch: true
+        },
+        {
+            title: '角色',
+            dataIndex: 'role',
+            valueEnum: {
+                admin: {text: '管理员'},
+                default: {text: '普通用户'},
+            }
         },
         {
             title: 'Email',
             dataIndex: 'email'
         },
         {
-            title: '角色',
-            dataIndex: 'role',
-            render: (role: string) => role === 'admin' ? <Tag color="processing" bordered={false}>管理员</Tag> :
-                <Tag color="default" bordered={false}>普通用户</Tag>
-        },
-        {
             title: '头像',
             dataIndex: 'avatar',
+            hideInSearch: true,
             render: (avatar: string, user: User.UserItem) => <Avatar src={avatar} alt={user.nickName} size={40}/>
         },
         {
             title: '创建时间',
+            hideInSearch: true,
             dataIndex: 'createdAt'
         },
         {
             title: '更新时间',
+            hideInSearch: true,
             dataIndex: 'updatedAt'
         },
         {
