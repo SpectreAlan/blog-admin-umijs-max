@@ -82,18 +82,21 @@ const AddOrEdit: React.FC<IProps> = ({setDrawerVisible, id, actionRef}) => {
                 width="md"
                 label="内容"
                 placeholder="请输入内容"
+                rules={[{required: true}]}
             />
             <ProFormText
                 name="author"
                 width="md"
                 label="来源"
                 placeholder="请输入来源"
+                rules={[{required: true}]}
             />
             <ProFormText
                 name="type"
                 width="md"
                 label="类型"
                 placeholder="请输入类型"
+                rules={[{required: true}]}
             />
         </DrawerForm>
     );
