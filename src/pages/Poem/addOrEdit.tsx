@@ -1,23 +1,65 @@
-import {PlusOutlined} from '@ant-design/icons';
 import {
+    ActionType,
     DrawerForm,
     ProFormText,
 } from '@ant-design/pro-components';
-import {Button, Form } from 'antd';
-import {useState} from "react";
+import {Form} from 'antd';
+import {useEffect} from "react";
+import {useRequest} from "@@/exports";
 
-export default () => {
-    const [drawerVisible, setDrawerVisible] = useState(false)
-    const [form] = Form.useForm<{ name: string; company: string }>();
+interface IProps {
+    actionRef: React.MutableRefObject<ActionType | undefined>
+    id: string
+    setDrawerVisible: (visible: boolean) => void
+}
+
+
+const AddOrEdit: React.FC<IProps> = ({setDrawerVisible, id, actionRef}) => {
+    const [form] = Form.useForm();
+
+    const {loading, run: queryRun} = useRequest(`/poem/${id}`,
+        {
+            manual: true,
+            onSuccess: (res) => {
+                form.setFieldsValue(res)
+            }
+        });
+
+    const {loading: saveLoading, run: saveRun} = useRequest(
+        (data: Poem.PoemItem) => {
+            if (id) {
+                return {
+                    method: 'PATCH',
+                    url: `/poem/${id}`,
+                    data,
+                }
+            }
+            return {
+                method: 'POST',
+                url: `/poem`,
+                data,
+            }
+        },
+        {
+            manual: true,
+            onSuccess: () => {
+                setDrawerVisible(false);
+                actionRef.current?.reloadAndRest?.();
+            }
+        });
+
+    useEffect(() => {
+        if (id) {
+            queryRun()
+        }
+    }, [])
 
     return (
-        <DrawerForm<{
-            name: string;
-            company: string;
-        }>
+        <DrawerForm<Poem.PoemItem>
+            loading={loading || saveLoading}
             onOpenChange={setDrawerVisible}
-            open={drawerVisible}
-            title="新建一言"
+            open={true}
+            title={id ? '编辑一言' : '新建一言'}
             resize={{
                 onResize() {
                     console.log('resize!');
@@ -26,19 +68,13 @@ export default () => {
                 minWidth: 300,
             }}
             form={form}
-            trigger={
-                <Button type="primary" onClick={() => setDrawerVisible(true)}>
-                    <PlusOutlined/>
-                    新建一言
-                </Button>
-            }
             autoFocusFirstInput
             drawerProps={{
                 destroyOnClose: true,
             }}
             submitTimeout={2000}
             onFinish={async (values) => {
-                setDrawerVisible(false)
+                saveRun(values)
             }}
         >
             <ProFormText
@@ -62,3 +98,5 @@ export default () => {
         </DrawerForm>
     );
 };
+
+export default AddOrEdit
