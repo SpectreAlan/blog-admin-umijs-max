@@ -43,14 +43,16 @@ const PoemPage: React.FC = () => {
         });
     }
     const renderActions = (text: string, record: Poem.PoemItem) => (
-        <Space>
-            <Button type="link" onClick={() => handleEdit(record)}>
-                编辑
-            </Button>
-            <Button type="text" loading={deleteLoading} danger onClick={() => handleDelete([record.id])}>
-                删除
-            </Button>
-        </Space>
+        <Access accessible={access.canEdit} key='action'>
+            <Space>
+                <Button type="link" onClick={() => handleEdit(record)}>
+                    编辑
+                </Button>
+                <Button type="text" loading={deleteLoading} danger onClick={() => handleDelete([record.id])}>
+                    删除
+                </Button>
+            </Space>
+        </Access>
     );
 
     const columns: any[] = [

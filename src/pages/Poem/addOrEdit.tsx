@@ -1,20 +1,13 @@
 import {
-    ActionType,
     DrawerForm,
     ProFormText,
 } from '@ant-design/pro-components';
 import {Form} from 'antd';
 import {useEffect} from "react";
-import {useRequest} from "@@/exports";
+import {useRequest} from "@umijs/max";
+import {CommonType} from "@/types/common.typings";
 
-interface IProps {
-    actionRef: React.MutableRefObject<ActionType | undefined>
-    id: string
-    setDrawerVisible: (visible: boolean) => void
-}
-
-
-const AddOrEdit: React.FC<IProps> = ({setDrawerVisible, id, actionRef}) => {
+const AddOrEdit: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef}) => {
     const [form] = Form.useForm();
 
     const {loading, run: queryRun} = useRequest(`/poem/${id}`,
