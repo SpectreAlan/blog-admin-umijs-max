@@ -29,6 +29,11 @@ const routes = [
         component: './Category',
     },
     {
+        name: '系统设置',
+        path: '/setting',
+        component: './Setting',
+    },
+    {
         name: 'Login',
         path: '/login',
         component: './login',
