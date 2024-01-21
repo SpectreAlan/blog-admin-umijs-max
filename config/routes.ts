@@ -34,6 +34,11 @@ const routes = [
         component: './Setting',
     },
     {
+        name: '访问日志',
+        path: '/visitor',
+        component: './Visitor',
+    },
+    {
         name: 'Login',
         path: '/login',
         component: './login',
