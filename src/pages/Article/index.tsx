@@ -2,7 +2,7 @@ import {ActionType, FooterToolbar, PageContainer, ProTable} from '@ant-design/pr
 import {Access, useAccess, useRequest} from '@umijs/max';
 import {Button, Space, Modal, Tag } from 'antd';
 import React, {useRef, useState} from "react";
-import AddOrEdit from "@/pages/Article/addOrEdit";
+import Create from "@/pages/Article/create";
 import {ExclamationCircleFilled, PlusOutlined} from '@ant-design/icons';
 
 const ArticlePage: React.FC = () => {
@@ -112,7 +112,7 @@ const ArticlePage: React.FC = () => {
     return (
         <PageContainer>
             {
-                drawerVisible ? <AddOrEdit setDrawerVisible={setDrawerVisible} id={id} actionRef={actionRef}/> : null
+                drawerVisible ? <Create setDrawerVisible={setDrawerVisible} id={id} actionRef={actionRef}/> : null
             }
             <ProTable<Article.ArticleItem>
                 actionRef={actionRef}
@@ -128,7 +128,7 @@ const ArticlePage: React.FC = () => {
                             setDrawerVisible(true)
                         }}>
                             <PlusOutlined/>
-                            新建标签
+                            新建文章
                         </Button>
                     </Access>
                 ]}
