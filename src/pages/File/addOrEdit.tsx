@@ -2,12 +2,15 @@ import {
     DrawerForm,
     ProFormText,
 } from '@ant-design/pro-components';
+import {useState} from 'react'
 import {Form} from 'antd';
 import {CommonType} from "@/types/common.typings";
 import OSSUpload from '@/pages/File/upload'
 
 const AddOrEdit: React.FC<CommonType.IProps> = ({setDrawerVisible}) => {
     const [form] = Form.useForm();
+
+    const [url, setUrl] = useState('');
 
     return (
         <DrawerForm<File.FileItem>
@@ -37,7 +40,7 @@ const AddOrEdit: React.FC<CommonType.IProps> = ({setDrawerVisible}) => {
                 label="描述"
                 placeholder="请输入描述"
             />
-            <OSSUpload label={'文件上传'} formName='file' url='' type='common'/>
+            <OSSUpload label={'文件上传'} formName='file' url={url} type='common' onChange={setUrl}/>
         </DrawerForm>
     );
 };
