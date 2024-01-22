@@ -6,58 +6,51 @@ import {Form, Upload, Button} from 'antd';
 import {useEffect} from "react";
 import {useRequest} from "@umijs/max";
 import {CommonType} from "@/types/common.typings";
-import {UploadChangeParam} from "antd/lib/upload/interface";
 import {UploadOutlined} from '@ant-design/icons';
 
 const AddOrEdit: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef}) => {
     const [form] = Form.useForm();
 
-    const {loading, run: queryRun} = useRequest(`/file/${id}`,
+    const {loading, run: signatureRun, data:config} = useRequest(`/file/signature`,
         {
             manual: true,
-            onSuccess: (res) => {
-                form.setFieldsValue(res)
-            }
         });
 
-    const {loading: saveLoading, run: saveRun} = useRequest(
-        (data: File.FileItem) => {
-            if (id) {
-                return {
-                    method: 'PATCH',
-                    url: `/file/${id}`,
-                    data,
-                }
-            }
+    useEffect(()=>{
+        signatureRun()
+    }, [])
+
+    const {loading: saveLoading, run: uploadToOss} = useRequest(
+        (data: FormData) => {
             return {
                 method: 'POST',
-                url: `/file`,
+                url: config.host,
                 data,
             }
+
         },
         {
             manual: true,
-            onSuccess: () => {
-                setDrawerVisible(false);
-                actionRef.current?.reloadAndRest?.();
+            onSuccess: (res) => {
+                console.log(res);
             }
         });
 
-    useEffect(() => {
-        if (id) {
-            queryRun()
-        }
-    }, [])
 
-    const beforeUpload = (file: UploadChangeParam) => {
-        console.log('onChange', info);
-        if (info.file.status === 'done') {
-            // 文件上传成功
-            console.log(`${info.file.name} file uploaded successfully`);
-        } else if (info.file.status === 'error') {
-            // 文件上传失败
-            console.error(`${info.file.name} file upload failed.`);
-        }
+    const beforeUpload = (file: any) => {
+        console.log(config);
+        console.log(file);
+        const formData = new FormData()
+        const key = `${config.dir}/common/${new Date().getTime()}.${
+            file.name.split('/')[1]
+        }`
+        formData.append('key', key)
+        formData.append('OSSAccessKeyId', config.accessId)
+        formData.append('policy', config.policy)
+        formData.append('signature', config.signature)
+        formData.append('success_action_status', '200')
+        formData.append('file', file)
+        uploadToOss(formData)
     };
 
 
@@ -92,6 +85,7 @@ const AddOrEdit: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef
             />
             <Form.Item name="files" label="Dragger">
                 <Upload
+                    action='/file'
                     beforeUpload={beforeUpload}
                     maxCount={1}
                     accept=".png, .jpg, .jpeg"

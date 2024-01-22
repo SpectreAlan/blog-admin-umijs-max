@@ -27,7 +27,7 @@ const request: RequestConfig = {
                 config.headers.Authorization = 'Bearer ' + token;
             }
             if (config.method !== 'get') {
-                config.headers['Content-Type'] = 'application/json'
+                config.headers['Content-Type'] = config.headers['Content-Type'] || 'application/json'
                 config.data = JSON.stringify(config.data)
             }
             return config;
