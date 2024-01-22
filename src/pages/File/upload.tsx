@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {UploadOutlined} from '@ant-design/icons';
 import type {  UploadProps} from 'antd';
 import {Button, Form, Upload} from 'antd';
@@ -6,13 +6,14 @@ import {useRequest} from "@umijs/max";
 
 interface OSSUploadProps {
     label: string
+    type: string
     formName: string
     url?: string;
     onChange?: (url: string) => void;
 }
 
-const OSSUpload = ({url, label, formName}: OSSUploadProps) => {
-    const {run: signatureRun, data: OSSData} = useRequest(`/file/signature`,
+const OSSUpload = ({url, label, formName, type}: OSSUploadProps) => {
+    const {run: signatureRun, data: ossConfig} = useRequest(`/file/signature`,
         {
             manual: true,
         });
@@ -24,33 +25,29 @@ const OSSUpload = ({url, label, formName}: OSSUploadProps) => {
 
     const getExtraData: UploadProps['data'] = (file) => ({
         key: file.url,
-        OSSAccessKeyId: OSSData?.accessId,
-        policy: OSSData?.policy,
-        Signature: OSSData?.signature,
+        OSSAccessKeyId: ossConfig?.accessId,
+        policy: ossConfig?.policy,
+        Signature: ossConfig?.signature,
     });
 
     const beforeUpload: UploadProps['beforeUpload'] = async (file) => {
-        if (!OSSData) return false;
+        if (!ossConfig) return false;
 
-        const expire = Number(OSSData.expire) * 1000;
-
-        if (expire < Date.now()) {
-            await init();
+        if (new Date(ossConfig.expire) < new Date()) {
+            await signatureRun();
         }
-
         const suffix = file.name.slice(file.name.lastIndexOf('.'));
-        const filename = Date.now() + suffix;
         // @ts-ignore
-        file.url = OSSData.dir + filename;
-
+        file.url = `${ossConfig.dir}/${type}/${Date.now() + suffix}`;
         return file;
     };
 
     const uploadProps: UploadProps = {
         name: 'file',
-        action: OSSData?.host,
+        action: ossConfig?.host,
         data: getExtraData,
         beforeUpload,
+        fileList: []
     };
 
     return (

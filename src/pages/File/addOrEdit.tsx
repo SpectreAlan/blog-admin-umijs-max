@@ -37,7 +37,7 @@ const AddOrEdit: React.FC<CommonType.IProps> = ({setDrawerVisible}) => {
                 label="描述"
                 placeholder="请输入描述"
             />
-            <OSSUpload label={'文件上传'} formName='file' url=''/>
+            <OSSUpload label={'文件上传'} formName='file' url='' type='common'/>
         </DrawerForm>
     );
 };
