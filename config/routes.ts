@@ -34,6 +34,11 @@ const routes = [
         component: './Setting',
     },
     {
+        name: '文件管理',
+        path: '/file',
+        component: './File',
+    },
+    {
         name: '访问日志',
         path: '/visitor',
         component: './Visitor',

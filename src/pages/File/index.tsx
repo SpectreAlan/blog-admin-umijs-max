@@ -2,13 +2,13 @@ import {ActionType, FooterToolbar, PageContainer, ProTable} from '@ant-design/pr
 import {Access, useAccess, useRequest} from '@umijs/max';
 import {Button, Space, Modal} from 'antd';
 import React, {useRef, useState} from "react";
-import AddOrEdit from "@/pages/Poem/addOrEdit";
+import AddOrEdit from "@/pages/File/addOrEdit";
 import {ExclamationCircleFilled, PlusOutlined} from '@ant-design/icons';
 
-const PoemPage: React.FC = () => {
+const FilePage: React.FC = () => {
     const access = useAccess();
     const actionRef = useRef<ActionType>();
-    const [selectedRows, setSelectedRows] = useState<Poem.PoemItem[]>([]);
+    const [selectedRows, setSelectedRows] = useState<File.FileItem[]>([]);
     const [id, setId] = useState<string>('');
     const [drawerVisible, setDrawerVisible] = useState(false)
 
@@ -16,7 +16,7 @@ const PoemPage: React.FC = () => {
         (ids: string[]) => {
             return {
                 method: 'DELETE',
-                url: `/poem`,
+                url: `/file`,
                 data: {ids},
             }
         },
@@ -28,7 +28,7 @@ const PoemPage: React.FC = () => {
             }
         });
 
-    const handleEdit = (record: Poem.PoemItem) => {
+    const handleEdit = (record: File.FileItem) => {
         setId(record.id)
         setDrawerVisible(true)
     }
@@ -42,7 +42,7 @@ const PoemPage: React.FC = () => {
             }
         });
     }
-    const renderActions = (text: string, record: Poem.PoemItem) => (
+    const renderActions = (text: string, record: File.FileItem) => (
         <Access accessible={access.canEdit} key='action'>
             <Space>
                 <Button type="link" onClick={() => handleEdit(record)}>
@@ -57,20 +57,17 @@ const PoemPage: React.FC = () => {
 
     const columns: any[] = [
         {
-            title: '内容',
-            dataIndex: 'content',
+            title: '链接',
+            dataIndex: 'url',
             copyable: true
         },
         {
-            title: '来源',
-            dataIndex: 'author'
+            title: '描述',
+            dataIndex: 'description',
+            hideInSearch: true
         },
         {
-            title: '类型',
-            dataIndex: 'type'
-        },
-        {
-            title: '创建时间',
+            title: '上传时间',
             dataIndex: 'createdAt',
             hideInSearch: true
         },
@@ -84,7 +81,7 @@ const PoemPage: React.FC = () => {
     const {loading, run} = useRequest((params) => {
         return {
             method: 'GET',
-            url: '/poem',
+            url: '/file',
             params,
         }
     }, {
@@ -96,7 +93,7 @@ const PoemPage: React.FC = () => {
             {
                 drawerVisible ? <AddOrEdit setDrawerVisible={setDrawerVisible} id={id} actionRef={actionRef}/> : null
             }
-            <ProTable<Poem.PoemItem>
+            <ProTable<File.FileItem>
                 actionRef={actionRef}
                 loading={loading}
                 rowKey="id"
@@ -110,7 +107,7 @@ const PoemPage: React.FC = () => {
                             setDrawerVisible(true)
                         }}>
                             <PlusOutlined/>
-                            新建一言
+                            上传文件
                         </Button>
                     </Access>
                 ]}
@@ -154,4 +151,4 @@ const PoemPage: React.FC = () => {
     );
 };
 
-export default PoemPage;
+export default FilePage;

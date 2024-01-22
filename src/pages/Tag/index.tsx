@@ -63,11 +63,13 @@ const TagPage: React.FC = () => {
         },
         {
             title: '创建时间',
-            dataIndex: 'createdAt'
+            dataIndex: 'createdAt',
+            hideInSearch: true
         },
         {
             title: '更新时间',
-            dataIndex: 'updatedAt'
+            dataIndex: 'updatedAt',
+            hideInSearch: true
         },
         {
             title: '操作',
