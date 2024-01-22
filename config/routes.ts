@@ -9,6 +9,11 @@ const routes = [
         component: './Home',
     },
     {
+        name: '文章管理',
+        path: '/article',
+        component: './Article',
+    },
+    {
         name: '用户管理',
         path: '/user',
         component: './User',
