@@ -27,12 +27,27 @@ const routes = [
                 path: '/blog/category',
                 component: './Category',
             },
+            {
+                name: '评论管理',
+                path: '/blog/comment',
+                component: './Comment',
+            },
         ]
     },
     {
         name: '一言管理',
         path: '/poem',
         component: './Poem',
+    },
+    {
+        name: '文件管理',
+        path: '/file',
+        component: './File',
+    },
+    {
+        name: '访客管理',
+        path: '/visitor',
+        component: './Visitor',
     },
     {
         name: '系统管理',
@@ -50,16 +65,7 @@ const routes = [
             }
         ],
     },
-    {
-        name: '文件管理',
-        path: '/file',
-        component: './File',
-    },
-    {
-        name: '访问日志',
-        path: '/visitor',
-        component: './Visitor',
-    },
+
     {
         name: 'Login',
         path: '/login',
