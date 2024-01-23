@@ -44,7 +44,7 @@ const OSSUpload = ({url, label, formName, type, onChange}: OSSUploadProps) => {
         }
         return true;
     };
-    const customRequest: any = async ({file}) => {
+    const customRequest: any = async ({file}: { file: File }) => {
         setLoading(true)
         try {
             const suffix = file.name.slice(file.name.lastIndexOf('.'));
@@ -84,7 +84,7 @@ const OSSUpload = ({url, label, formName, type, onChange}: OSSUploadProps) => {
             <Spin spinning={ossConfigLoading || loading}>
                 <Upload {...uploadProps}>
                     {
-                        url ? <img src={ossConfig.host + '/' + url} alt=""/> :
+                        url ? <img src={ url} alt="" style={{height: '70px'}}/> :
                             <Button icon={<UploadOutlined/>}>Click to Upload</Button>
                     }
                 </Upload>

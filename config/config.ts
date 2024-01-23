@@ -18,6 +18,11 @@ export default defineConfig({
             'changeOrigin': true,
             'pathRewrite': {'^/api': ''},
         },
+        '/image-base-url': {
+            'target': process.env.IMAGE_PROXY,
+            'changeOrigin': true,
+            'pathRewrite': {'^/image-base-url': ''},
+        },
     },
     define: {
         'process.env': process.env
