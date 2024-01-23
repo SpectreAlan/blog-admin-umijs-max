@@ -23,4 +23,9 @@ declare namespace Article {
     cover: string
     tags: string[]
   }
+
+  interface Option {
+    title: string
+    id: string
+  }
 }

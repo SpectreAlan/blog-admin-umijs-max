@@ -10,21 +10,25 @@ import {useEffect, useState} from "react";
 import {useRequest} from "@umijs/max";
 import {CommonType} from "@/types/common.typings";
 import MarkdownEditors from '@/pages/Article/markdown'
+// @ts-ignore
 import Editor from "@toast-ui/editor";
 import OSSUpload from '@/pages/File/upload'
-import {CloudUploadOutlined, CloudServerOutlined}  from '@ant-design/icons'
+import {CloudUploadOutlined, CloudServerOutlined} from '@ant-design/icons'
 
 const Create: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef}) => {
-    const [editor, setEditor] = useState(null | Editor)
+    const [editor, setEditor] = useState<null | Editor>(null)
     const [form] = Form.useForm();
+    const cover = Form.useWatch('cover', form);
     const [tags, setTags] = useState([])
     const [category, setCategory] = useState([])
 
-    const {loading, run: queryRun} = useRequest(`/article/${id}`,
+    const {loading, run: queryDetail} = useRequest(`/article/${id}`,
         {
             manual: true,
             onSuccess: (res) => {
+                console.log(res);
                 form.setFieldsValue(res)
+                editor.setMarkdown(res.content)
             }
         });
 
@@ -37,7 +41,7 @@ const Create: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef}) 
     }, {
         manual: true,
         onSuccess: ({list}) => {
-            setTags(list?.map(({title, id}) => ({label: title, value: id})))
+            setTags(list?.map(({title, id}:Article.Option) => ({label: title, value: id})))
         }
     });
     const {run: queryCategory} = useRequest(() => {
@@ -49,12 +53,14 @@ const Create: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef}) 
     }, {
         manual: true,
         onSuccess: ({list}) => {
-            setCategory(list?.map(({title, id}) => ({label: title, value: id})))
+            setCategory(list?.map(({title, id}:Article.Option) => ({label: title, value: id})))
         }
     });
 
     const {loading: saveLoading, run: saveRun} = useRequest(
         (status: number) => {
+            const content = editor.getMarkdown()
+            const data = {...form.getFieldsValue(), status, content}
             if (id) {
                 return {
                     method: 'PATCH',
@@ -80,7 +86,7 @@ const Create: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef}) 
         queryTags()
         queryCategory()
         if (id) {
-            queryRun()
+            queryDetail()
         }
     }, [])
 
@@ -91,15 +97,7 @@ const Create: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef}) 
             onOpenChange={setDrawerVisible}
             open={true}
             title={id ? '编辑文章' : '新建文章'}
-            resize={{
-                onResize() {
-                    console.log('resize!');
-                },
-                maxWidth: window.innerWidth * 0.8,
-                minWidth: 300,
-            }}
             form={form}
-            autoFocusFirstInput
             drawerProps={{
                 destroyOnClose: true,
             }}
@@ -123,21 +121,15 @@ const Create: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef}) 
                             保存为草稿
                         </Button>,
                         <Button
-                            icon={<CloudUploadOutlined />}
+                            icon={<CloudUploadOutlined/>}
                             type='primary'
                             key="publish"
-                            onClick={() => saveRun(a)}
+                            onClick={() => saveRun(1)}
                         >
                             发布
                         </Button>,
                     ];
                 },
-            }}
-            onFinish={async (values) => {
-                console.log(values);
-                console.log(1);
-                console.log(editor.getMarkdown());
-                // saveRun(values)
             }}
         >
             <ProForm.Group>
@@ -178,11 +170,16 @@ const Create: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef}) 
                     label="关键字"
                     placeholder="请输入关键字"
                 />
-                <OSSUpload formName='cover' label='封面'
-                           url={'https://cdn.helingqi.com/wavatar/763962c5359409dc7115d2819b9649a7?d=mm'}/>
+                <OSSUpload
+                    formName='cover'
+                    label='封面'
+                    url={cover}
+                    type='article'
+                    onChange={(cover: string) => form.setFieldsValue({cover})}
+                />
             </ProForm.Group>
             <Form.Item label='内容' name='content'>
-                <MarkdownEditors setEditor={setEditor}/>
+                <MarkdownEditors setEditor={setEditor} />
             </Form.Item>
         </DrawerForm>
     );

@@ -3,7 +3,7 @@ import {Access, useAccess, useRequest} from '@umijs/max';
 import {Button, Space, Modal, Tag } from 'antd';
 import React, {useRef, useState} from "react";
 import Create from "@/pages/Article/create";
-import {ExclamationCircleFilled, PlusOutlined} from '@ant-design/icons';
+import {ExclamationCircleFilled, FrownOutlined, PlusOutlined, SmileOutlined} from '@ant-design/icons';
 
 const ArticlePage: React.FC = () => {
     const access = useAccess();
@@ -63,12 +63,29 @@ const ArticlePage: React.FC = () => {
         {
             title: '封面',
             dataIndex: 'cover',
-            hideInSearch: true
+            hideInSearch: true,
+            render: (_: string) => <img src={_} alt="" style={{width: '60px'}}/>
         },
         {
             title: '浏览量',
             dataIndex: 'scan',
             hideInSearch: true
+        },
+        {
+            title: '状态',
+            dataIndex: 'status',
+            valueEnum: {
+                1: {
+                    text: '正常',
+                    status: 'Success',
+                    icon: <SmileOutlined/>,
+                },
+                0: {
+                    text: '草稿',
+                    status: 'Error',
+                    icon: <FrownOutlined/>,
+                }
+            },
         },
         {
             title: '分类',
@@ -88,7 +105,7 @@ const ArticlePage: React.FC = () => {
             hideInSearch: true
         },
         {
-            title: '更新时间',
+            title: '最后更新',
             dataIndex: 'updatedAt',
             hideInSearch: true
         },
