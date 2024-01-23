@@ -9,14 +9,25 @@ const routes = [
         component: './Home',
     },
     {
-        name: '文章管理',
-        path: '/article',
-        component: './Article',
-    },
-    {
-        name: '用户管理',
-        path: '/user',
-        component: './User',
+        name: '博客管理',
+        path: '/blog',
+        routes: [
+            {
+                name: '文章管理',
+                path: '/blog/article',
+                component: './Article',
+            },
+            {
+                name: '标签管理',
+                path: '/blog/tag',
+                component: './Tag',
+            },
+            {
+                name: '分类管理',
+                path: '/blog/category',
+                component: './Category',
+            },
+        ]
     },
     {
         name: '一言管理',
@@ -24,19 +35,20 @@ const routes = [
         component: './Poem',
     },
     {
-        name: '标签管理',
-        path: '/tag',
-        component: './Tag',
-    },
-    {
-        name: '分类管理',
-        path: '/category',
-        component: './Category',
-    },
-    {
-        name: '系统设置',
-        path: '/setting',
-        component: './Setting',
+        name: '系统管理',
+        path: '/system',
+        routes: [
+            {
+                name: '系统设置',
+                path: '/system/setting',
+                component: './Setting',
+            },
+            {
+                name: '用户管理',
+                path: '/system/user',
+                component: './User',
+            }
+        ],
     },
     {
         name: '文件管理',
