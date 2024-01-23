@@ -4,6 +4,7 @@ import {Button, Space, Modal, Tag } from 'antd';
 import React, {useRef, useState} from "react";
 import Create from "@/pages/Article/create";
 import {ExclamationCircleFilled, FrownOutlined, PlusOutlined, SmileOutlined} from '@ant-design/icons';
+import Comment from '@/pages/Comment/addOrEdit'
 
 const ArticlePage: React.FC = () => {
     const access = useAccess();
@@ -11,6 +12,7 @@ const ArticlePage: React.FC = () => {
     const [selectedRows, setSelectedRows] = useState<Article.ArticleItem[]>([]);
     const [id, setId] = useState<string>('');
     const [drawerVisible, setDrawerVisible] = useState(false)
+    const [drawerComment, setCommentVisible] = useState(false)
 
     const {loading: deleteLoading, run: batchDelete} = useRequest(
         (ids: string[]) => {
@@ -32,6 +34,11 @@ const ArticlePage: React.FC = () => {
         setId(record.id)
         setDrawerVisible(true)
     }
+
+    const handlePinedComment = (record: Article.ArticleItem) => {
+        setId(record.id)
+        setCommentVisible(true)
+    }
     const handleDelete = (ids: string[]) => {
         Modal.confirm({
             title: '温馨提示',
@@ -47,6 +54,9 @@ const ArticlePage: React.FC = () => {
             <Space>
                 <Button type="link" onClick={() => handleEdit(record)}>
                     编辑
+                </Button>
+                <Button type="link" onClick={() => handlePinedComment(record)}>
+                    添加置顶评论
                 </Button>
                 <Button type="text" loading={deleteLoading} danger onClick={() => handleDelete([record.id])}>
                     删除
@@ -64,7 +74,7 @@ const ArticlePage: React.FC = () => {
             title: '封面',
             dataIndex: 'cover',
             hideInSearch: true,
-            render: (_: string) => <img src={_} alt="" style={{width: '60px'}}/>
+            render: (_: string) => <img src={'/' + _} alt="" style={{width: '60px'}}/>
         },
         {
             title: '浏览量',
@@ -130,6 +140,10 @@ const ArticlePage: React.FC = () => {
         <PageContainer>
             {
                 drawerVisible ? <Create setDrawerVisible={setDrawerVisible} id={id} actionRef={actionRef}/> : null
+            }
+
+            {
+                drawerComment ? <Comment setDrawerVisible={setCommentVisible} article={id} actionRef={actionRef} type='pinned' id='-1'/> : null
             }
             <ProTable<Article.ArticleItem>
                 actionRef={actionRef}
