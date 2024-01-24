@@ -34,27 +34,29 @@ const Visitor: React.FC<IPropsStatistics> = (params) => {
             run()
         }
     };
-    return <div className="records">
-        <h3>访客记录</h3>
-        <List loading={loading}>
-            <VirtualList
-                data={list}
-                height={ContainerHeight}
-                itemHeight={47}
-                itemKey="id"
-                onScroll={onScroll}
-            >
-                {(item: Visitor.VisitorItem) => (
-                    <List.Item key={item.id}>
-                        <span className="ip">{item.ip}</span>
-                        <span className="country">{item.country}</span>
-                        <span className="province">{item.province}</span>
-                        <span className="city">{item.city}</span>
-                        <span className="device">{item.device}({item.os})</span>
-                    </List.Item>
-                )}
-            </VirtualList>
-        </List>
+    return <div className="chart">
+        <div className="records">
+            <h3>访客记录</h3>
+            <List loading={loading}>
+                <VirtualList
+                    data={list}
+                    height={ContainerHeight}
+                    itemHeight={47}
+                    itemKey="id"
+                    onScroll={onScroll}
+                >
+                    {(item: Visitor.VisitorItem) => (
+                        <List.Item key={item.id}>
+                            <span className="ip">{item.ip}</span>
+                            <span className="country">{item.country}</span>
+                            <span className="province">{item.province}</span>
+                            <span className="city">{item.city}</span>
+                            <span className="device">{item.device}({item.os})</span>
+                        </List.Item>
+                    )}
+                </VirtualList>
+            </List>
+        </div>
     </div>
 };
 
