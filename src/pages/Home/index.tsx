@@ -49,11 +49,11 @@ const HomePage: React.FC = () => {
                     </Radio.Group>
                 </div>
                 <div className="charts">
-                    <Article {...range}/>
-                    <Comments {...range}/>
                     <Visitor {...range}/>
                     <Records {...range}/>
                     <VisitorAnalysis {...range}/>
+                    <Article {...range}/>
+                    <Comments {...range}/>
                 </div>
             </div>
         </PageContainer>
