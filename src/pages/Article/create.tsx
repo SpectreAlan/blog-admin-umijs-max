@@ -22,7 +22,7 @@ const Create: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef}) 
     const [tags, setTags] = useState([])
     const [category, setCategory] = useState([])
 
-    const {loading, run: queryDetail} = useRequest(`/article/${id}`,
+    const {loading, run: queryDetail} = useRequest(`/article/detail?id=${id}`,
         {
             manual: true,
             onSuccess: (res) => {
