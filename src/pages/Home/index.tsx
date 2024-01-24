@@ -3,6 +3,7 @@ import Article from './charts/article'
 import Comments from './charts/comments'
 import Visitor from './charts/visitor'
 import Records from './charts/records'
+import VisitorAnalysis from "@/pages/Home/charts/visitorAnalysis";
 import {Radio} from 'antd'
 import {useState} from 'react'
 import {rangesByDay, IPropsStatistics, rangesByMonth} from './utils'
@@ -52,6 +53,7 @@ const HomePage: React.FC = () => {
                     <Comments {...range}/>
                     <Visitor {...range}/>
                     <Records {...range}/>
+                    <VisitorAnalysis {...range}/>
                 </div>
             </div>
         </PageContainer>

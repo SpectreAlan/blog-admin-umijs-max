@@ -10,10 +10,16 @@
   }
   .charts{
     display: flex;
-    justify-content: space-evenly;
     flex-wrap: wrap;
-    .echarts-for-react, .records{
+    .chart{
       width: 50%;
+      position: relative;
+      .type-radio{
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        z-index: 99999;
+      }
       @media screen and (max-width: 768px){
         width: 100%;
       }

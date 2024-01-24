@@ -28,12 +28,14 @@ const Visitor: React.FC<IPropsStatistics> = (params) => {
             data: data.series
         }]
     };
-    return <ReactECharts
-        showLoading={loading}
-        option={option}
-        style={{height: 400}}
-        opts={{renderer: 'svg'}}
-    />
+    return <div className="chart">
+        <ReactECharts
+            showLoading={loading}
+            option={option}
+            style={{height: 400}}
+            opts={{renderer: 'svg'}}
+        />
+    </div>
 };
 
 export default Visitor;
