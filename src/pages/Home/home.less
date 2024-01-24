@@ -12,10 +12,24 @@
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
-    .echarts-for-react{
+    .echarts-for-react, .records{
       width: 50%;
       @media screen and (max-width: 768px){
         width: 100%;
+      }
+    }
+    .records{
+      .ip{
+        color: #1a88ff;
+      }
+      h3{
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .device{
+        @media screen and (max-width: 768px){
+          display: none;
+        }
       }
     }
   }

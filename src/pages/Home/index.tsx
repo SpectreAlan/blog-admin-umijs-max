@@ -2,6 +2,7 @@ import {PageContainer} from '@ant-design/pro-components';
 import Article from './charts/article'
 import Comments from './charts/comments'
 import Visitor from './charts/visitor'
+import Records from './charts/records'
 import {Radio} from 'antd'
 import {useState} from 'react'
 import {rangesByDay, IPropsStatistics, rangesByMonth} from './utils'
@@ -50,6 +51,7 @@ const HomePage: React.FC = () => {
                     <Article {...range}/>
                     <Comments {...range}/>
                     <Visitor {...range}/>
+                    <Records {...range}/>
                 </div>
             </div>
         </PageContainer>
