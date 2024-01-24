@@ -1,20 +1,58 @@
 import {PageContainer} from '@ant-design/pro-components';
-import styles from './index.less';
-import {  useRequest} from '@umijs/max';
+import Article from './charts/article'
+import Comments from './charts/comments'
+import Visitor from './charts/visitor'
+import {Radio} from 'antd'
+import {useState} from 'react'
+import {rangesByDay, IPropsStatistics, rangesByMonth} from './utils'
+import './home.less'
 
 
 const HomePage: React.FC = () => {
-    const { data, loading } = useRequest('/article');
-    console.log(data);
-    console.log(loading);
-    console.log('-------------');
+    const [selected, setSelected] = useState<number>(0)
+    const [range, setRange] = useState<IPropsStatistics>(rangesByDay[0].fun())
     return (
         <PageContainer ghost>
-            <div className={styles.container}>
-                {loading ? 'loading' : JSON.stringify(data)}
+            <div className="home">
+                <div className="form">
+                    <Radio.Group
+                        buttonStyle="solid"
+                        value={selected}
+                        onChange={(e) => {
+                            const val = e.target.value
+                            setSelected(val)
+                            setRange(rangesByDay[val].fun());
+                        }}>
+                        {
+                            rangesByDay.map((item, index) => <Radio.Button
+                                value={index}
+                                key={item.title}
+                            >{item.title}</Radio.Button>)
+                        }
+                    </Radio.Group>
+                    <Radio.Group
+                        buttonStyle="solid"
+                        value={selected}
+                        onChange={(e) => {
+                            const val = e.target.value
+                            setSelected(val)
+                            setRange(rangesByMonth[val - rangesByDay.length].fun());
+                        }}>
+                        {
+                            rangesByMonth.map((item, index) => <Radio.Button
+                                value={index + rangesByDay.length}
+                                key={item.title}
+                            >{item.title}</Radio.Button>)
+                        }
+                    </Radio.Group>
+                </div>
+                <div className="charts">
+                    <Article {...range}/>
+                    <Comments {...range}/>
+                    <Visitor {...range}/>
+                </div>
             </div>
         </PageContainer>
     );
 };
-
 export default HomePage;

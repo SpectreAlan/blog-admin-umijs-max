@@ -1,0 +1,22 @@
+.home {
+  .form{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    .ant-radio-button-wrapper{
+      margin-bottom: 10px;
+    }
+  }
+  .charts{
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    .echarts-for-react{
+      width: 50%;
+      @media screen and (max-width: 768px){
+        width: 100%;
+      }
+    }
+  }
+}
