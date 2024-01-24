@@ -16,7 +16,9 @@
     "@toast-ui/editor": "^3.2.2",
     "@umijs/max": "^4.1.0",
     "antd": "^5.13.1",
-    "crypto-js": "^4.2.0"
+    "crypto-js": "^4.2.0",
+    "dayjs": "^1.11.10",
+    "echarts-for-react": "^3.0.2"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.2.1",
