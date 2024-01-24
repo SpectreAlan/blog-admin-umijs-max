@@ -28,7 +28,6 @@ const Article: React.FC<IPropsStatistics> = (params) => {
             data: data.series
         }]
     };
-    console.log(data);
     return <ReactECharts
         showLoading={loading}
         option={option}
