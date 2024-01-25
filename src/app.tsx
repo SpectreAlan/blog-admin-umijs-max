@@ -2,28 +2,29 @@ import request from '@/utils/request'
 import {RunTimeLayoutConfig} from '@umijs/max';
 import Logo from '@/assets/images/logo.png'
 import {decrypt} from "@/utils/common";
+import User from "@/components/User";
 
-export async function getInitialState():Promise<User.AccountInfo> {
+export async function getInitialState(): Promise<User.AccountInfo> {
     const user = sessionStorage.getItem('user')
-    if(user){
+    if (user) {
         return decrypt(user)
     }
-    return {role: 'default', avatar: '', nickName: '', account: '', email: '', token: ''};
+    return {role: 'default', avatar: '', nickName: '', account: '', email: '', token: '', id: ''};
 }
-
 export const layout: RunTimeLayoutConfig = ({initialState}) => {
     return {
         logo: Logo,
         title: 'blog admin',
         menu: {
-            locale: false,
+            locale: 'en-US',
         },
-        layout: 'side',
+        layout: 'mix',
         avatarProps: {
-            src: initialState?.avatar || undefined,
-            title: initialState?.nickName || '用户',
-            size: 'small',
+            render: ()=><User initialState={initialState}/>,
         },
+        links: [
+            <a href="https://google.com" key='google'>Google</a>
+        ]
     };
 };
 
