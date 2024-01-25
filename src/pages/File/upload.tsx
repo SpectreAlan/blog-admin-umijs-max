@@ -9,10 +9,11 @@ interface OSSUploadProps {
     type: string
     formName: string
     url?: string;
+    required?: boolean;
     onChange: (url: string) => void;
 }
 
-const OSSUpload = ({url, label, formName, type, onChange}: OSSUploadProps) => {
+const OSSUpload = ({url, label, formName, type, onChange, required = true}: OSSUploadProps) => {
     const [loading, setLoading] = useState(false);
     const {loading: ossConfigLoading, run: signatureRun, data: ossConfig} = useRequest(`/file/signature`,
         {
@@ -61,7 +62,7 @@ const OSSUpload = ({url, label, formName, type, onChange}: OSSUploadProps) => {
                 body: formData,
             });
             if (response.ok) {
-                onChange(key)
+                onChange('image-base-url/' + key)
             } else {
                 const error = await response.text();
                 message.error(error);
@@ -80,7 +81,7 @@ const OSSUpload = ({url, label, formName, type, onChange}: OSSUploadProps) => {
     };
 
     return (
-        <Form.Item label={label} name={formName} rules={[{required: true}]}>
+        <Form.Item label={label} name={formName} rules={[{required}]}>
             <Spin spinning={ossConfigLoading || loading}>
                 <Upload {...uploadProps}>
                     {
