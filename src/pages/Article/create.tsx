@@ -78,7 +78,7 @@ const Create: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef}) 
             manual: true,
             onSuccess: () => {
                 setDrawerVisible(false);
-                actionRef.current?.reloadAndRest?.();
+                actionRef?.current?.reloadAndRest?.();
             }
         });
 
@@ -175,11 +175,12 @@ const Create: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef}) 
                     label='封面'
                     url={cover}
                     type='article'
+                    required={false}
                     onChange={(cover: string) => form.setFieldsValue({cover})}
                 />
             </ProForm.Group>
             <Form.Item label='内容' name='content'>
-                <MarkdownEditors setEditor={setEditor} />
+                <MarkdownEditors setEditor={setEditor} editor={editor}/>
             </Form.Item>
         </DrawerForm>
     );
