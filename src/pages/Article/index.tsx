@@ -26,7 +26,7 @@ const ArticlePage: React.FC = () => {
             manual: true,
             onSuccess: () => {
                 setSelectedRows([]);
-                actionRef.current?.reloadAndRest?.();
+                actionRef?.current?.reloadAndRest?.();
             }
         });
 
