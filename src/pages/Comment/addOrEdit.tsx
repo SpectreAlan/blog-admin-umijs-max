@@ -52,7 +52,7 @@ const AddOrEdit: React.FC<CommonType.IProps &
             manual: true,
             onSuccess: () => {
                 setDrawerVisible(false);
-                actionRef.current?.reloadAndRest?.();
+                actionRef?.current?.reloadAndRest?.();
             }
         });
 
