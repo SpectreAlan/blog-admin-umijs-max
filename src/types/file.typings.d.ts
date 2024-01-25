@@ -1,6 +1,6 @@
 declare namespace File {
   interface FileItem {
-    id: string;
+    id?: string;
     url: string;
     description: string;
   }
