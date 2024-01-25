@@ -1,4 +1,4 @@
-import {ActionType, FooterToolbar, PageContainer, ProTable} from '@ant-design/pro-components';
+import {ActionType, PageContainer, ProTable} from '@ant-design/pro-components';
 import {Access, useAccess, useRequest} from '@umijs/max';
 import {Button, Space, Modal} from 'antd';
 import React, {useRef, useState} from "react";
@@ -25,10 +25,6 @@ const FilePage: React.FC = () => {
             }
         });
 
-    const handleEdit = (record: File.FileItem) => {
-        setId(record.id)
-        setDrawerVisible(true)
-    }
     const handleDelete = (id:string) => {
         Modal.confirm({
             title: '温馨提示',
@@ -42,10 +38,7 @@ const FilePage: React.FC = () => {
     const renderActions = (text: string, record: File.FileItem) => (
         <Access accessible={access.canEdit} key='action'>
             <Space>
-                <Button type="link" onClick={() => handleEdit(record)}>
-                    编辑
-                </Button>
-                <Button type="text" danger onClick={() => handleDelete(record.id)}>
+                <Button type="text" danger onClick={() => handleDelete(record.id!)}>
                     删除
                 </Button>
             </Space>
@@ -61,12 +54,12 @@ const FilePage: React.FC = () => {
         {
             title: '预览',
             dataIndex: 'id',
+            hideInSearch: true,
             render: (_: string, record:File.FileItem) => <img src={'/' + record.url} alt="" style={{width: '60px'}}/>
         },
         {
             title: '描述',
-            dataIndex: 'description',
-            hideInSearch: true
+            dataIndex: 'description'
         },
         {
             title: '上传时间',
