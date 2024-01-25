@@ -21,7 +21,7 @@ const SettingPage: React.FC = () => {
         {
             manual: true,
             onSuccess: () => {
-                actionRef.current?.reloadAndRest?.();
+                actionRef?.current?.reloadAndRest?.();
             }
         });
 

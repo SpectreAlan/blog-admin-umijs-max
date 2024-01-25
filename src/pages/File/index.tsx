@@ -8,23 +8,20 @@ import {ExclamationCircleFilled, PlusOutlined} from '@ant-design/icons';
 const FilePage: React.FC = () => {
     const access = useAccess();
     const actionRef = useRef<ActionType>();
-    const [selectedRows, setSelectedRows] = useState<File.FileItem[]>([]);
     const [id, setId] = useState<string>('');
     const [drawerVisible, setDrawerVisible] = useState(false)
 
-    const {loading: deleteLoading, run: batchDelete} = useRequest(
-        (ids: string[]) => {
+    const {loading: deleteLoading, run: fileDelete} = useRequest(
+        (id: string) => {
             return {
                 method: 'DELETE',
-                url: `/file`,
-                data: {ids},
+                url: `/file/${id}`,
             }
         },
         {
             manual: true,
             onSuccess: () => {
-                setSelectedRows([]);
-                actionRef.current?.reloadAndRest?.();
+                actionRef?.current?.reloadAndRest?.();
             }
         });
 
@@ -32,13 +29,13 @@ const FilePage: React.FC = () => {
         setId(record.id)
         setDrawerVisible(true)
     }
-    const handleDelete = (ids: string[]) => {
+    const handleDelete = (id:string) => {
         Modal.confirm({
             title: '温馨提示',
             icon: <ExclamationCircleFilled/>,
             content: `确定要删除所选项吗？`,
             onOk() {
-                batchDelete(ids)
+                fileDelete(id)
             }
         });
     }
@@ -48,7 +45,7 @@ const FilePage: React.FC = () => {
                 <Button type="link" onClick={() => handleEdit(record)}>
                     编辑
                 </Button>
-                <Button type="text" loading={deleteLoading} danger onClick={() => handleDelete([record.id])}>
+                <Button type="text" danger onClick={() => handleDelete(record.id)}>
                     删除
                 </Button>
             </Space>
@@ -60,6 +57,11 @@ const FilePage: React.FC = () => {
             title: '链接',
             dataIndex: 'url',
             copyable: true
+        },
+        {
+            title: '预览',
+            dataIndex: 'id',
+            render: (_: string, record:File.FileItem) => <img src={'/' + record.url} alt="" style={{width: '60px'}}/>
         },
         {
             title: '描述',
@@ -95,7 +97,7 @@ const FilePage: React.FC = () => {
             }
             <ProTable<File.FileItem>
                 actionRef={actionRef}
-                loading={loading}
+                loading={loading || deleteLoading}
                 rowKey="id"
                 search={{
                     labelWidth: 60,
@@ -120,33 +122,7 @@ const FilePage: React.FC = () => {
                     };
                 }}
                 columns={columns}
-                rowSelection={{
-                    onChange: (_, selectedRows) => setSelectedRows(selectedRows),
-                }}
             />
-            {selectedRows?.length > 0 && (
-                <FooterToolbar
-                    extra={
-                        <div>
-                            已选择{' '}
-                            <a style={{fontWeight: 600}}>{selectedRows.length}</a>{' '}
-                            项&nbsp;&nbsp;
-                        </div>
-                    }
-                >
-                    <Access accessible={access.canCreate} key='add'>
-                        <Button
-                            loading={deleteLoading}
-                            type="primary" danger
-                            onClick={async () => {
-                                handleDelete(selectedRows.map(item => item.id))
-                            }}
-                        >
-                            批量删除
-                        </Button>
-                    </Access>
-                </FooterToolbar>
-            )}
         </PageContainer>
     );
 };
