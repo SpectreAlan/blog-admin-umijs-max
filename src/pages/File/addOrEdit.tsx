@@ -8,7 +8,7 @@ import {CommonType} from "@/types/common.typings";
 import OSSUpload from '@/pages/File/upload'
 import {useRequest} from "@@/exports";
 
-const AddOrEdit: React.FC<CommonType.IProps> = ({setDrawerVisible, onChange, actionRef}) => {
+const AddOrEdit: React.FC<CommonType.IProps> = ({setDrawerVisible, onChange, actionRef, type}) => {
     const [form] = Form.useForm();
 
     const [url, setUrl] = useState('');
@@ -52,7 +52,7 @@ const AddOrEdit: React.FC<CommonType.IProps> = ({setDrawerVisible, onChange, act
                 label="描述"
                 placeholder="请输入描述"
             />
-            <OSSUpload label={'选择文件'} formName='file' url={url} type='common' onChange={(url: string) => {
+            <OSSUpload label={'选择文件'} formName='file' url={url} type={type || 'common'} onChange={(url: string) => {
                 setUrl(url)
                 run({url, description: form.getFieldValue('description')})
             }}/>

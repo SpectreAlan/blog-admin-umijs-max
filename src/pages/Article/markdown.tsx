@@ -8,7 +8,7 @@ import Upload from "@/pages/File/addOrEdit";
 const MarkdownEditors = forwardRef(function MarkdownEditor({setEditor, editor}: any) {
     const editorRef = useRef(null)
 
-    const [uploadDrawer, setUploadDrawer] =useState(false)
+    const [uploadDrawer, setUploadDrawer] = useState(false)
 
     function uploadButton() {
         const button = document.createElement('button');
@@ -31,7 +31,7 @@ const MarkdownEditors = forwardRef(function MarkdownEditor({setEditor, editor}: 
                 ['heading', 'bold', 'italic', 'strike'],
                 ['hr', 'quote'],
                 ['ul', 'ol', 'task', 'indent', 'outdent'],
-                ['table','link',{
+                ['table', 'link', {
                     el: uploadButton(),
                     command: 'bold',
                     tooltip: 'Insert Image'
@@ -46,13 +46,13 @@ const MarkdownEditors = forwardRef(function MarkdownEditor({setEditor, editor}: 
         }
     }, [])
 
-    const onChange = (data: File.FileItem)=>{
+    const onChange = (data: File.FileItem) => {
         editor.insertText(`![${data?.description || '404'}](${data.url})`)
     }
 
     return (
         <>
-            {uploadDrawer && <Upload setDrawerVisible={setUploadDrawer} id={''} onChange={onChange} />}
+            {uploadDrawer && <Upload setDrawerVisible={setUploadDrawer} id={''} onChange={onChange} type={'article'}/>}
             <div id="editor" ref={editorRef}/>
         </>
     )
