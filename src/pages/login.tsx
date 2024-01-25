@@ -44,6 +44,7 @@ export default () => {
     }, {
         manual: true,
         onSuccess: (res: User.AccountInfo) => {
+            console.log(res);
             sessionStorage.setItem('token', res.token)
             sessionStorage.setItem('user', encrypt(res))
             setInitialState(res);
