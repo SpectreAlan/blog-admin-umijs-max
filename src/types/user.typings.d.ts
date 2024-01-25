@@ -8,4 +8,18 @@ declare namespace User {
         role: string
         status: number
     }
+    interface UserLogin {
+        account: string
+        password: string
+    }
+
+    interface AccountInfo {
+        account: string
+        avatar: string
+        email: string
+        id: string
+        nickName: string
+        role: string
+        token: string
+    }
 }

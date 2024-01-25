@@ -101,7 +101,8 @@ const ArticlePage: React.FC = () => {
             title: '分类',
             dataIndex: 'category',
             valueType: 'text',
-            render: (_: unknown, record: Article.ArticleItem) => record.category.title
+            render: (_: unknown, record: Article.ArticleItem) => record.category.title,
+            hideInSearch: true
         },
         {
             title: '标签',
