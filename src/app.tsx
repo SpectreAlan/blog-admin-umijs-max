@@ -14,7 +14,7 @@ export async function getInitialState(): Promise<User.AccountInfo> {
 export const layout: RunTimeLayoutConfig = ({initialState}) => {
     return {
         logo: Logo,
-        title: 'blog admin',
+        title: '博客管理系统',
         menu: {
             locale: 'en-US',
         },
@@ -22,9 +22,6 @@ export const layout: RunTimeLayoutConfig = ({initialState}) => {
         avatarProps: {
             render: ()=><User initialState={initialState}/>,
         },
-        links: [
-            <a href="https://google.com" key='google'>Google</a>
-        ]
     };
 };
 
