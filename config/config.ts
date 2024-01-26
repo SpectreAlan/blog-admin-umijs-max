@@ -29,14 +29,5 @@ export default defineConfig({
     favicons: [
         '/favicon.ico'
     ],
-    cssMinifier: 'esbuild',
-    jsMinifierOptions: {
-        jsMinifier: 'esbuild',
-        jsMinifierOptions: {
-            minifyWhitespace: true,
-            minifyIdentifiers: true,
-            minifySyntax: true,
-        }
-    }
 });
 
