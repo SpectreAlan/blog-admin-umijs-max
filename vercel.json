@@ -3,6 +3,10 @@
     {
       "source": "/api/:path*",
       "destination": "https://blog-server-nestjs-vercel.vercel.app/:path*"
+    },
+    {
+      "source": "/image-base-url/:path*",
+      "destination": "https://jszoo-file.oss-cn-beijing.aliyuncs.com/:path*"
     }
   ]
 }
