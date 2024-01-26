@@ -1,7 +1,4 @@
 {
   "version": 2,
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
-  "routes": [
-    {"src": "/api/.*","dest": "https://blog-server-nestjs-vercel.vercel.app"}
-  ]
+  "rewrites": [{ "source": "/api/*", "destination": "https://blog-server-nestjs-vercel.vercel.app" }]
 }
