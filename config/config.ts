@@ -9,6 +9,7 @@ export default defineConfig({
     request: {},
     layout: {},
     routes,
+    hash: true,
     npmClient: 'pnpm',
     proxy: {
         '/api': {
@@ -24,6 +25,18 @@ export default defineConfig({
     },
     define: {
         'process.env': process.env
+    },
+    favicons: [
+        '/favicon.ico'
+    ],
+    cssMinifier: 'esbuild',
+    jsMinifierOptions: {
+        jsMinifier: 'esbuild',
+        jsMinifierOptions: {
+            minifyWhitespace: true,
+            minifyIdentifiers: true,
+            minifySyntax: true,
+        }
     }
 });
 
