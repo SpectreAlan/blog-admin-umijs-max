@@ -14,7 +14,7 @@ export async function getInitialState(): Promise<User.AccountInfo> {
 export const layout: RunTimeLayoutConfig = ({initialState}) => {
     return {
         logo: Logo,
-        title: '博客管理系统',
+        title: 'blog admin',
         menu: {
             locale: 'en-US',
         },
