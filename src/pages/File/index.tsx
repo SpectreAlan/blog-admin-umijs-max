@@ -55,7 +55,7 @@ const FilePage: React.FC = () => {
             title: '预览',
             dataIndex: 'id',
             hideInSearch: true,
-            render: (_: string, record:File.FileItem) => <img src={'/' + record.url} alt="" style={{width: '60px'}}/>
+            render: (_: string, record:File.FileItem) => <img src={record.url} alt="" style={{width: '60px'}}/>
         },
         {
             title: '描述',
