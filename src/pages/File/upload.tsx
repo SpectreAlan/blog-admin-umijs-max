@@ -62,7 +62,7 @@ const OSSUpload = ({url, label, formName, type, onChange, required = true}: OSSU
                 body: formData,
             });
             if (response.ok) {
-                onChange('image-base-url/' + key)
+                onChange('image-proxy/' + key)
             } else {
                 const error = await response.text();
                 message.error(error);
