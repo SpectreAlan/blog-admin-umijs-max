@@ -2,19 +2,7 @@
   "rewrites": [
     {
       "source": "/:path*",
-      "destination": "/api/:path*"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "https://blog-server-nestjs-vercel.vercel.app/$1",
-      "methods": ["GET", "POST", "PUT", "DELETE"]
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1",
-      "status": 200
+      "destination": "https://blog-server-nestjs-vercel.vercel.app/:path*"
     }
   ]
 }
