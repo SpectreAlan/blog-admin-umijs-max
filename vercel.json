@@ -1,7 +1,7 @@
 {
   "rewrites": [
     {
-      "source": "/:path*",
+      "source": "/api/:path*",
       "destination": "https://blog-server-nestjs-vercel.vercel.app/:path*"
     }
   ]
