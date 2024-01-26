@@ -26,7 +26,6 @@ const Create: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef}) 
         {
             manual: true,
             onSuccess: (res) => {
-                console.log(res);
                 form.setFieldsValue(res)
                 editor.setMarkdown(res.content)
             }

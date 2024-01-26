@@ -74,7 +74,7 @@ const ArticlePage: React.FC = () => {
             title: '封面',
             dataIndex: 'cover',
             hideInSearch: true,
-            render: (_: string) => <img src={'/' + _} alt="" style={{width: '60px'}}/>
+            render: (_: string) => <img src={_} alt="" style={{width: '60px'}}/>
         },
         {
             title: '浏览量',
