@@ -173,7 +173,7 @@ const Create: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef}) 
                     formName='cover'
                     label='封面'
                     url={cover}
-                    type='article'
+                    type='cover'
                     required={false}
                     onChange={(cover: string) => form.setFieldsValue({cover})}
                 />
