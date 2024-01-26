@@ -11,8 +11,14 @@
   .charts{
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
     .chart{
-      width: 50%;
+      box-sizing: border-box;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #d9d9d9;
+      width: 48%;
       position: relative;
       .type-radio{
         position: absolute;
@@ -22,6 +28,8 @@
       }
       @media screen and (max-width: 768px){
         width: 100%;
+        border: none;
+        padding: 0;
       }
     }
     .records{
