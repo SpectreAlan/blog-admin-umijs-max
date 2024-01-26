@@ -7,9 +7,7 @@ export default defineConfig({
     model: {},
     initialState: {},
     request: {},
-    layout: {
-        title: 'blog admin',
-    },
+    layout: {},
     routes,
     npmClient: 'pnpm',
     proxy: {
