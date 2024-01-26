@@ -52,14 +52,7 @@ const AddOrEdit: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef
             loading={loading || saveLoading}
             onOpenChange={setDrawerVisible}
             open={true}
-            title={id ? '编辑标签' : '新建标签'}
-            resize={{
-                onResize() {
-                    console.log('resize!');
-                },
-                maxWidth: window.innerWidth * 0.8,
-                minWidth: 300,
-            }}
+            title={id ? '编辑分类' : '新建标签'}
             form={form}
             autoFocusFirstInput
             drawerProps={{

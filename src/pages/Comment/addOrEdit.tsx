@@ -68,13 +68,6 @@ const AddOrEdit: React.FC<CommonType.IProps &
             onOpenChange={setDrawerVisible}
             open={true}
             title={type === 'approval' ? '评论审核' : type === 'reply' ? '回复' : '创建置顶评论'}
-            resize={{
-                onResize() {
-                    console.log('resize!');
-                },
-                maxWidth: window.innerWidth * 0.8,
-                minWidth: 300,
-            }}
             form={form}
             autoFocusFirstInput
             drawerProps={{

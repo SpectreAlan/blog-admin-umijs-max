@@ -53,13 +53,6 @@ const AddOrEdit: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef
             onOpenChange={setDrawerVisible}
             open={true}
             title={id ? '编辑配置' : '新建配置'}
-            resize={{
-                onResize() {
-                    console.log('resize!');
-                },
-                maxWidth: window.innerWidth * 0.8,
-                minWidth: 300,
-            }}
             form={form}
             autoFocusFirstInput
             drawerProps={{
