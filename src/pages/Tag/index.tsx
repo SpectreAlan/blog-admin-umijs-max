@@ -89,11 +89,12 @@ const TagPage: React.FC = () => {
     });
 
     return (
-        <PageContainer>
+        <PageContainer header={{title: false}}>
             {
                 drawerVisible ? <AddOrEdit setDrawerVisible={setDrawerVisible} id={id} actionRef={actionRef}/> : null
             }
             <ProTable<Tag.TagItem>
+                scroll={{ x: 'max-content' }}
                 actionRef={actionRef}
                 loading={loading}
                 rowKey="id"

@@ -124,11 +124,12 @@ const UserPage: React.FC = () => {
         manual: true
     });
     return (
-        <PageContainer>
+        <PageContainer header={{title: false}}>
             {
                 drawerVisible ? <AddOrEdit setDrawerVisible={setDrawerVisible} id={id} actionRef={actionRef}/> : null
             }
             <ProTable<User.UserItem>
+                scroll={{ x: 'max-content' }}
                 actionRef={actionRef}
                 loading={loading}
                 rowKey="id"

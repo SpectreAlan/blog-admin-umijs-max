@@ -101,8 +101,9 @@ const VisitorPage: React.FC = () => {
     });
 
     return (
-        <PageContainer>
+        <PageContainer header={{title: false}}>
             <ProTable<Visitor.VisitorItem>
+                scroll={{ x: 'max-content' }}
                 actionRef={actionRef}
                 loading={loading}
                 rowKey="id"

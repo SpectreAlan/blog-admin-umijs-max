@@ -125,9 +125,7 @@ const ArticlePage: React.FC = () => {
         {
             title: '操作',
             valueType: 'option',
-            render: renderActions,
-            fixed: 'right',
-            width: 200
+            render: renderActions
         },
     ]
 
@@ -142,7 +140,7 @@ const ArticlePage: React.FC = () => {
     });
 
     return (
-        <PageContainer>
+        <PageContainer header={{title: false}}>
             {
                 drawerVisible ? <Create setDrawerVisible={setDrawerVisible} id={id} actionRef={actionRef}/> : null
             }

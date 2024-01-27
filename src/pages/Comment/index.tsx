@@ -139,12 +139,13 @@ const CommentPage: React.FC = () => {
     });
 
     return (
-        <PageContainer>
+        <PageContainer header={{title: false}}>
             {
                 drawerVisible ?
                     <AddOrEdit setDrawerVisible={setDrawerVisible} id={id} actionRef={actionRef} type={type} article={article}/> : null
             }
             <ProTable<Comment.CommentItem>
+                scroll={{ x: 'max-content' }}
                 actionRef={actionRef}
                 loading={loading}
                 rowKey="id"

@@ -84,11 +84,12 @@ const FilePage: React.FC = () => {
     });
 
     return (
-        <PageContainer>
+        <PageContainer header={{title: false}}>
             {
                 drawerVisible ? <AddOrEdit setDrawerVisible={setDrawerVisible} id={id} actionRef={actionRef}/> : null
             }
             <ProTable<File.FileItem>
+                scroll={{ x: 'max-content' }}
                 actionRef={actionRef}
                 loading={loading || deleteLoading}
                 rowKey="id"
