@@ -9,7 +9,8 @@ const request: RequestConfig = {
     errorConfig: {
         errorHandler(error: any) {
             const {response} = error;
-            message.error(response?.data?.message || error?.message || '请求错误：服务器故障，请稍后再试');
+            const res = decrypt(response.data as string)
+            message.error(res?.message || error?.message || '请求错误：服务器故障，请稍后再试');
             if (response && response.status === 401) {
                 sessionStorage.clear()
                 history.push('/login')
@@ -42,9 +43,10 @@ const request: RequestConfig = {
             const {code, message: msg} = res;
             if (code) {
                 message.error(msg)
-            }
-            if (msg !== 'success') {
-                message.success(msg)
+            }else{
+                if (msg !== 'success') {
+                    message.success(msg)
+                }
             }
             response.data = res
             return response
