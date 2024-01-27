@@ -16,7 +16,7 @@ export const layout: RunTimeLayoutConfig = ({initialState}) => {
         logo: Logo,
         title: '博客管理系统',
         menu: {
-            locale: 'en-US',
+            locale: false,
         },
         layout: 'mix',
         avatarProps: {
