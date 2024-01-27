@@ -79,11 +79,13 @@ const ArticlePage: React.FC = () => {
         {
             title: '浏览量',
             dataIndex: 'scan',
+            width: 80,
             hideInSearch: true
         },
         {
             title: '状态',
             dataIndex: 'status',
+            width: 80,
             valueEnum: {
                 1: {
                     text: '正常',
@@ -124,6 +126,8 @@ const ArticlePage: React.FC = () => {
             title: '操作',
             valueType: 'option',
             render: renderActions,
+            fixed: 'right',
+            width: 200
         },
     ]
 
@@ -147,6 +151,7 @@ const ArticlePage: React.FC = () => {
                 drawerComment ? <Comment setDrawerVisible={setCommentVisible} article={id} actionRef={actionRef} type='pinned' id='-1'/> : null
             }
             <ProTable<Article.ArticleItem>
+                scroll={{ x: 'max-content' }}
                 actionRef={actionRef}
                 loading={loading}
                 rowKey="id"
