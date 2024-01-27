@@ -2,7 +2,8 @@ import {
     LockOutlined,
     MobileOutlined,
     UserOutlined,
-    GithubOutlined
+    GithubOutlined,
+    FundViewOutlined
 } from '@ant-design/icons';
 import {
     LoginFormPage,
@@ -10,7 +11,7 @@ import {
     ProFormCheckbox,
     ProFormText,
 } from '@ant-design/pro-components';
-import {Divider, Space, Tabs} from 'antd';
+import {Divider, Space, Tabs, Form, Input} from 'antd';
 import type {CSSProperties} from 'react';
 import {useState} from 'react';
 import {history, useRequest, useModel} from '@umijs/max';
@@ -26,8 +27,12 @@ const iconStyles: CSSProperties = {
     verticalAlign: 'middle',
     cursor: 'pointer',
 };
+const changeCaptcha = ()=>`${process.env.BASE_URL}/auth/captcha?${Math.random()}`
 
 export default () => {
+    const [form] = Form.useForm()
+    const [captcha, setCaptcha] = useState(changeCaptcha())
+
     const {setInitialState} = useModel('@@initialState');
     const items = [
         {label: '账户密码登录', key: 'account'},
@@ -48,6 +53,10 @@ export default () => {
             sessionStorage.setItem('user', encrypt(res))
             setInitialState(res);
             history.push('/')
+        },
+        onError: ()=>{
+            setCaptcha(changeCaptcha())
+            form.setFieldsValue({captcha: ''})
         }
     });
 
@@ -63,6 +72,7 @@ export default () => {
             }}
         >
             <LoginFormPage
+                form={form}
                 onFinish={onSubmit}
                 backgroundImageUrl={Bg}
                 logo={Logo}
@@ -141,6 +151,13 @@ export default () => {
                                 },
                             ]}
                         />
+                        <Form.Item  name={'captcha'} rules={[{required: true, message: '请输入验证码'}]}>
+                            <Input
+                                prefix={<FundViewOutlined/>}
+                                placeholder={'请输入验证码'}
+                                suffix={<img src={captcha} style={{cursor: 'pointer'}} alt="验证码" onClick={()=>setCaptcha(changeCaptcha())}/>}
+                            />
+                        </Form.Item>
                     </>
                 )}
                 {loginType === 'phone' && (
