@@ -2,7 +2,7 @@ import {useRequest} from '@umijs/max';
 import {IPropsStatistics} from '../utils'
 import {useEffect, useState} from "react";
 import VirtualList from 'rc-virtual-list';
-import {List} from 'antd';
+import {List, Row, Col} from 'antd';
 
 
 const ContainerHeight = 380;
@@ -47,11 +47,13 @@ const Visitor: React.FC<IPropsStatistics> = (params) => {
                 >
                     {(item: Visitor.VisitorItem) => (
                         <List.Item key={item.id}>
-                            <span className="ip">{item.ip}</span>
-                            <span className="country">{item.country}</span>
-                            <span className="province">{item.province}</span>
-                            <span className="city">{item.city}</span>
-                            <span className="device">{item.device}({item.os})</span>
+                            <Row>
+                                <Col xs={{span:8}} sm={{span:8}} md={{span:4}}>{item.ip}</Col>
+                                <Col xs={{span:8}} sm={{span:8}} md={{span:5}}>{item.createdAt}</Col>
+                                <Col xs={{span:0}} sm={{span:0}} md={{span:5}}>{item.country}</Col>
+                                <Col xs={{span:8}} sm={{span:8}} md={{span:5}}>{item.city}</Col>
+                                <Col xs={{span:0}} sm={{span:0}} md={{span:5}}>{item.device}({item.os})</Col>
+                            </Row>
                         </List.Item>
                     )}
                 </VirtualList>

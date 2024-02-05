@@ -8,5 +8,6 @@ declare namespace Visitor {
     country: string;
     province: string;
     city: string;
+    createdAt: string;
   }
 }

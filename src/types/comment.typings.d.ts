@@ -8,5 +8,7 @@ declare namespace Comment {
         pinned: number;
         author: number;
         status: number;
+        platform: number;
+        region: number;
     }
 }

@@ -1,6 +1,6 @@
 import {ActionType, PageContainer, ProTable} from '@ant-design/pro-components';
 import {Access, useAccess, useRequest} from '@umijs/max';
-import {Button, Space, Modal} from 'antd';
+import {Button, Space, Modal, message} from 'antd';
 import React, {useRef, useState} from "react";
 import AddOrEdit from "@/pages/Setting/addOrEdit";
 import {ExclamationCircleFilled, PlusOutlined} from '@ant-design/icons';
@@ -29,13 +29,17 @@ const SettingPage: React.FC = () => {
         setId(record.id)
         setDrawerVisible(true)
     }
-    const handleDelete = (id: string) => {
+    const handleDelete = (item: Setting.SettingItem) => {
+        if (item.type === 'system') {
+            message.error('系统配置禁止删除')
+            return
+        }
         Modal.confirm({
             title: '温馨提示',
             icon: <ExclamationCircleFilled/>,
             content: `确定要删除所选项吗？`,
             onOk() {
-                deleteRun(id)
+                deleteRun(item.id)
             }
         });
     }
@@ -45,7 +49,7 @@ const SettingPage: React.FC = () => {
                 <Button type="link" onClick={() => handleEdit(record)}>
                     编辑
                 </Button>
-                <Button type="text" loading={deleteLoading} danger onClick={() => handleDelete(record.id)}>
+                <Button type="text" loading={deleteLoading} danger onClick={() => handleDelete(record)}>
                     删除
                 </Button>
             </Space>
@@ -64,7 +68,11 @@ const SettingPage: React.FC = () => {
         {
             title: '类型',
             dataIndex: 'type',
-            hideInSearch: true
+            hideInSearch: true,
+            valueEnum: {
+                system: {text: '系统配置'},
+                custom: {text: '用户配置'},
+            }
         },
         {
             title: '创建时间',
@@ -99,7 +107,7 @@ const SettingPage: React.FC = () => {
                 drawerVisible ? <AddOrEdit setDrawerVisible={setDrawerVisible} id={id} actionRef={actionRef}/> : null
             }
             <ProTable<Setting.SettingItem>
-                scroll={{ x: 'max-content' }}
+                scroll={{x: 'max-content'}}
                 actionRef={actionRef}
                 loading={loading}
                 rowKey="id"

@@ -1,5 +1,5 @@
 import {
-    DrawerForm,
+    DrawerForm, ProFormRadio,
     ProFormText,
 } from '@ant-design/pro-components';
 import {Form} from 'antd';
@@ -84,11 +84,19 @@ const AddOrEdit: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef
                 placeholder="请输入value"
                 rules={[{required: true}]}
             />
-            <ProFormText
+            <ProFormRadio.Group
                 name="type"
-                width="md"
                 label="类型"
-                placeholder="请输入类型"
+                options={[
+                    {
+                        label: '用户配置',
+                        value: 'custom',
+                    },
+                    {
+                        label: '系统配置',
+                        value: 'system',
+                    },
+                ]}
                 rules={[{required: true}]}
             />
         </DrawerForm>

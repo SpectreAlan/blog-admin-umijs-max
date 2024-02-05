@@ -96,6 +96,14 @@ const CommentPage: React.FC = () => {
             dataIndex: 'email'
         },
         {
+            title: '地区',
+            dataIndex: 'region'
+        },
+        {
+            title: '设备',
+            dataIndex: 'platform'
+        },
+        {
             title: '类型',
             dataIndex: 'author',
             render: (_: boolean, info: Comment.CommentItem) => info.pinned ? '置顶评论' : (_ ? '博主回复' : '用户评论')
