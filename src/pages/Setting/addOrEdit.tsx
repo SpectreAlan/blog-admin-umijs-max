@@ -1,6 +1,6 @@
 import {
     DrawerForm, ProFormRadio,
-    ProFormText,
+    ProFormText, ProFormTextArea,
 } from '@ant-design/pro-components';
 import {Form} from 'antd';
 import {useEffect} from "react";
@@ -85,6 +85,7 @@ const AddOrEdit: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef
                 rules={[{required: true}]}
             />
             <ProFormRadio.Group
+                readonly={id.length > 0}
                 name="type"
                 label="类型"
                 options={[
@@ -98,6 +99,12 @@ const AddOrEdit: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef
                     },
                 ]}
                 rules={[{required: true}]}
+            />
+            <ProFormTextArea
+                name="description"
+                width="md"
+                label="Value"
+                placeholder="请输入描述"
             />
         </DrawerForm>
     );
