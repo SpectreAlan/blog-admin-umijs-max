@@ -24,6 +24,13 @@ const request: RequestConfig = {
     requestInterceptors: [
         (config: any) => {
             let token = sessionStorage.getItem('token') || '';
+            if(!token && !config.url.includes('/auth/')){
+                history.push('/login')
+                const error = new Error('No token available');
+                error.name = 'TOKEN_ERROR';
+                error.message = 'TOKEN_ERROR';
+                return Promise.reject(error);
+            }
             if (token) {
                 config.headers.Authorization = 'Bearer ' + token;
             }
