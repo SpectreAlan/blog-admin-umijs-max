@@ -52,7 +52,26 @@ export default () => {
             sessionStorage.setItem('token', res.token)
             sessionStorage.setItem('user', encrypt(res))
             setInitialState(res);
-            history.push('/')
+            history.push('/home')
+        },
+        onError: ()=>{
+            setCaptcha(changeCaptcha())
+            form.setFieldsValue({captcha: ''})
+        }
+    });
+
+    const {loading:phoneCaptchaLoading, run:getPhoneCaptcha} = useRequest(() => {
+        return {
+            url: '/auth/captcha',
+            method: 'get',
+        }
+    }, {
+        manual: true,
+        onSuccess: (res: User.AccountInfo) => {
+            sessionStorage.setItem('token', res.token)
+            sessionStorage.setItem('user', encrypt(res))
+            setInitialState(res);
+            history.push('/home')
         },
         onError: ()=>{
             setCaptcha(changeCaptcha())
@@ -167,7 +186,7 @@ export default () => {
                                 size: 'large',
                                 prefix: <MobileOutlined className={'prefixIcon'}/>,
                             }}
-                            name="mobile"
+                            name="phone"
                             placeholder={'手机号'}
                             rules={[
                                 {
@@ -195,7 +214,7 @@ export default () => {
                                 }
                                 return '获取验证码';
                             }}
-                            name="captcha"
+                            name="sms"
                             rules={[
                                 {
                                     required: true,
@@ -203,16 +222,11 @@ export default () => {
                                 },
                             ]}
                             onGetCaptcha={async () => {
+
                             }}
                         />
                     </>
                 )}
-                <div style={{marginBlockEnd: 24}}>
-                    <ProFormCheckbox noStyle name="autoLogin">
-                        自动登录
-                    </ProFormCheckbox>
-                    <a style={{float: 'right'}}>忘记密码 </a>
-                </div>
             </LoginFormPage>
         </div>
     );
