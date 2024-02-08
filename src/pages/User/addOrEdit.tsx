@@ -86,6 +86,18 @@ const AddOrEdit: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef
                 placeholder="请输入email"
                 rules={[{required: true}]}
             />
+            <ProFormText
+                name="phone"
+                width="md"
+                label="Phone"
+                placeholder="请输入手机号"
+            />
+            <ProFormText
+                name="pushDeer"
+                width="md"
+                label="PushDeer"
+                placeholder="请输入pushDeer"
+            />
             <ProFormSwitch
                 name="status"
                 label="状态"
