@@ -13,6 +13,11 @@ declare namespace User {
         password: string
     }
 
+    interface UserLoginSms {
+        phone: string
+        sms: string
+    }
+
     interface AccountInfo {
         account: string
         avatar: string
