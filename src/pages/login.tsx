@@ -8,7 +8,6 @@ import {
 import {
     LoginFormPage,
     ProFormCaptcha,
-    ProFormCheckbox,
     ProFormText,
 } from '@ant-design/pro-components';
 import {Divider, Space, Tabs, Form, Input} from 'antd';
@@ -27,7 +26,7 @@ const iconStyles: CSSProperties = {
     verticalAlign: 'middle',
     cursor: 'pointer',
 };
-const changeCaptcha = ()=>`${process.env.BASE_URL}/auth/captcha?${Math.random()}`
+const changeCaptcha = () => `${process.env.BASE_URL}/auth/captcha?${Math.random()}`
 
 export default () => {
     const [form] = Form.useForm()
@@ -40,7 +39,14 @@ export default () => {
     ];
     const [loginType, setLoginType] = useState<LoginType>('account');
 
-    const {loading, run} = useRequest((data: User.UserLogin) => {
+    const onSuccess = (res: User.AccountInfo) => {
+        sessionStorage.setItem('token', res.token)
+        sessionStorage.setItem('user', encrypt(res))
+        setInitialState(res);
+        history.push('/home')
+    }
+
+    const {loading, run} = useRequest((data: User.UserLogin | User.UserLoginSms) => {
         return {
             url: '/auth/login',
             method: 'post',
@@ -48,39 +54,36 @@ export default () => {
         }
     }, {
         manual: true,
-        onSuccess: (res: User.AccountInfo) => {
-            sessionStorage.setItem('token', res.token)
-            sessionStorage.setItem('user', encrypt(res))
-            setInitialState(res);
-            history.push('/home')
-        },
-        onError: ()=>{
+        onSuccess,
+        onError: () => {
             setCaptcha(changeCaptcha())
             form.setFieldsValue({captcha: ''})
         }
     });
 
-    const {loading:phoneCaptchaLoading, run:getPhoneCaptcha} = useRequest(() => {
+    const {loading: loadingSms, run: runSms} = useRequest((data: User.UserLoginSms | User.UserLogin) => {
         return {
-            url: '/auth/captcha',
-            method: 'get',
+            url: '/auth/loginBySms',
+            method: 'post',
+            data,
         }
     }, {
         manual: true,
-        onSuccess: (res: User.AccountInfo) => {
-            sessionStorage.setItem('token', res.token)
-            sessionStorage.setItem('user', encrypt(res))
-            setInitialState(res);
-            history.push('/home')
-        },
-        onError: ()=>{
-            setCaptcha(changeCaptcha())
-            form.setFieldsValue({captcha: ''})
-        }
+        onSuccess
     });
 
-    const onSubmit = async (formData: User.UserLogin) => {
-        run(formData)
+    const {run: getPhoneCaptcha} = useRequest((data: { phone: number }) => {
+        return {
+            url: '/auth/sms',
+            method: 'post',
+            data,
+        }
+    }, {
+        manual: true
+    });
+
+    const onSubmit = async (formData: User.UserLoginSms | User.UserLogin) => {
+        (loginType === 'account' ? run : runSms)(formData);
     };
     return (
         <div
@@ -95,7 +98,7 @@ export default () => {
                 onFinish={onSubmit}
                 backgroundImageUrl={Bg}
                 logo={Logo}
-                loading={loading}
+                loading={loading || loadingSms}
                 title="博客后台"
                 subTitle="基于umijs/max"
                 actions={
@@ -170,11 +173,12 @@ export default () => {
                                 },
                             ]}
                         />
-                        <Form.Item  name={'captcha'} rules={[{required: true, message: '请输入验证码'}]}>
+                        <Form.Item name={'captcha'} rules={[{required: true, message: '请输入验证码'}]}>
                             <Input
                                 prefix={<FundViewOutlined/>}
                                 placeholder={'请输入验证码'}
-                                suffix={<img src={captcha} style={{cursor: 'pointer'}} alt="验证码" onClick={()=>setCaptcha(changeCaptcha())}/>}
+                                suffix={<img src={captcha} style={{cursor: 'pointer'}} alt="验证码"
+                                             onClick={() => setCaptcha(changeCaptcha())}/>}
                             />
                         </Form.Item>
                     </>
@@ -222,7 +226,7 @@ export default () => {
                                 },
                             ]}
                             onGetCaptcha={async () => {
-
+                                getPhoneCaptcha({phone: form.getFieldValue('phone')})
                             }}
                         />
                     </>
