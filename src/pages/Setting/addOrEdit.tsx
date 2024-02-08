@@ -80,12 +80,12 @@ const AddOrEdit: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef
             <ProFormText
                 name="value"
                 width="md"
-                label="Value"
-                placeholder="请输入value"
+                label="配置"
+                placeholder="请输入配置"
                 rules={[{required: true}]}
             />
             <ProFormRadio.Group
-                readonly={id.length > 0}
+                disabled={id.length > 0}
                 name="type"
                 label="类型"
                 options={[
@@ -103,7 +103,7 @@ const AddOrEdit: React.FC<CommonType.IProps> = ({setDrawerVisible, id, actionRef
             <ProFormTextArea
                 name="description"
                 width="md"
-                label="Value"
+                label="描述"
                 placeholder="请输入描述"
             />
         </DrawerForm>
