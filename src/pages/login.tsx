@@ -37,7 +37,7 @@ export default () => {
         {label: '账户密码登录', key: 'account'},
         {label: '手机号登录', key: 'phone'},
     ];
-    const [loginType, setLoginType] = useState<LoginType>('account');
+    const [loginType, setLoginType] = useState<LoginType>('phone');
 
     const onSuccess = (res: User.AccountInfo) => {
         sessionStorage.setItem('token', res.token)
