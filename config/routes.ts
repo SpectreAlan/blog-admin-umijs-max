@@ -50,6 +50,11 @@ const routes = [
         component: './Visitor',
     },
     {
+        name: '错误日志',
+        path: '/log',
+        component: './Log',
+    },
+    {
         name: '系统管理',
         path: '/system',
         routes: [
