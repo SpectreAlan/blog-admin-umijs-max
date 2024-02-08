@@ -13,3 +13,4 @@
 .swc
 /.idea
 .env
+pnpm-lock.yaml
