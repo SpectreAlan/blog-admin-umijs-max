@@ -48,11 +48,13 @@ const Visitor: React.FC<IPropsStatistics> = (params) => {
                     {(item: Visitor.VisitorItem) => (
                         <List.Item key={item.id}>
                             <Row>
-                                <Col xs={{span:8}} sm={{span:8}} md={{span:4}}>{item.ip}</Col>
-                                <Col xs={{span:8}} sm={{span:8}} md={{span:5}}>{item.createdAt}</Col>
-                                <Col xs={{span:0}} sm={{span:0}} md={{span:5}}>{item.country}</Col>
-                                <Col xs={{span:8}} sm={{span:8}} md={{span:5}}>{item.city}</Col>
-                                <Col xs={{span:0}} sm={{span:0}} md={{span:5}}>{item.device}({item.os})</Col>
+                                <Col xs={{span: 8}} sm={{span: 8}} md={{span: 4}}>{item.ip}</Col>
+                                <Col xs={{span: 8}} sm={{span: 8}} md={{span: 5}}>{item.createdAt}</Col>
+                                <Col xs={{span: 0}} sm={{span: 0}} md={{span: 5}}>{item.country}</Col>
+                                <Col xs={{span: 8}} sm={{span: 8}} md={{span: 5}}>{item?.city ?? '-'}</Col>
+                                <Col
+                                    xs={{span: 0}} sm={{span: 0}}
+                                    md={{span: 5}}>{item.device}{item?.os.length > 1 ? ` (${item.os})` : '-'}</Col>
                             </Row>
                         </List.Item>
                     )}
