@@ -2,15 +2,12 @@ import {ActionType, FooterToolbar, PageContainer, ProTable} from '@ant-design/pr
 import {Access, useAccess, useRequest} from '@umijs/max';
 import {Button, Space, Modal} from 'antd';
 import React, {useRef, useState} from "react";
-import AddOrEdit from "@/pages/Log/addOrEdit";
-import {ExclamationCircleFilled, PlusOutlined} from '@ant-design/icons';
+import {ExclamationCircleFilled} from '@ant-design/icons';
 
 const LogPage: React.FC = () => {
     const access = useAccess();
     const actionRef = useRef<ActionType>();
     const [selectedRows, setSelectedRows] = useState<Log.LogItem[]>([]);
-    const [id, setId] = useState<string>('');
-    const [drawerVisible, setDrawerVisible] = useState(false)
 
     const {loading: deleteLoading, run: batchDelete} = useRequest(
         (ids: string[]) => {
@@ -28,10 +25,6 @@ const LogPage: React.FC = () => {
             }
         });
 
-    const handleEdit = (record: Log.LogItem) => {
-        setId(record.id)
-        setDrawerVisible(true)
-    }
     const handleDelete = (ids: string[]) => {
         Modal.confirm({
             title: '温馨提示',
@@ -45,9 +38,6 @@ const LogPage: React.FC = () => {
     const renderActions = (text: string, record: Log.LogItem) => (
         <Access accessible={access.canEdit} key='action'>
             <Space>
-                <Button type="link" onClick={() => handleEdit(record)}>
-                    编辑
-                </Button>
                 <Button type="text" loading={deleteLoading} danger onClick={() => handleDelete([record.id])}>
                     删除
                 </Button>
@@ -117,9 +107,6 @@ const LogPage: React.FC = () => {
 
     return (
         <PageContainer header={{title: false}}>
-            {
-                drawerVisible ? <AddOrEdit setDrawerVisible={setDrawerVisible} id={id} actionRef={actionRef}/> : null
-            }
             <ProTable<Log.LogItem>
                 scroll={{ x: 'max-content' }}
                 actionRef={actionRef}
@@ -128,17 +115,6 @@ const LogPage: React.FC = () => {
                 search={{
                     labelWidth: 70,
                 }}
-                toolBarRender={() => [
-                    <Access accessible={access.canCreate} key='add'>
-                        <Button type="primary" onClick={() => {
-                            setId('')
-                            setDrawerVisible(true)
-                        }}>
-                            <PlusOutlined/>
-                            新建一言
-                        </Button>
-                    </Access>
-                ]}
                 request={async (params) => {
 
                     const {list, total} = await run(params);
