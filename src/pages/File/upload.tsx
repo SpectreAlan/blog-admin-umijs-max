@@ -49,7 +49,7 @@ const OSSUpload = ({url, label, formName, type, onChange, required = true}: OSSU
         setLoading(true)
         try {
             const suffix = file.name.slice(file.name.lastIndexOf('.'));
-            const key = `/${ossConfig.dir}/${type}/${Date.now() + suffix}`;
+            const key = `${ossConfig.dir}/${type}/${Date.now() + suffix}`;
             const formData = new FormData();
             formData.append('key', key);
             formData.append('OSSAccessKeyId', ossConfig.accessId);
@@ -62,7 +62,7 @@ const OSSUpload = ({url, label, formName, type, onChange, required = true}: OSSU
                 body: formData,
             });
             if (response.ok) {
-                onChange('image-proxy/' + key)
+                onChange('/image-proxy/' + key)
             } else {
                 const error = await response.text();
                 message.error(error);
